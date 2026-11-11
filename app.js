@@ -447,6 +447,26 @@ function watchMarquees(rows) {
   rows.forEach((row) => io.observe(row.marquee));
 }
 
+/* The bot publishes its own server list, so the showcase is real without regenerating a file.
+ * A saved servers.json (or the examples below) covers the case where the bot is not reachable. */
+async function fetchLiveServers() {
+  const base =
+    typeof window.KERNEL_API_BASE === 'string' ? window.KERNEL_API_BASE.trim().replace(/\/+$/, '') : '';
+  if (!base) return null;
+  try {
+    const response = await fetch(base + '/api/public/servers', {
+      cache: 'no-store',
+      headers: { 'ngrok-skip-browser-warning': '1' },
+    });
+    if (!response.ok) return null;
+    const data = await response.json();
+    if (!data || data.sample !== false || !Array.isArray(data.servers)) return null;
+    return data;
+  } catch (error) {
+    return null;
+  }
+}
+
 async function setupServers() {
   const preview = document.querySelector('[data-servers-preview]');
   const grid = document.querySelector('[data-servers-grid]');
@@ -454,15 +474,17 @@ async function setupServers() {
   const note = document.querySelector('[data-servers-note]');
   if (!preview && !grid) return;
 
-  let payload = null;
-  try {
-    const response = await fetch('servers.json', { cache: 'no-store' });
-    if (!response.ok) throw new Error('HTTP ' + response.status);
-    const data = await response.json();
-    if (!data || !Array.isArray(data.servers)) throw new Error('Unexpected servers.json shape');
-    payload = data;
-  } catch (error) {
-    payload = { sample: true, servers: SAMPLE_SERVERS };
+  let payload = await fetchLiveServers();
+  if (!payload) {
+    try {
+      const response = await fetch('servers.json', { cache: 'no-store' });
+      if (!response.ok) throw new Error('HTTP ' + response.status);
+      const data = await response.json();
+      if (!data || !Array.isArray(data.servers)) throw new Error('Unexpected servers.json shape');
+      payload = data;
+    } catch (error) {
+      payload = { sample: true, servers: SAMPLE_SERVERS };
+    }
   }
 
   const sample = payload.sample !== false;

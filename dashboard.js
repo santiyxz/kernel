@@ -103,6 +103,25 @@
   }
 
   async function loadBotGuilds() {
+    const base =
+      typeof window.KERNEL_API_BASE === 'string' ? window.KERNEL_API_BASE.trim().replace(/\/+$/, '') : '';
+    if (base) {
+      try {
+        const response = await fetch(base + '/api/public/servers', {
+          cache: 'no-store',
+          headers: { 'ngrok-skip-browser-warning': '1' },
+        });
+        if (response.ok) {
+          const live = await response.json();
+          if (live && live.sample === false && Array.isArray(live.servers)) {
+            return new Set(live.servers.map((server) => String(server.id || '')).filter(Boolean));
+          }
+        }
+      } catch (error) {
+        /* The bot may be asleep; the saved list below is still usable. */
+      }
+    }
+
     try {
       const response = await fetch('servers.json', { cache: 'no-store' });
       if (!response.ok) return null;
@@ -243,7 +262,7 @@
     if (ui.presenceNote) {
       ui.presenceNote.hidden = Boolean(botGuilds);
       ui.presenceNote.textContent =
-        'Kernel’s public server list has not been generated yet, so installation status is hidden.';
+        'Kernel’s server list could not be loaded right now, so installation status is hidden.';
     }
 
     const sorted = guilds.slice().sort((a, b) => {
