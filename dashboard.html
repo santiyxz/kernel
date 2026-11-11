@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard — Kernel</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#08090a">
+<link rel="icon" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body class="dash-page">
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav-shell" id="top">
+  <div class="nav">
+    <a class="brand" href="index.html" aria-label="Kernel, back to the site">
+      <span class="mark" aria-hidden="true">K</span>
+      <span class="brand-name">Kernel</span>
+    </a>
+    <nav class="links" aria-label="Primary">
+      <a href="index.html#features">Features</a>
+      <a href="index.html#news">News</a>
+      <a href="index.html#commands">Commands</a>
+      <a href="index.html#faq">FAQ</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="nav-support" href="index.html">Back to site</a>
+      <a class="btn btn-light btn-sm" data-link="invite" href="index.html#support">Invite</a>
+    </div>
+  </div>
+</header>
+
+<main id="main" class="dash">
+  <div class="shell">
+
+    <div class="dash-loading" data-dash-loading>
+      <span class="dash-spinner" aria-hidden="true"></span>
+      <p>Checking your Discord session…</p>
+    </div>
+    <noscript><p class="dash-noscript">This dashboard needs JavaScript to talk to Discord. Enable it and reload.</p></noscript>
+
+    <section class="dash-gate" data-dash-gate hidden aria-labelledby="gate-title">
+      <span class="dash-mark" aria-hidden="true">K</span>
+      <p class="dash-eyebrow">Dashboard</p>
+      <h1 id="gate-title" tabindex="-1">Log in to see your servers.</h1>
+      <p class="dash-gate-lede">
+        Discord is the only way in. Kernel uses it to confirm who you are and which servers you manage — there
+        is no separate account and no password to store.
+      </p>
+      <p class="dash-gate-error" data-dash-gate-error role="alert" hidden></p>
+      <div class="dash-actions">
+        <a class="btn btn-light btn-lg" data-oauth-login href="#">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M20.3 4.4a19.8 19.8 0 0 0-4.9-1.5l-.6 1.3a18.3 18.3 0 0 0-5.5 0L8.7 2.9a19.7 19.7 0 0 0-4.9 1.5C.5 9 -.3 13.6.1 18c2 1.5 4 2.4 6 3l.8-1.4c-.7-.3-1.4-.6-2-1l.5-.4c3.9 1.8 8.2 1.8 12.1 0l.5.4c-.6.4-1.3.7-2 1l.8 1.4c2-.6 4-1.5 6-3 .4-4.4-.4-9-3.5-13.6zM8 15.3c-1.2 0-2.2-1.1-2.2-2.4S6.8 10.5 8 10.5s2.2 1.1 2.2 2.4-1 2.4-2.2 2.4zm8 0c-1.2 0-2.2-1.1-2.2-2.4s1-2.4 2.2-2.4 2.2 1.1 2.2 2.4-1 2.4-2.2 2.4z"/></svg>
+          Continue with Discord
+        </a>
+      </div>
+      <ul class="dash-gate-notes">
+        <li>Kernel asks for your username and server list. Nothing else.</li>
+        <li>Your access token stays in this browser tab and is cleared when you log out.</li>
+        <li>You only see servers where you have Manage Server.</li>
+      </ul>
+    </section>
+
+    <section class="dash-app" data-dash-app hidden aria-labelledby="dash-title">
+      <header class="dash-head">
+        <div class="dash-user">
+          <span class="dash-avatar" data-dash-avatar aria-hidden="true"></span>
+          <div>
+            <p class="dash-eyebrow">Signed in with Discord</p>
+            <h1 id="dash-title" data-dash-name tabindex="-1">—</h1>
+            <p class="dash-handle" data-dash-handle></p>
+          </div>
+        </div>
+        <button class="btn btn-dark btn-sm" type="button" data-dash-logout>Log out</button>
+      </header>
+
+      <div class="dash-stats">
+        <div class="dash-stat">
+          <b data-dash-managed>0</b>
+          <span>servers you manage</span>
+        </div>
+        <div class="dash-stat">
+          <b data-dash-installed>—</b>
+          <span>with Kernel installed</span>
+        </div>
+      </div>
+
+      <p class="dash-presence-note" data-dash-presence-note hidden></p>
+
+      <div class="dash-list-head">
+        <h2>Your servers</h2>
+        <p>Only servers where you have Manage Server or Administrator can be customized.</p>
+      </div>
+
+      <div class="dash-servers" data-dash-servers></div>
+      <p class="dash-empty" data-dash-empty hidden>
+        None of your servers give you Manage Server. Ask an owner to grant it, or invite Kernel to a server you
+        control.
+      </p>
+
+      <div class="dash-verify">
+        <span class="eyebrow-pill"><span class="dot" aria-hidden="true"></span>Server studio</span>
+        <h2>Style every message Kernel posts.</h2>
+        <p>
+          Pick a server above, then <strong>Manage settings</strong>. You get the welcome card, goodbye card,
+          announcement panel, log channels and verification wording — with live previews. Saves go straight to
+          your bot, so the next message uses them.
+        </p>
+        <div class="dash-cmd">
+          <code data-dash-command>/verification setup</code>
+          <button class="btn btn-dark btn-sm" type="button" data-dash-copy>Copy</button>
+          <span class="dash-copy-state" data-dash-copy-state role="status" aria-live="polite"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="dash-error" data-dash-error role="alert" hidden aria-labelledby="dash-error-title">
+      <p class="dash-eyebrow">Dashboard</p>
+      <h1 id="dash-error-title">Discord did not answer.</h1>
+      <p data-dash-error-text>Something went wrong while loading your servers.</p>
+      <div class="dash-actions">
+        <button class="btn btn-light" type="button" data-dash-retry>Try again</button>
+        <button class="btn btn-dark" type="button" data-dash-relogin>Log in again</button>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="shell foot-base">
+    <p>© <span id="year">2026</span> Kernel. This page only loads servers after Discord signs you in.</p>
+    <p class="foot-status"><span class="dot" aria-hidden="true"></span>No password stored · no telemetry</p>
+  </div>
+</footer>
+
+<script src="auth.js"></script>
+<script src="app.js"></script>
+<script src="dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page not found — Kernel</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#08090a">
+<link rel="icon" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body class="page-404">
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav-shell" id="top">
+  <div class="nav">
+    <a class="brand" href="index.html" aria-label="Kernel, back to homepage">
+      <span class="mark" aria-hidden="true">K</span>
+      <span class="brand-name">Kernel</span>
+    </a>
+    <nav class="links" aria-label="Primary">
+      <a href="index.html#features">Features</a>
+      <a href="index.html#servers">Servers</a>
+      <a href="index.html#commands">Commands</a>
+      <a href="index.html#proof">Proof</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="nav-support" href="index.html#support">Support</a>
+      <a class="btn btn-dark btn-sm nav-login" data-login href="dashboard.html">
+        <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M20.3 4.4a19.8 19.8 0 0 0-4.9-1.5l-.6 1.3a18.3 18.3 0 0 0-5.5 0L8.7 2.9a19.7 19.7 0 0 0-4.9 1.5C.5 9 -.3 13.6.1 18c2 1.5 4 2.4 6 3l.8-1.4c-.7-.3-1.4-.6-2-1l.5-.4c3.9 1.8 8.2 1.8 12.1 0l.5.4c-.6.4-1.3.7-2 1l.8 1.4c2-.6 4-1.5 6-3 .4-4.4-.4-9-3.5-13.6zM8 15.3c-1.2 0-2.2-1.1-2.2-2.4S6.8 10.5 8 10.5s2.2 1.1 2.2 2.4-1 2.4-2.2 2.4zm8 0c-1.2 0-2.2-1.1-2.2-2.4s1-2.4 2.2-2.4 2.2 1.1 2.2 2.4-1 2.4-2.2 2.4z"/></svg>
+        <span data-login-label="Log in" data-login-label-signed-in="Dashboard">Log in</span>
+      </a>
+      <a class="btn btn-light btn-sm" data-link="invite" href="index.html#support">Invite</a>
+      <button class="burger" id="burger" aria-expanded="false" aria-controls="drawer" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="drawer" id="drawer">
+  <nav aria-label="Mobile">
+    <a href="index.html">Home</a>
+    <a href="index.html#features">Features</a>
+    <a href="index.html#commands">Commands</a>
+    <a href="index.html#proof">Proof</a>
+    <a href="index.html#support">Support</a>
+    <a class="btn btn-dark" data-login href="dashboard.html">
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M20.3 4.4a19.8 19.8 0 0 0-4.9-1.5l-.6 1.3a18.3 18.3 0 0 0-5.5 0L8.7 2.9a19.7 19.7 0 0 0-4.9 1.5C.5 9 -.3 13.6.1 18c2 1.5 4 2.4 6 3l.8-1.4c-.7-.3-1.4-.6-2-1l.5-.4c3.9 1.8 8.2 1.8 12.1 0l.5.4c-.6.4-1.3.7-2 1l.8 1.4c2-.6 4-1.5 6-3 .4-4.4-.4-9-3.5-13.6zM8 15.3c-1.2 0-2.2-1.1-2.2-2.4S6.8 10.5 8 10.5s2.2 1.1 2.2 2.4-1 2.4-2.2 2.4zm8 0c-1.2 0-2.2-1.1-2.2-2.4s1-2.4 2.2-2.4 2.2 1.1 2.2 2.4-1 2.4-2.2 2.4z"/></svg>
+      <span data-login-label="Log in with Discord" data-login-label-signed-in="Open dashboard">Log in with Discord</span>
+    </a>
+    <a class="btn btn-light" data-link="invite" href="index.html#support">Add to Discord</a>
+  </nav>
+</div>
+
+<main id="main">
+  <section class="hero" aria-labelledby="missing-title">
+    <div class="scene" data-scene="core" data-density="low" data-anchor="center" aria-hidden="true"></div>
+    <div class="hero-aurora" aria-hidden="true"></div>
+
+    <div class="shell hero-inner">
+      <span class="eyebrow-pill"><span class="dot" aria-hidden="true"></span>Error 404</span>
+      <div class="app-icon" aria-hidden="true"><span>K</span><i></i></div>
+      <h1 id="missing-title">That page<br>is not here.</h1>
+      <p class="hero-sub">
+        The link you followed points somewhere this site does not have. Nothing was deleted — it is just a
+        missing page. Your server is still guarded.
+      </p>
+      <div class="hero-cta">
+        <a class="btn btn-light btn-lg" href="index.html">Back to the homepage</a>
+        <a class="btn btn-dark btn-lg" href="index.html#commands">Browse 99 commands</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="auth.js"></script>
+<script src="background-3d.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

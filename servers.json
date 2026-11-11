@@ -1,0 +1,14 @@
+{
+  "updatedAt": null,
+  "sample": true,
+  "servers": [
+    { "id": "example-01", "name": "Northwind", "icon": null, "memberCount": 48200 },
+    { "id": "example-02", "name": "Studio Nine", "icon": null, "memberCount": 12600 },
+    { "id": "example-03", "name": "Pixel Forge", "icon": null, "memberCount": 8400 },
+    { "id": "example-04", "name": "The Commons", "icon": null, "memberCount": 5100 },
+    { "id": "example-05", "name": "Orbit Labs", "icon": null, "memberCount": 3200 },
+    { "id": "example-06", "name": "Late Night", "icon": null, "memberCount": 1800 },
+    { "id": "example-07", "name": "Greenhouse", "icon": null, "memberCount": 940 },
+    { "id": "example-08", "name": "The Archive", "icon": null, "memberCount": 460 }
+  ]
+}
