@@ -159,6 +159,9 @@
 
     const headers = { Authorization: 'Bearer ' + session.accessToken };
     if (body !== undefined) headers['Content-Type'] = 'application/json';
+    // ngrok's free domains answer browser requests with a warning page instead of the API's
+    // JSON unless this header is present.
+    headers['ngrok-skip-browser-warning'] = '1';
 
     const response = await fetch(state.api + path, {
       method,
@@ -1199,7 +1202,10 @@
 
         ui.connectError.hidden = true;
         try {
-          const response = await fetch(base + '/api/health', { cache: 'no-store' });
+          const response = await fetch(base + '/api/health', {
+            cache: 'no-store',
+            headers: { 'ngrok-skip-browser-warning': '1' },
+          });
           const data = await response.json().catch(() => null);
           if (!response.ok || !data || !data.ok) throw new Error('bad answer');
           try { window.localStorage.setItem(API_STORE, base); } catch (error) { /* ignore */ }

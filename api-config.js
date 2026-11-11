@@ -7,4 +7,4 @@
  *   window.KERNEL_API_BASE = 'https://kernel-api.wispbyte.app';
  * No trailing slash, no /api suffix.
  */
-window.KERNEL_API_BASE = '';
+window.KERNEL_API_BASE = 'https://almanac-carbon-babied.ngrok-free.dev';
