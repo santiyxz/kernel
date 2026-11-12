@@ -1493,6 +1493,8 @@ section[id], [id="top"] { scroll-margin-top: 100px; }
 
 @media (max-width: 900px) {
   .links, .nav-support { display: none; }
+  /* The dashboard pages have no drawer, so the owner link keeps its place there. */
+  .nav-support.nav-owner-pinned { display: inline; font-size: .78rem; }
   .nav-login { display: none; }
   .burger { display: grid; }
   .nav { gap: 14px; padding: 7px 7px 7px 16px; }
