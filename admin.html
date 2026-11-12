@@ -10,8 +10,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20261112">
-<link rel="stylesheet" href="admin.css?v=20261112">
+<link rel="stylesheet" href="styles.css?v=20261112b">
+<link rel="stylesheet" href="admin.css?v=20261112b">
 <script>document.documentElement.classList.add('js');</script>
 </head>
 <body class="dash-page admin-page">
@@ -103,6 +103,7 @@
         <div class="ad-toolbar">
           <span class="ad-live" data-ad-live><span class="ad-dot" aria-hidden="true"></span><span data-ad-live-text>Live</span></span>
           <button class="btn btn-dark btn-sm" type="button" data-ad-refresh>Refresh</button>
+          <a class="btn btn-dark btn-sm" href="inbox.html">Inbox</a>
           <a class="btn btn-dark btn-sm" href="dashboard.html">Dashboard</a>
           <button class="btn btn-dark btn-sm" type="button" data-ad-logout>Sign out</button>
         </div>
@@ -341,7 +342,7 @@
                   <div class="ad-form-row">
                     <label class="ad-field">
                       <span>Colour</span>
-                      <input type="text" maxlength="7" data-ad-broadcast-color placeholder="#5865f2">
+                      <input type="text" maxlength="7" data-ad-broadcast-color placeholder="#b9bfc7">
                     </label>
                     <label class="ad-field">
                       <span>Footer</span>
@@ -613,7 +614,7 @@
               <span class="ad-count" data-ad-inbox-count>—</span>
               <button class="btn btn-dark btn-sm" type="button" data-ad-inbox-refresh>Refresh</button>
             </div>
-            <p class="ad-tool-note">Everything sent from the Contact page or a developer profile, kept in <code>data/inbox.json</code> (last 500). Reply opens your mail client with the visitor's address already in the To field; nothing is sent from here.</p>
+            <p class="ad-tool-note">Everything sent from the Contact page or a developer profile, kept in <code>data/inbox.json</code> (last 500). The full inbox has a reader, search and a test notification button. Reply opens your mail client with the visitor's address already in the To field; nothing is sent from the site.</p>
             <div class="ad-rows" data-ad-inbox-list></div>
             <div class="ad-form-actions">
               <span class="ad-status" data-ad-inbox-status role="status"></span>

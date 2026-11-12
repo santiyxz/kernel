@@ -126,7 +126,7 @@
 
         form.reset();
         count();
-        setStatus(status, 'Sent. It is in the owner console now, and a Discord DM goes out too.', 'ok');
+        setStatus(status, 'Sent. It is in the owner inbox now, and a Discord notification goes out too.', 'ok');
       } catch (error) {
         setStatus(status, error.message || 'Could not reach Kernel. Check your connection and try again.', 'bad');
       } finally {

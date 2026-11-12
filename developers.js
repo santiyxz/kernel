@@ -101,19 +101,26 @@ window.KernelDev = (function () {
     return STATUS[status] || 'Offline';
   }
 
+  // Lanyard can report a lone Hangul jamo or a zero-width tag, which paints as an empty
+  // status line. Treat anything with no visible characters as no activity at all.
+  const INVISIBLE = /[\u1100-\u11ff\u200b-\u200f\u202a-\u202e\u2060-\u206f\u2800\u3164\ua960-\ua97f\ud7b0-\ud7ff\ufe00-\ufe0f\uffa0]/g;
+  function visible(value) {
+    return String(value || '').replace(INVISIBLE, '').trim();
+  }
+
   function activityLine(presence) {
     if (!presence) return null;
     if (presence.listening_to_spotify && presence.spotify) {
       const track = [presence.spotify.song, presence.spotify.artist].filter(Boolean).join(' — ');
       return track ? { spotify: true, text: 'Spotify · ' + track, art: presence.spotify.album_art_url || null } : null;
     }
-    const activity = (presence.activities || []).find((item) => item && item.type !== 4);
+    const activity = (presence.activities || []).find((item) => item && item.type !== 4 && visible(item.name));
     if (!activity) return null;
     const verb = VERB[activity.type] || 'Playing';
-    const detail = activity.details || activity.state || '';
+    const detail = visible(activity.details || activity.state);
     return {
       spotify: false,
-      text: verb + ' ' + activity.name + (detail ? ' · ' + detail : ''),
+      text: verb + ' ' + visible(activity.name) + (detail ? ' · ' + detail : ''),
       art: activity.assets && activity.assets.large_image && /^https:\/\//.test(activity.assets.large_image) ? activity.assets.large_image : null,
     };
   }
@@ -123,7 +130,7 @@ window.KernelDev = (function () {
     const activity = (presence.activities || []).find((item) => item && item.type === 4);
     if (!activity) return '';
     const emoji = activity.emoji && activity.emoji.name ? activity.emoji.name + ' ' : '';
-    return (emoji + (activity.state || '')).trim();
+    return (emoji + visible(activity.state)).trim();
   }
 
   async function fetchPresence(id) {

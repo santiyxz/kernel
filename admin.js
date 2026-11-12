@@ -1056,7 +1056,7 @@
     ui.embedFooter.textContent = String(ui.broadcastFooter.value || '').trim() || 'Kernel owner console';
     const color = String(ui.broadcastColor.value || '').trim();
     if (ui.embedTitle.parentElement) {
-      ui.embedTitle.parentElement.style.borderLeftColor = /^#[0-9a-f]{6}$/i.test(color) ? color : '#5865f2';
+      ui.embedTitle.parentElement.style.borderLeftColor = /^#[0-9a-f]{6}$/i.test(color) ? color : '#b9bfc7';
     }
   }
 
@@ -1452,7 +1452,7 @@
       setStatus(ui.digestStatus, 'Nothing to preview.', 'bad');
       return;
     }
-    const color = embed.color === undefined || embed.color === null ? '#5865f2' : '#' + Number(embed.color).toString(16).padStart(6, '0');
+    const color = embed.color === undefined || embed.color === null ? '#b9bfc7' : '#' + Number(embed.color).toString(16).padStart(6, '0');
     const nodes = [el('strong', { text: embed.title || 'Weekly protection report' })];
     if (embed.description) nodes.push(el('p', { text: embed.description }));
     for (const field of embed.fields || []) {

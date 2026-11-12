@@ -385,10 +385,10 @@
 
   function colorField(labelText, value) {
     const initial = typeof value === 'number' ? '#' + value.toString(16).padStart(6, '0') : '';
-    const text = el('input', { type: 'text', name: 'color', placeholder: '#5865f2', maxlength: '7', class: 'mg-color-text' });
+    const text = el('input', { type: 'text', name: 'color', placeholder: '#b9bfc7', maxlength: '7', class: 'mg-color-text' });
     text.value = initial;
-    const picker = el('input', { type: 'color', class: 'mg-color', value: initial || '#5865f2', 'aria-label': labelText });
-    picker.value = initial || '#5865f2';
+    const picker = el('input', { type: 'color', class: 'mg-color', value: initial || '#b9bfc7', 'aria-label': labelText });
+    picker.value = initial || '#b9bfc7';
 
     picker.addEventListener('input', () => {
       text.value = picker.value;
@@ -1084,7 +1084,7 @@
       .replace(/\{button\}/gi, label);
 
     const embed = el('div', { class: 'dc-embed' });
-    embed.style.setProperty('--dc-accent', '#8b5cf6');
+    embed.style.setProperty('--dc-accent', '#c9cdd3');
     const main = el('div', { class: 'dc-embed-main' });
     main.append(el('div', { class: 'dc-title', text: '🔐 Member verification' }));
     main.append(el('div', { class: 'dc-desc', html: formatText(text) }));

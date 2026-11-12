@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20261112">
+<link rel="stylesheet" href="styles.css?v=20261112b">
 <script>document.documentElement.classList.add('js');</script>
 <script type="application/ld+json">
 {
@@ -63,6 +63,7 @@
     </nav>
 
     <div class="nav-actions">
+      <a class="nav-support" data-owner-link hidden href="inbox.html">Inbox</a>
       <a class="nav-support" data-owner-link hidden href="admin.html">Admin</a>
       <a class="nav-support nav-support-site" href="#support">Support</a>
       <a class="btn btn-dark btn-sm nav-login" data-login href="dashboard.html">
@@ -88,6 +89,7 @@
     <a href="#developers">Developers</a>
     <a href="contact.html">Contact</a>
     <a href="#faq">FAQ</a>
+    <a data-owner-link hidden href="inbox.html">Inbox</a>
     <a data-owner-link hidden href="admin.html">Admin</a>
     <a href="#support">Support</a>
     <a class="btn btn-dark" data-login href="dashboard.html">
@@ -978,44 +980,53 @@
            EDIT ME: replace the placeholder name, @handle, role, tags and link in each card. -->
       <div class="dev-grid">
         <article class="dev-card" data-dev-card="founder" data-reveal>
-          <div class="dev-top">
-            <span class="dev-avatar" aria-hidden="true" data-dev-slot="avatar"><span data-dev-slot="initials">YN</span></span>
+          <div class="dev-head">
+            <span class="dev-avatar" aria-hidden="true" data-dev-slot="avatar"><span data-dev-slot="initials">IN</span></span>
+            <div class="dev-id">
+              <h3 data-dev-slot="name">intelnito</h3>
+              <p class="dev-handle" data-dev-slot="handle">@py.ex</p>
+            </div>
             <span class="dev-badge">Maintainer</span>
           </div>
-          <h3 data-dev-slot="name">Your Name</h3>
-          <p class="dev-handle" data-dev-slot="handle">@yourhandle</p>
           <p class="dev-status" data-dev-slot="status" hidden></p>
           <p class="dev-activity" data-dev-slot="activity" hidden></p>
           <p class="dev-role">Founder · anti-nuke engine, case ledger and the site.</p>
           <ul class="dev-tags"><li>Node.js</li><li>discord.js</li><li>Security</li></ul>
-          <div class="dev-links"><a href="profile.html?dev=founder">Say hello →</a></div>
+          <div class="dev-links"><a href="profile.html?dev=founder">Open profile <span aria-hidden="true">→</span></a></div>
         </article>
 
         <article class="dev-card" data-dev-card="teammate" data-reveal>
-          <div class="dev-top">
+          <div class="dev-head">
             <span class="dev-avatar" aria-hidden="true" data-dev-slot="avatar"><span data-dev-slot="initials">TM</span></span>
-            <span class="dev-badge">Developer</span>
+            <div class="dev-id">
+              <h3 data-dev-slot="name">Developer seat</h3>
+              <p class="dev-handle" data-dev-slot="handle">@waiting</p>
+            </div>
+            <span class="dev-badge">Open slot</span>
           </div>
-          <h3 data-dev-slot="name">Team Member</h3>
-          <p class="dev-handle" data-dev-slot="handle">@teammate</p>
           <p class="dev-status" data-dev-slot="status" hidden></p>
           <p class="dev-activity" data-dev-slot="activity" hidden></p>
-          <p class="dev-role">Commands, automod and the economy pack.</p>
+          <p class="dev-role">This card fills in the moment a second developer account is added in <code>developers.js</code> — no invented presence before then.</p>
           <ul class="dev-tags"><li>discord.js</li><li>Commands</li><li>Automod</li></ul>
-          <div class="dev-links"><a href="profile.html?dev=teammate">Say hello →</a></div>
+          <div class="dev-links"><a href="profile.html?dev=teammate">Open profile <span aria-hidden="true">→</span></a></div>
         </article>
 
         <article class="dev-card is-accent" data-reveal>
-          <div class="dev-top">
-            <span class="dev-avatar" aria-hidden="true">&lt;/&gt;</span>
-            <span class="dev-badge">How it is built</span>
+          <div class="dev-head">
+            <span class="dev-avatar is-mark" aria-hidden="true">&lt;/&gt;</span>
+            <div class="dev-id">
+              <h3>Small on purpose</h3>
+              <p class="dev-handle">how it is built</p>
+            </div>
+            <span class="dev-badge">Spec</span>
           </div>
-          <h3>Small on purpose</h3>
-          <p class="dev-role">
-            One bot, plain Node.js and JSON files you own. No third-party service, no telemetry and no paid tier
-            hiding the useful commands.
-          </p>
-          <div class="dev-links"><a href="#commands">See every command</a></div>
+          <dl class="dev-spec">
+            <div><dt>Runtime</dt><dd>Node.js · discord.js</dd></div>
+            <div><dt>Storage</dt><dd>JSON files you own</dd></div>
+            <div><dt>Telemetry</dt><dd>None</dd></div>
+            <div><dt>Paid tier</dt><dd>None</dd></div>
+          </dl>
+          <div class="dev-links"><a href="#commands">See every command <span aria-hidden="true">→</span></a></div>
         </article>
       </div>
     </div>
