@@ -325,12 +325,14 @@
     const year = document.getElementById('year');
     if (year) year.textContent = String(new Date().getFullYear());
 
-    if (ui.login) ui.login.href = auth.loginUrl('admin.html');
-
+    // Consume the redirect before building a login link: loginUrl() stores a fresh state, and
+    // doing that first made every real login look like a forged one.
     const callback = auth.consumeCallback();
     if (callback && !callback.ok) {
       gate(callback.description || 'Discord sign-in did not complete. Try again.');
     }
+
+    if (ui.login) ui.login.href = auth.loginUrl('admin.html');
 
     ui.logout.addEventListener('click', () => {
       auth.clearSession();
