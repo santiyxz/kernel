@@ -26,8 +26,8 @@ window.KernelAuth = (function () {
 
   const store = storage();
 
-  function redirectUri() {
-    const url = new URL('dashboard.html', window.location.href);
+  function redirectUri(page) {
+    const url = new URL(page || 'dashboard.html', window.location.href);
     url.hash = '';
     url.search = '';
     return url.href;
@@ -42,11 +42,11 @@ window.KernelAuth = (function () {
     return Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('');
   }
 
-  function loginUrl() {
+  function loginUrl(page) {
     const params = new URLSearchParams();
     params.set('client_id', CLIENT_ID);
     params.set('response_type', 'token');
-    params.set('redirect_uri', redirectUri());
+    params.set('redirect_uri', redirectUri(page));
     params.set('scope', SCOPES.join(' '));
 
     if (store) {
