@@ -24,6 +24,14 @@
     backup: document.querySelector('[data-status-backup]'),
     version: document.querySelector('[data-status-version]'),
     domain: document.querySelector('[data-status-domain]'),
+    external: document.querySelector('[data-st-external]'),
+    probeLast: document.querySelector('[data-st-probe-last]'),
+    probeTarget: document.querySelector('[data-st-probe-target]'),
+    probeState: document.querySelector('[data-st-probe-state]'),
+    probeDetail: document.querySelector('[data-st-probe-detail]'),
+    probeCount: document.querySelector('[data-st-probe-count]'),
+    probeUptime: document.querySelector('[data-st-probe-uptime]'),
+    probeStrip: document.querySelector('[data-st-probe-strip]'),
   };
 
   const number = new Intl.NumberFormat('en');
@@ -106,8 +114,54 @@
     }
   }
 
+  // External probe: a small JSON file GitHub Actions rewrites every 15 minutes. When the file is
+  // absent (workflow not added yet) the whole panel stays hidden instead of showing fake zeros.
+  async function loadProbe() {
+    if (!ui.external) return;
+    try {
+      const response = await fetch('uptime.json?t=' + Date.now(), { cache: 'no-store' });
+      if (!response.ok) return;
+      const data = await response.json();
+      const checks = Array.isArray(data && data.checks) ? data.checks.slice(-96) : [];
+      if (!checks.length) return;
+
+      const last = checks[checks.length - 1];
+      const ok = checks.filter((check) => check && check.ok).length;
+      const pct = Math.round((ok / checks.length) * 100);
+
+      if (ui.probeLast) ui.probeLast.textContent = ago(Date.parse(last.at) || 0).replace(' ago', '');
+      if (ui.probeTarget) ui.probeTarget.textContent = data.target || 'health endpoint';
+      if (ui.probeState) ui.probeState.textContent = last.ok ? 'Answered' : 'No answer';
+      if (ui.probeDetail) {
+        ui.probeDetail.textContent = last.ok
+          ? (Number.isFinite(last.ms) ? last.ms + ' ms · HTTP ' + (last.code || 200) : 'HTTP ' + (last.code || 200))
+          : (last.error || 'the endpoint did not answer') + (last.code ? ' · HTTP ' + last.code : '');
+      }
+      if (ui.probeCount) ui.probeCount.textContent = number.format(checks.length);
+      if (ui.probeUptime) ui.probeUptime.textContent = pct + '% answered · oldest ' + ago(Date.parse(checks[0].at) || 0);
+
+      if (ui.probeStrip) {
+        ui.probeStrip.replaceChildren();
+        checks.forEach((check) => {
+          const cell = document.createElement('span');
+          cell.className = check && check.ok ? 'is-ok' : 'is-bad';
+          cell.title = (check && check.at ? new Date(check.at).toLocaleString() : '') + (check && check.ok ? ' · answered' : ' · no answer');
+          ui.probeStrip.append(cell);
+        });
+      }
+
+      ui.external.hidden = false;
+    } catch (error) {
+      /* no probe file yet */
+    }
+  }
+
   load();
+  loadProbe();
   setInterval(() => {
     if (!document.hidden) load();
   }, 30000);
+  setInterval(() => {
+    if (!document.hidden) loadProbe();
+  }, 300000);
 })();

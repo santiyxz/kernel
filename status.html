@@ -23,7 +23,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20261112b">
+<link rel="stylesheet" href="styles.css?v=20261113b">
 <style>
   .st-page { min-height: 100vh; display: flex; flex-direction: column; }
   .st-main { flex: 1; padding: 64px 0 72px; position: relative; }
@@ -78,6 +78,13 @@
   @media (prefers-reduced-motion: reduce) { .st-card:hover { transform: none; } }
   .st-note { margin: 0; font-size: .78rem; line-height: 1.7; color: #83878e; }
   .st-note code { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: .74rem; color: #c9ccd1; }
+  .st-external { margin-top: 30px; padding-top: 24px; border-top: 1px solid rgba(255, 255, 255, .08); }
+  .st-external h2 { margin: 0 0 8px; font-size: 1.05rem; letter-spacing: -.01em; color: #eef0f2; }
+  .st-external-lead { margin: 0 0 18px; font-size: .8rem; line-height: 1.6; color: #9aa0a7; max-width: 640px; }
+  .st-strip { display: flex; flex-wrap: wrap; gap: 3px; margin: 4px 0 16px; }
+  .st-strip span { width: 7px; height: 16px; border-radius: 2px; background: #3a3d42; }
+  .st-strip span.is-ok { background: #e8eaec; box-shadow: 0 0 6px rgba(255, 255, 255, .28); }
+  .st-strip span.is-bad { background: #6a6e75; }
   @media (max-width: 560px) {
     .st-main { padding: 40px 0 56px; }
     .st-banner { padding: 15px 16px; }
@@ -162,6 +169,30 @@
       Build <span data-status-version>—</span> · public endpoint <code data-status-domain>not configured</code>.
       If this page cannot reach the bot, the site itself is still up; only the API is down.
     </p>
+
+    <section class="st-external" data-st-external hidden aria-labelledby="st-external-title">
+      <h2 id="st-external-title">External checks</h2>
+      <p class="st-external-lead">Recorded by GitHub Actions every 15 minutes from outside the bot, so a sleeping or crashed process still shows up here.</p>
+      <div class="st-grid">
+        <article class="st-card">
+          <p class="st-label">Last external check</p>
+          <p class="st-value" data-st-probe-last>—</p>
+          <p class="st-sub" data-st-probe-target>—</p>
+        </article>
+        <article class="st-card">
+          <p class="st-label">Result</p>
+          <p class="st-value" data-st-probe-state>—</p>
+          <p class="st-sub" data-st-probe-detail>—</p>
+        </article>
+        <article class="st-card">
+          <p class="st-label">Checks recorded</p>
+          <p class="st-value" data-st-probe-count>—</p>
+          <p class="st-sub" data-st-probe-uptime>—</p>
+        </article>
+      </div>
+      <div class="st-strip" data-st-probe-strip aria-label="Recent external checks, oldest first"></div>
+      <p class="st-note">A failed check can also be ngrok or GitHub briefly failing. The live panel above is the source of truth right now.</p>
+    </section>
   </div>
 </main>
 
@@ -173,6 +204,7 @@
 </footer>
 
 <script src="api-config.js"></script>
+<script src="site-content.js"></script>
 <script src="status.js" defer></script>
 </body>
 </html>

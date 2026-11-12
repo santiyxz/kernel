@@ -83,6 +83,7 @@
     broadcastDesc: document.querySelector('[data-ad-broadcast-desc]'),
     broadcastColor: document.querySelector('[data-ad-broadcast-color]'),
     broadcastFooter: document.querySelector('[data-ad-broadcast-footer]'),
+    broadcastUrl: document.querySelector('[data-ad-broadcast-url]'),
     broadcastConfirm: document.querySelector('[data-ad-broadcast-confirm]'),
     broadcastStatus: document.querySelector('[data-ad-broadcast-status]'),
     broadcastGuilds: document.querySelector('[data-ad-broadcast-guilds]'),
@@ -173,6 +174,41 @@
     adoption: document.querySelector('[data-ad-adoption]'),
     adoptRefresh: document.querySelector('[data-ad-adopt-refresh]'),
     adoptStatus: document.querySelector('[data-ad-adopt-status]'),
+    siteStamp: document.querySelector('[data-ad-site-stamp]'),
+    sitePill: document.querySelector('[data-ad-site-pill]'),
+    siteTitle: document.querySelector('[data-ad-site-title]'),
+    siteSub: document.querySelector('[data-ad-site-sub]'),
+    siteBannerOn: document.querySelector('[data-ad-site-banner-on]'),
+    siteBannerText: document.querySelector('[data-ad-site-banner-text]'),
+    siteBannerHref: document.querySelector('[data-ad-site-banner-href]'),
+    siteSave: document.querySelector('[data-ad-site-save]'),
+    siteReset: document.querySelector('[data-ad-site-reset]'),
+    siteStatus: document.querySelector('[data-ad-site-status]'),
+    showList: document.querySelector('[data-ad-show-list]'),
+    showCount: document.querySelector('[data-ad-show-count]'),
+    showRefresh: document.querySelector('[data-ad-show-refresh]'),
+    showSave: document.querySelector('[data-ad-show-save]'),
+    showStatus: document.querySelector('[data-ad-show-status]'),
+    tplCount: document.querySelector('[data-ad-tpl-count]'),
+    tplName: document.querySelector('[data-ad-tpl-name]'),
+    tplColor: document.querySelector('[data-ad-tpl-color]'),
+    tplTitle: document.querySelector('[data-ad-tpl-title]'),
+    tplDesc: document.querySelector('[data-ad-tpl-desc]'),
+    tplFooter: document.querySelector('[data-ad-tpl-footer]'),
+    tplUrl: document.querySelector('[data-ad-tpl-url]'),
+    tplSave: document.querySelector('[data-ad-tpl-save]'),
+    tplUse: document.querySelector('[data-ad-tpl-use]'),
+    tplStatus: document.querySelector('[data-ad-tpl-status]'),
+    tplList: document.querySelector('[data-ad-tpl-list]'),
+    tplPreview: document.querySelector('[data-ad-tpl-preview]'),
+    tplPreviewTitle: document.querySelector('[data-ad-tpl-preview-title]'),
+    tplPreviewDesc: document.querySelector('[data-ad-tpl-preview-desc]'),
+    tplPreviewFooter: document.querySelector('[data-ad-tpl-preview-footer]'),
+    ticketCount: document.querySelector('[data-ad-ticket-count]'),
+    ticketScope: document.querySelector('[data-ad-ticket-scope]'),
+    ticketList: document.querySelector('[data-ad-ticket-list]'),
+    ticketRefresh: document.querySelector('[data-ad-ticket-refresh]'),
+    ticketStatus: document.querySelector('[data-ad-ticket-status]'),
   };
 
   const state = {
@@ -187,6 +223,9 @@
     control: null,
     settings: null,
     settingsGuildTouched: false,
+    showcaseRules: { hidden: [], order: [] },
+    showcaseDraft: [],
+    templates: [],
   };
 
   const numberFormat = new Intl.NumberFormat('en');
@@ -1077,6 +1116,7 @@
         description: ui.broadcastDesc.value.trim(),
         footer: ui.broadcastFooter.value.trim(),
         color: ui.broadcastColor.value.trim(),
+        url: ui.broadcastUrl ? ui.broadcastUrl.value.trim() : '',
         confirm: ui.broadcastConfirm.value.trim(),
       });
       setStatus(ui.broadcastStatus, data.sent + ' delivered, ' + data.failed + ' failed.', data.failed ? 'bad' : 'ok');
@@ -1956,6 +1996,371 @@
     }
   }
 
+  /* --------------------------------------------------------------- website */
+
+  function siteUnavailable(error) {
+    if (ui.siteStamp) ui.siteStamp.textContent = 'unavailable';
+    toolMissing(ui.showList, 'Website copy');
+    if (error && error.session) throw error;
+  }
+
+  function renderSite(data) {
+    const content = (data && data.content) || {};
+    const hero = content.hero || {};
+    const banner = content.banner || {};
+    if (ui.sitePill) ui.sitePill.value = hero.pill || '';
+    if (ui.siteTitle) ui.siteTitle.value = hero.title || '';
+    if (ui.siteSub) ui.siteSub.value = hero.sub || '';
+    if (ui.siteBannerOn) ui.siteBannerOn.checked = banner.enabled === true;
+    if (ui.siteBannerText) ui.siteBannerText.value = banner.text || '';
+    if (ui.siteBannerHref) ui.siteBannerHref.value = banner.href || '';
+    if (ui.siteStamp) {
+      ui.siteStamp.textContent = data && data.updatedAt ? 'saved ' + relativeTime(data.updatedAt) : 'shipped copy';
+    }
+    state.showcaseRules = content.showcase || { hidden: [], order: [] };
+  }
+
+  async function loadSite() {
+    try {
+      const data = await get('/api/owner/site');
+      renderSite(data);
+      setStatus(ui.siteStatus, '', '');
+      await loadShowcase();
+    } catch (error) {
+      if (error.session) throw error;
+      siteUnavailable(error);
+    }
+  }
+
+  async function saveSite(reset) {
+    if (!ui.siteSave) return;
+    setStatus(ui.siteStatus, reset ? 'Restoring…' : 'Saving…');
+    try {
+      const body = reset
+        ? { reset: true }
+        : {
+            hero: {
+              pill: ui.sitePill.value.trim(),
+              title: ui.siteTitle.value.trim(),
+              sub: ui.siteSub.value.trim(),
+            },
+            banner: {
+              enabled: Boolean(ui.siteBannerOn && ui.siteBannerOn.checked),
+              text: ui.siteBannerText.value.trim(),
+              href: ui.siteBannerHref.value.trim(),
+            },
+          };
+      const data = await request('PUT', '/api/owner/site', body);
+      renderSite(data);
+      if (reset) await loadShowcase();
+      setStatus(ui.siteStatus, reset ? 'Shipped copy restored.' : 'Saved. Reload the site to see it.', 'ok');
+      loadAudit();
+    } catch (error) {
+      if (error.session) return gate('Your Discord session expired. Log in again.');
+      if (error.denied) return show('denied');
+      setStatus(ui.siteStatus, error.message, 'bad');
+    }
+  }
+
+  function showcaseSource() {
+    const guilds = state.overview && Array.isArray(state.overview.guilds) ? state.overview.guilds : [];
+    return guilds.map((guild) => ({ id: String(guild.id), name: guild.name, members: guild.memberCount || 0 }));
+  }
+
+  function renderShowcase() {
+    if (!ui.showList) return;
+    const draft = state.showcaseDraft || [];
+    ui.showList.replaceChildren();
+    if (!draft.length) {
+      ui.showList.append(el('p', { className: 'ad-empty', text: 'No servers to list yet.' }));
+      if (ui.showCount) ui.showCount.textContent = '0';
+      return;
+    }
+
+    draft.forEach((row, index) => {
+      const box = el('input', { type: 'checkbox', 'aria-label': 'Show ' + row.name });
+      box.checked = !row.hidden;
+      box.addEventListener('change', () => {
+        row.hidden = !box.checked;
+        updateShowcaseCount();
+      });
+
+      const move = (delta) => {
+        const next = index + delta;
+        if (next < 0 || next >= draft.length) return;
+        const [entry] = draft.splice(index, 1);
+        draft.splice(next, 0, entry);
+        renderShowcase();
+      };
+      const up = el('button', { className: 'btn btn-dark btn-sm', type: 'button', text: '↑', 'aria-label': 'Move ' + row.name + ' up' });
+      up.addEventListener('click', () => move(-1));
+      const down = el('button', { className: 'btn btn-dark btn-sm', type: 'button', text: '↓', 'aria-label': 'Move ' + row.name + ' down' });
+      down.addEventListener('click', () => move(1));
+
+      ui.showList.append(
+        el('div', { className: 'ad-row' },
+          el('div', { className: 'ad-row-main' },
+            el('div', { className: 'ad-row-name', text: row.name }),
+            el('div', { className: 'ad-row-meta', text: (row.members ? numberFormat.format(row.members) + ' members' : 'Kernel is in this server') + (row.hidden ? ' · hidden' : '') })),
+          el('div', { className: 'ad-row-side' }, box, up, down)),
+      );
+    });
+    updateShowcaseCount();
+  }
+
+  function updateShowcaseCount() {
+    if (!ui.showCount) return;
+    const draft = state.showcaseDraft || [];
+    const shown = draft.filter((row) => !row.hidden).length;
+    ui.showCount.textContent = shown + '/' + draft.length + ' shown';
+  }
+
+  async function loadShowcase() {
+    if (!ui.showList) return;
+    const rules = state.showcaseRules || { hidden: [], order: [] };
+    const hidden = new Set(rules.hidden || []);
+    const order = Array.isArray(rules.order) ? rules.order : [];
+    const rank = new Map(order.map((id, index) => [id, index]));
+    const servers = showcaseSource();
+    servers.sort((a, b) => {
+      const ra = rank.has(a.id) ? rank.get(a.id) : Infinity;
+      const rb = rank.has(b.id) ? rank.get(b.id) : Infinity;
+      return ra === rb ? b.members - a.members : ra - rb;
+    });
+    state.showcaseDraft = servers.map((server) => ({ ...server, hidden: hidden.has(server.id) }));
+    renderShowcase();
+  }
+
+  async function saveShowcase() {
+    if (!ui.showSave) return;
+    setStatus(ui.showStatus, 'Saving…');
+    const draft = state.showcaseDraft || [];
+    try {
+      const data = await request('PUT', '/api/owner/site', {
+        showcase: {
+          hidden: draft.filter((row) => row.hidden).map((row) => row.id),
+          order: draft.map((row) => row.id),
+        },
+      });
+      renderSite(data);
+      setStatus(ui.showStatus, 'Showcase saved. Reload the site to see it.', 'ok');
+      loadAudit();
+    } catch (error) {
+      if (error.session) return gate('Your Discord session expired. Log in again.');
+      if (error.denied) return show('denied');
+      setStatus(ui.showStatus, error.message, 'bad');
+    }
+  }
+
+  /* --------------------------------------------------------------- templates */
+
+  function templateFields() {
+    return {
+      name: ui.tplName ? ui.tplName.value.trim() : '',
+      title: ui.tplTitle ? ui.tplTitle.value.trim() : '',
+      description: ui.tplDesc ? ui.tplDesc.value.trim() : '',
+      color: ui.tplColor ? ui.tplColor.value.trim() : '',
+      footer: ui.tplFooter ? ui.tplFooter.value.trim() : '',
+      url: ui.tplUrl ? ui.tplUrl.value.trim() : '',
+    };
+  }
+
+  function fillTemplate(template) {
+    if (!template) return;
+    if (ui.tplName) ui.tplName.value = template.name || '';
+    if (ui.tplTitle) ui.tplTitle.value = template.title || '';
+    if (ui.tplDesc) ui.tplDesc.value = template.description || '';
+    if (ui.tplColor) ui.tplColor.value = typeof template.color === 'number'
+      ? '#' + template.color.toString(16).padStart(6, '0')
+      : String(template.color || '');
+    if (ui.tplFooter) ui.tplFooter.value = template.footer || '';
+    if (ui.tplUrl) ui.tplUrl.value = template.url || '';
+    updateTplPreview();
+  }
+
+  function updateTplPreview() {
+    if (!ui.tplPreviewTitle) return;
+    const fields = templateFields();
+    ui.tplPreviewTitle.textContent = fields.title || 'Untitled announcement';
+    ui.tplPreviewDesc.textContent = fields.description || 'Your description appears here.';
+    ui.tplPreviewFooter.textContent = fields.footer || 'Kernel';
+    if (ui.tplPreview) {
+      ui.tplPreview.style.borderLeftColor = /^#[0-9a-f]{6}$/i.test(fields.color) ? fields.color : 'var(--line-strong)';
+    }
+  }
+
+  function renderTemplates() {
+    if (!ui.tplList) return;
+    const rows = state.templates || [];
+    if (ui.tplCount) ui.tplCount.textContent = rows.length + ' saved';
+    ui.tplList.replaceChildren();
+    if (!rows.length) {
+      ui.tplList.append(el('p', { className: 'ad-empty', text: 'No templates yet. Write one and press Save template.' }));
+      return;
+    }
+    rows.forEach((template) => {
+      const load = el('button', { className: 'btn btn-dark btn-sm', type: 'button', text: 'Load' });
+      load.addEventListener('click', () => {
+        fillTemplate(template);
+        setStatus(ui.tplStatus, 'Loaded “' + template.name + '”.', 'ok');
+      });
+      const use = el('button', { className: 'btn btn-light btn-sm', type: 'button', text: 'Broadcast' });
+      use.addEventListener('click', () => useInBroadcast(template));
+      const remove = el('button', { className: 'btn btn-dark btn-sm', type: 'button', text: 'Delete' });
+      remove.addEventListener('click', () => deleteTemplate(template));
+      ui.tplList.append(
+        el('div', { className: 'ad-row' },
+          el('div', { className: 'ad-row-main' },
+            el('div', { className: 'ad-row-name', text: template.name }),
+            el('div', { className: 'ad-row-meta', text: (template.title || '(no title)') + ' · ' + relativeTime(template.at) })),
+          el('div', { className: 'ad-row-side' }, load, use, remove)),
+      );
+    });
+  }
+
+  async function loadTemplates() {
+    try {
+      const data = await get('/api/owner/templates');
+      state.templates = Array.isArray(data.templates) ? data.templates : [];
+      renderTemplates();
+    } catch (error) {
+      if (error.session) throw error;
+      if (ui.tplCount) ui.tplCount.textContent = 'unavailable';
+      toolMissing(ui.tplList, 'The embed builder');
+    }
+  }
+
+  async function saveTemplate() {
+    const fields = templateFields();
+    if (!fields.name) {
+      setStatus(ui.tplStatus, 'Give the template a name first.', 'bad');
+      return;
+    }
+    setStatus(ui.tplStatus, 'Saving…');
+    try {
+      const data = await request('POST', '/api/owner/templates', fields);
+      state.templates = data.templates || [];
+      renderTemplates();
+      setStatus(ui.tplStatus, 'Saved “' + fields.name + '”.', 'ok');
+      loadAudit();
+    } catch (error) {
+      if (error.session) return gate('Your Discord session expired. Log in again.');
+      if (error.denied) return show('denied');
+      setStatus(ui.tplStatus, error.message, 'bad');
+    }
+  }
+
+  async function deleteTemplate(template) {
+    if (!window.confirm('Delete the template “' + template.name + '”?')) return;
+    try {
+      const data = await request('POST', '/api/owner/templates/remove', { name: template.name });
+      state.templates = data.templates || [];
+      renderTemplates();
+      setStatus(ui.tplStatus, 'Deleted.', 'ok');
+      loadAudit();
+    } catch (error) {
+      if (error.session) return gate('Your Discord session expired. Log in again.');
+      if (error.denied) return show('denied');
+      setStatus(ui.tplStatus, error.message, 'bad');
+    }
+  }
+
+  function useInBroadcast(template) {
+    if (!ui.broadcastTitle) return;
+    ui.broadcastTitle.value = template.title || '';
+    ui.broadcastDesc.value = template.description || '';
+    ui.broadcastColor.value = typeof template.color === 'number'
+      ? '#' + template.color.toString(16).padStart(6, '0')
+      : String(template.color || '');
+    ui.broadcastFooter.value = template.footer || '';
+    if (ui.broadcastUrl) ui.broadcastUrl.value = template.url || '';
+    updatePreview();
+    setStatus(ui.broadcastStatus, 'Filled from “' + template.name + '”. Tick servers, then type SEND.', 'ok');
+    setStatus(ui.tplStatus, 'Copied into the Broadcast form.', 'ok');
+    if (ui.broadcastTitle.scrollIntoView) ui.broadcastTitle.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  /* ----------------------------------------------------------------- tickets */
+
+  function renderTickets(data) {
+    if (!ui.ticketList) return;
+    const rows = data && Array.isArray(data.rows) ? data.rows : [];
+    const counts = (data && data.counts) || { open: 0, closed: 0 };
+    if (ui.ticketCount) ui.ticketCount.textContent = counts.open + ' open · ' + counts.closed + ' closed';
+    ui.ticketList.replaceChildren();
+    if (!rows.length) {
+      ui.ticketList.append(el('p', { className: 'ad-empty', text: 'No tickets in this view.' }));
+      return;
+    }
+
+    rows.forEach((row) => {
+      const side = [];
+      if (row.exists) {
+        const jump = el('a', {
+          className: 'btn btn-dark btn-sm',
+          href: 'https://discord.com/channels/' + row.guildId + '/' + row.channelId,
+          target: '_blank',
+          rel: 'noopener',
+          text: 'Open',
+        });
+        const download = el('button', { className: 'btn btn-light btn-sm', type: 'button', text: 'Transcript' });
+        download.addEventListener('click', () => downloadTranscript(row));
+        side.push(jump, download);
+      }
+      ui.ticketList.append(
+        el('div', { className: 'ad-row' },
+          el('div', { className: 'ad-row-main' },
+            el('div', { className: 'ad-row-name', text: (row.open ? 'Open · ' : 'Closed · ') + (row.number ? '#' + row.number : '#' + (row.channel || row.channelId)) + ' · ' + row.guild }),
+            el('div', {
+              className: 'ad-row-meta',
+              text: [
+                'member ' + (row.userId || 'unknown'),
+                row.claimedBy ? 'claimed by ' + row.claimedBy : 'unclaimed',
+                row.priority && row.priority !== 'normal' ? row.priority : null,
+                row.open ? 'last activity ' + relativeTime(row.lastActivityAt) : 'closed ' + relativeTime(row.closedAt),
+                row.open ? null : row.transcript ? row.transcript + ' archived message(s)' : 'not archived',
+                row.exists ? null : 'channel deleted',
+              ].filter(Boolean).join(' · '),
+            })),
+          el('div', { className: 'ad-row-side' }, ...side)),
+      );
+    });
+  }
+
+  async function loadTickets() {
+    if (!ui.ticketList) return;
+    try {
+      const scope = ui.ticketScope ? ui.ticketScope.value : 'open';
+      renderTickets(await get('/api/owner/tickets?scope=' + encodeURIComponent(scope)));
+    } catch (error) {
+      if (error.session) throw error;
+      toolMissing(ui.ticketList, 'The ticket inbox');
+      if (ui.ticketCount) ui.ticketCount.textContent = 'unavailable';
+    }
+  }
+
+  async function downloadTranscript(row) {
+    setStatus(ui.ticketStatus, 'Reading the channel…');
+    try {
+      const data = await get('/api/owner/tickets/transcript?guild=' + encodeURIComponent(row.guildId) + '&channel=' + encodeURIComponent(row.channelId));
+      const blob = new Blob([String(data.content || '')], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = data.filename || 'ticket-transcript.txt';
+      document.body.append(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 4000);
+      setStatus(ui.ticketStatus, data.count + ' message(s) saved.', 'ok');
+      loadAudit();
+    } catch (error) {
+      if (error.session) return gate('Your Discord session expired. Log in again.');
+      if (error.denied) return show('denied');
+      setStatus(ui.ticketStatus, error.message, 'bad');
+    }
+  }
+
   function chartGroup(label, rows, key, tone, note) {
     const values = rows.map((row) => Number(row[key]) || 0);
     const peak = Math.max(1, ...values);
@@ -2222,6 +2627,11 @@
         await loadDigest();
         await loadEconomy();
         await loadLayout();
+        // Form-shaped tools: only on a deliberate load, or the 15-second refresh would wipe
+        // whatever the owner is typing.
+        await loadSite();
+        await loadTemplates();
+        await loadTickets();
       }
       markLive(false);
       show('app');
@@ -2459,6 +2869,20 @@
     }
     if (ui.buildSave) ui.buildSave.addEventListener('click', () => { saveBuildNow(); });
     if (ui.inboxRefresh) ui.inboxRefresh.addEventListener('click', () => { loadInbox().catch(report); });
+
+    if (ui.siteSave) ui.siteSave.addEventListener('click', () => { saveSite(false); });
+    if (ui.siteReset) ui.siteReset.addEventListener('click', () => { saveSite(true); });
+    if (ui.showRefresh) ui.showRefresh.addEventListener('click', () => { loadShowcase().catch(report); });
+    if (ui.showSave) ui.showSave.addEventListener('click', () => { saveShowcase(); });
+    if (ui.tplSave) ui.tplSave.addEventListener('click', () => { saveTemplate(); });
+    if (ui.tplUse) ui.tplUse.addEventListener('click', () => { useInBroadcast(templateFields()); });
+    [ui.tplTitle, ui.tplDesc, ui.tplColor, ui.tplFooter].forEach((field) => {
+      if (!field) return;
+      field.addEventListener('input', updateTplPreview);
+      field.addEventListener('change', updateTplPreview);
+    });
+    if (ui.ticketRefresh) ui.ticketRefresh.addEventListener('click', () => { loadTickets().catch(report); });
+    if (ui.ticketScope) ui.ticketScope.addEventListener('change', () => { loadTickets().catch(report); });
 
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden && state.session && state.overview) refresh(true);

@@ -311,7 +311,9 @@ section[id], [id="top"] { scroll-margin-top: 100px; }
 
 .hero {
   position: relative;
-  overflow: hidden;
+  /* Not `hidden`: the Explore menu opens below the CTA and would be clipped at the hero edge.
+     The scene and aurora layers already clip themselves. */
+  overflow: visible;
   padding: clamp(86px, 11vw, 136px) 0 44px;
   text-align: center;
 }
@@ -343,7 +345,9 @@ section[id], [id="top"] { scroll-margin-top: 100px; }
 
 .hero-inner {
   position: relative;
-  z-index: 2;
+  /* Above .hero-servers (both z-index 2, servers come later in the DOM): otherwise the showcase
+     cards paint over the last items of the Explore menu and swallow their clicks. */
+  z-index: 3;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2880,4 +2884,64 @@ select:focus-visible {
   .dev-badge {
     display: none;
   }
+}
+
+/* ------------------------------------------------- site banner (owner-set) */
+
+.site-banner {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  z-index: 95;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: min(720px, calc(100vw - 28px));
+  padding: 12px 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: 14px;
+  background: rgba(13, 14, 16, .97);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, .55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  font-size: .82rem;
+  line-height: 1.45;
+  color: #e6e8ea;
+  animation: site-banner-in .28s var(--ease);
+}
+.site-banner-dot {
+  width: 7px;
+  height: 7px;
+  flex: none;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, .55);
+}
+.site-banner-text { color: inherit; text-decoration: none; }
+a.site-banner-text:hover { text-decoration: underline; }
+.site-banner-close {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: transparent;
+  color: #c9cdd3;
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+}
+.site-banner-close:hover { background: rgba(255, 255, 255, .08); color: #fff; }
+@keyframes site-banner-in {
+  from { opacity: 0; transform: translate(-50%, 10px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+@media (max-width: 525px) {
+  .site-banner { bottom: 10px; padding: 10px 12px; font-size: .78rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-banner { animation: none; }
 }

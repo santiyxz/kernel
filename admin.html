@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20261112b">
+<link rel="stylesheet" href="styles.css?v=20261113b">
 <link rel="stylesheet" href="admin.css?v=20261112b">
 <script>document.documentElement.classList.add('js');</script>
 </head>
@@ -349,6 +349,10 @@
                       <input type="text" maxlength="2048" data-ad-broadcast-footer placeholder="Kernel owner console">
                     </label>
                   </div>
+                  <label class="ad-field">
+                    <span>Title link (optional)</span>
+                    <input type="text" maxlength="300" data-ad-broadcast-url placeholder="https://…">
+                  </label>
                   <div class="ad-block-row">
                     <input type="text" data-ad-broadcast-confirm placeholder="Type SEND to confirm" aria-label="Type SEND to confirm the broadcast">
                     <button class="btn btn-light btn-sm" type="submit">Send broadcast</button>
@@ -675,6 +679,154 @@
             <p class="ad-tool-note">Tunnel, CORS, owner, admin routing, data folder and environment names. It only reads; secret values are never shown.</p>
             <div class="ad-rows" data-ad-doctor></div>
             <span class="ad-status" data-ad-doctor-status role="status"></span>
+          </article>
+        </div>
+      </section>
+
+      <section class="ad-section" aria-labelledby="ad-web-title">
+        <div class="dash-list-head">
+          <div>
+            <h2 id="ad-web-title">Website</h2>
+            <p>Copy, showcase and announcement layouts for the public site. Everything is stored in the bot, so a change reaches the site on the next page load — no redeploy.</p>
+          </div>
+        </div>
+
+        <div class="ad-tools">
+          <article class="ad-tool" aria-labelledby="ad-site-title">
+            <div class="ad-tool-head">
+              <h3 id="ad-site-title">Homepage copy</h3>
+              <span class="ad-count" data-ad-site-stamp>—</span>
+            </div>
+            <p class="ad-tool-note">The hero pill, title and paragraph, plus an optional banner on every public page. Reset puts the shipped copy back.</p>
+            <div class="ad-tool-grid">
+              <label class="ad-field">
+                <span>Pill</span>
+                <input type="text" maxlength="90" data-ad-site-pill>
+              </label>
+              <label class="ad-field">
+                <span>Title</span>
+                <input type="text" maxlength="60" data-ad-site-title>
+              </label>
+              <label class="ad-field">
+                <span>Subtitle</span>
+                <textarea rows="3" maxlength="320" data-ad-site-sub></textarea>
+              </label>
+            </div>
+            <p class="ad-field-label">Maintenance banner</p>
+            <div class="ad-tool-grid">
+              <label class="ad-check"><input type="checkbox" data-ad-site-banner-on> <span>Show a banner on every public page</span></label>
+              <label class="ad-field">
+                <span>Banner text</span>
+                <input type="text" maxlength="200" data-ad-site-banner-text placeholder="Kernel is briefly offline for an update.">
+              </label>
+              <label class="ad-field">
+                <span>Banner link (optional)</span>
+                <input type="text" maxlength="300" data-ad-site-banner-href placeholder="https://… or status.html">
+              </label>
+            </div>
+            <div class="ad-form-actions">
+              <button class="btn btn-light btn-sm" type="button" data-ad-site-save>Save copy</button>
+              <button class="btn btn-dark btn-sm" type="button" data-ad-site-reset>Reset to shipped</button>
+              <span class="ad-status" data-ad-site-status role="status"></span>
+            </div>
+          </article>
+
+          <article class="ad-tool" aria-labelledby="ad-show-title">
+            <div class="ad-tool-head">
+              <h3 id="ad-show-title">Server showcase</h3>
+              <span class="ad-count" data-ad-show-count>—</span>
+              <button class="btn btn-dark btn-sm" type="button" data-ad-show-refresh>Reload list</button>
+            </div>
+            <p class="ad-tool-note">Which servers appear on the homepage, and in what order. Untick one to hide it; the arrows move it. Hiding every server falls back to showing all of them.</p>
+            <div class="ad-rows" data-ad-show-list></div>
+            <div class="ad-form-actions">
+              <button class="btn btn-light btn-sm" type="button" data-ad-show-save>Save showcase</button>
+              <span class="ad-status" data-ad-show-status role="status"></span>
+            </div>
+          </article>
+
+          <article class="ad-tool ad-tool-wide" aria-labelledby="ad-embed-title">
+            <div class="ad-tool-head">
+              <h3 id="ad-embed-title">Embed builder</h3>
+              <span class="ad-count" data-ad-tpl-count>—</span>
+            </div>
+            <p class="ad-tool-note">Write an announcement, preview it the way Discord renders it, and keep it as a template. “Use in broadcast” fills the Broadcast form in Control; nothing is sent from here.</p>
+            <div class="ad-broadcast-grid">
+              <div class="ad-broadcast-fields">
+                <div class="ad-form-row">
+                  <label class="ad-field">
+                    <span>Template name</span>
+                    <input type="text" maxlength="60" data-ad-tpl-name placeholder="Weekly reset">
+                  </label>
+                  <label class="ad-field">
+                    <span>Colour</span>
+                    <input type="text" maxlength="7" data-ad-tpl-color placeholder="#b9bfc7">
+                  </label>
+                </div>
+                <label class="ad-field">
+                  <span>Title</span>
+                  <input type="text" maxlength="256" data-ad-tpl-title placeholder="Maintenance tonight">
+                </label>
+                <label class="ad-field">
+                  <span>Description</span>
+                  <textarea rows="4" maxlength="4000" data-ad-tpl-desc placeholder="Kernel restarts at 20:00 UTC."></textarea>
+                </label>
+                <div class="ad-form-row">
+                  <label class="ad-field">
+                    <span>Footer</span>
+                    <input type="text" maxlength="200" data-ad-tpl-footer placeholder="Kernel">
+                  </label>
+                  <label class="ad-field">
+                    <span>Title link (optional)</span>
+                    <input type="text" maxlength="300" data-ad-tpl-url placeholder="https://…">
+                  </label>
+                </div>
+                <div class="ad-form-actions">
+                  <button class="btn btn-light btn-sm" type="button" data-ad-tpl-save>Save template</button>
+                  <button class="btn btn-dark btn-sm" type="button" data-ad-tpl-use>Use in broadcast</button>
+                  <span class="ad-status" data-ad-tpl-status role="status"></span>
+                </div>
+              </div>
+              <div class="ad-broadcast-side">
+                <p class="ad-preview-label">Preview</p>
+                <div class="ad-embed" data-ad-tpl-preview>
+                  <strong data-ad-tpl-preview-title>Untitled announcement</strong>
+                  <p data-ad-tpl-preview-desc>Your description appears here.</p>
+                  <span data-ad-tpl-preview-footer>Kernel</span>
+                </div>
+                <p class="ad-preview-label">Saved templates</p>
+                <div class="ad-rows" data-ad-tpl-list></div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="ad-section" aria-labelledby="ad-tickets-title">
+        <div class="dash-list-head">
+          <div>
+            <h2 id="ad-tickets-title">Tickets</h2>
+            <p>Open and closed tickets from every server, with a transcript rebuilt from the channel. Read-only: claiming and closing stay Discord actions with their own permission checks.</p>
+          </div>
+        </div>
+
+        <div class="ad-tools">
+          <article class="ad-tool ad-tool-wide" aria-labelledby="ad-ticket-title">
+            <div class="ad-tool-head">
+              <h3 id="ad-ticket-title">Ticket inbox</h3>
+              <span class="ad-count" data-ad-ticket-count>—</span>
+              <label class="ad-inline"><span>Show</span>
+                <select data-ad-ticket-scope>
+                  <option value="open">Open</option>
+                  <option value="closed">Closed</option>
+                  <option value="all">All</option>
+                </select>
+              </label>
+              <button class="btn btn-dark btn-sm" type="button" data-ad-ticket-refresh>Refresh</button>
+            </div>
+            <p class="ad-tool-note">A closed ticket's channel is usually deleted, so its transcript is only available while the channel still exists. Download reads the live channel; it never invents history.</p>
+            <div class="ad-rows" data-ad-ticket-list></div>
+            <span class="ad-status" data-ad-ticket-status role="status"></span>
           </article>
         </div>
       </section>

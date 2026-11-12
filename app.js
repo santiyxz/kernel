@@ -488,9 +488,21 @@ async function setupServers() {
   }
 
   const sample = payload.sample !== false;
-  const servers = payload.servers.filter(
+  const filtered = payload.servers.filter(
     (server) => server && typeof server.name === 'string' && server.name.trim(),
   );
+  // The owner can hide or reorder the showcase from the console. Wait briefly for that copy, but
+  // never stall the page on a sleeping bot: past 1.2s the shipped order is used.
+  if (window.KernelSite && window.KernelSite.ready) {
+    await Promise.race([
+      window.KernelSite.ready,
+      new Promise((resolve) => setTimeout(resolve, 1200)),
+    ]);
+  }
+  const servers =
+    window.KernelSite && typeof window.KernelSite.showcase === 'function'
+      ? window.KernelSite.showcase(filtered)
+      : filtered;
 
   const rows = [];
 
