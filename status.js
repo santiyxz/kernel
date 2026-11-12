@@ -114,15 +114,51 @@
     }
   }
 
-  // External probe: a small JSON file GitHub Actions rewrites every 15 minutes. When the file is
-  // absent (workflow not added yet) the whole panel stays hidden instead of showing fake zeros.
+  // The workflow commits with the repository token, and GitHub does not start the Pages deploy
+  // workflow for those commits, so the deployed uptime.json can lag behind the branch. Read the
+  // raw file on GitHub once the site runs on a github.io address, then fall back to the deployed
+  // copy (and to KERNEL_UPTIME_URL when one is configured).
+  function probeUrls() {
+    const configured = typeof window.KERNEL_UPTIME_URL === 'string'
+      ? window.KERNEL_UPTIME_URL.trim()
+      : '';
+    const urls = [];
+    if (configured) urls.push(configured);
+    const host = location.hostname;
+    if (/\.github\.io$/i.test(host)) {
+      const owner = host.split('.')[0];
+      const repo = location.pathname.split('/').filter(Boolean)[0];
+      if (owner && repo) {
+        urls.push('https://raw.githubusercontent.com/' + owner + '/' + repo + '/main/uptime.json');
+      }
+    }
+    urls.push('uptime.json');
+    return urls;
+  }
+
+  async function readProbe() {
+    for (const url of probeUrls()) {
+      try {
+        const separator = url.includes('?') ? '&' : '?';
+        const response = await fetch(url + separator + 't=' + Date.now(), { cache: 'no-store' });
+        if (!response.ok) continue;
+        const data = await response.json();
+        if (data && Array.isArray(data.checks) && data.checks.length) return data;
+      } catch (error) {
+        /* try the next source */
+      }
+    }
+    return null;
+  }
+
+  // External probe: a small JSON file GitHub Actions rewrites every 15 minutes. When no copy has
+  // checks yet the whole panel stays hidden instead of showing fake zeros.
   async function loadProbe() {
     if (!ui.external) return;
     try {
-      const response = await fetch('uptime.json?t=' + Date.now(), { cache: 'no-store' });
-      if (!response.ok) return;
-      const data = await response.json();
-      const checks = Array.isArray(data && data.checks) ? data.checks.slice(-96) : [];
+      const data = await readProbe();
+      if (!data) return;
+      const checks = data.checks.slice(-96);
       if (!checks.length) return;
 
       const last = checks[checks.length - 1];
