@@ -15,7 +15,7 @@ window.KERNEL_DEVELOPERS = {
   rest: 'https://api.lanyard.rest/v1/users/',
   socket: 'wss://api.lanyard.rest/socket',
   users: [
-    { card: 'founder', id: '' },
+    { card: 'founder', id: '1318483518262743072' },
     { card: 'teammate', id: '' },
   ],
 };
