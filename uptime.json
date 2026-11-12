@@ -1,5 +1,12 @@
 {
-  "target": "",
-  "updatedAt": 0,
-  "checks": []
+  "target": "https://almanac-carbon-babied.ngrok-free.dev",
+  "updatedAt": "2026-11-12T15:08:31Z",
+  "checks": [
+    {
+      "at": "2026-11-12T15:08:30Z",
+      "code": 200,
+      "ok": true,
+      "ms": 462
+    }
+  ]
 }
