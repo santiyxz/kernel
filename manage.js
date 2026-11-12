@@ -949,7 +949,6 @@
 
   function messageShell() {
     return el('div', { class: 'dc-message' },
-      el('div', { class: 'dc-app', text: 'Kernel ' }),
       el('div', { class: 'dc-row' },
         el('span', { class: 'dc-avatar', text: 'K' }),
         el('div', { class: 'dc-content' },
