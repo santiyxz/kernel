@@ -1,0 +1,38 @@
+name: Kernel uptime probe
+
+# An external check has to run somewhere that is not the bot, otherwise "the bot is down" also
+# means "nothing reports it". GitHub Actions is free for public repositories.
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency: uptime
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Ask the health endpoint
+        env:
+          # Change this when the ngrok domain changes.
+          UPTIME_TARGET: https://almanac-carbon-babied.ngrok-free.dev
+        run: python3 tools/uptime_probe.py
+
+      - name: Keep the result in the repository
+        run: |
+          git add uptime.json
+          if git diff --cached --quiet; then
+            echo "No change."
+            exit 0
+          fi
+          git config user.name "kernel-uptime"
+          git config user.email "actions@users.noreply.github.com"
+          git commit -m "uptime: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          git push
