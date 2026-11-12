@@ -5,24 +5,55 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Service status — Kernel</title>
 <meta name="description" content="Is Kernel online? Uptime, gateway latency and the aggregate numbers the bot publishes. No logins, no telemetry.">
+<meta property="og:title" content="Service status — Kernel">
+<meta property="og:description" content="Live uptime, gateway latency and aggregate server numbers for Kernel. No logins, no telemetry.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kernel">
+<meta property="og:url" content="https://santiyxz.github.io/kernel/status.html">
+<meta property="og:image" content="https://santiyxz.github.io/kernel/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Service status — Kernel">
+<meta name="twitter:description" content="Live uptime, gateway latency and aggregate server numbers for Kernel. No logins, no telemetry.">
+<meta name="twitter:image" content="https://santiyxz.github.io/kernel/og.png">
+<link rel="canonical" href="https://santiyxz.github.io/kernel/status.html">
 <meta name="theme-color" content="#08090a">
 <link rel="icon" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css?v=20261112">
 <style>
   .st-page { min-height: 100vh; display: flex; flex-direction: column; }
-  .st-main { flex: 1; padding: 64px 0 72px; }
+  .st-main { flex: 1; padding: 64px 0 72px; position: relative; }
+  .st-main::after {
+    content: ""; position: absolute; left: 50%; bottom: 0; z-index: -1;
+    width: min(920px, 92vw); height: 460px; transform: translateX(-50%);
+    background: radial-gradient(48% 50% at 50% 50%, rgba(88, 101, 242, .18), transparent 72%);
+    filter: blur(40px); pointer-events: none;
+  }
   .st-head { max-width: 680px; margin-bottom: 28px; }
-  .st-eyebrow { margin: 0 0 10px; font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: #8b8f96; }
-  .st-head h1 { margin: 0 0 12px; font-size: clamp(1.9rem, 4vw, 2.7rem); letter-spacing: -.03em; color: #f4f5f6; }
-  .st-head p { margin: 0; font-size: .95rem; line-height: 1.65; color: #a9adb4; }
+  .st-eyebrow { margin: 0 0 10px; font-size: .7rem; letter-spacing: .16em; text-transform: uppercase; color: #a9b0ff; }
+  .st-head h1 {
+    margin: 0 0 12px; font-size: clamp(1.9rem, 4vw, 2.7rem); letter-spacing: -.03em;
+    background: linear-gradient(112deg, #ffffff 6%, #e6e9ff 46%, #a9b0ff 88%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    filter: drop-shadow(0 16px 40px rgba(88, 101, 242, .2));
+  }
+  .st-head p { margin: 0; font-size: .95rem; line-height: 1.65; color: #b3b8c4; }
   .st-banner {
     display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
-    padding: 18px 20px; border: 1px solid #23252a; border-radius: 16px;
-    background: #0f1012; margin-bottom: 20px;
+    padding: 18px 20px; border: 1px solid transparent; border-radius: 16px;
+    background:
+      linear-gradient(160deg, rgba(22, 24, 31, .92), rgba(11, 12, 16, .95)) padding-box,
+      linear-gradient(150deg, rgba(255, 255, 255, .16), rgba(139, 147, 255, .26)) border-box;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05);
+    margin-bottom: 20px;
   }
+  .st-banner.is-ok { box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05), 0 24px 60px -44px rgba(87, 242, 135, .45); }
+  .st-banner.is-warn { box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05), 0 24px 60px -44px rgba(254, 231, 92, .45); }
+  .st-banner.is-bad { box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05), 0 24px 60px -44px rgba(237, 66, 69, .5); }
   .st-dot { width: 12px; height: 12px; border-radius: 50%; background: #74777d; flex: 0 0 auto; }
   .st-banner.is-ok .st-dot { background: #57f287; box-shadow: 0 0 0 5px rgba(87, 242, 135, .12); }
   .st-banner.is-warn .st-dot { background: #fee75c; box-shadow: 0 0 0 5px rgba(254, 231, 92, .12); }
@@ -32,10 +63,19 @@
   .st-banner-note { margin: 3px 0 0; font-size: .78rem; color: #9aa0a7; }
   .st-checked { font-size: .72rem; color: #8b8f96; white-space: nowrap; }
   .st-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 22px; }
-  .st-card { padding: 16px 18px; border: 1px solid #23252a; border-radius: 14px; background: #0d0e10; }
-  .st-label { margin: 0 0 6px; font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; color: #83878e; }
+  .st-card {
+    padding: 16px 18px; border: 1px solid transparent; border-radius: 14px;
+    background:
+      linear-gradient(160deg, rgba(23, 25, 33, .93), rgba(12, 13, 17, .95)) padding-box,
+      linear-gradient(150deg, rgba(255, 255, 255, .16), rgba(139, 147, 255, .24)) border-box;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05);
+    transition: transform .3s var(--ease), box-shadow .3s var(--ease);
+  }
+  .st-card:hover { transform: translateY(-2px); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .07), 0 24px 50px -40px rgba(88, 101, 242, .6); }
+  .st-label { margin: 0 0 6px; font-size: .66rem; letter-spacing: .12em; text-transform: uppercase; color: #9aa1b8; }
   .st-value { margin: 0; font-size: 1.35rem; font-weight: 600; color: #f1f2f4; font-variant-numeric: tabular-nums; }
   .st-sub { margin: 5px 0 0; font-size: .72rem; color: #8b8f96; overflow-wrap: anywhere; }
+  @media (prefers-reduced-motion: reduce) { .st-card:hover { transform: none; } }
   .st-note { margin: 0; font-size: .78rem; line-height: 1.7; color: #83878e; }
   .st-note code { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: .74rem; color: #c9ccd1; }
   @media (max-width: 560px) {

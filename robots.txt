@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /dashboard.html
+Disallow: /manage.html
+
+Sitemap: https://santiyxz.github.io/kernel/sitemap.xml
