@@ -1,6 +1,6 @@
 'use strict';
 
-// Live developer cards, fed by Lanyard (https://github.com/Phineas/lanyard).
+// Developer cards and profile pages, fed by Lanyard (https://github.com/Phineas/lanyard).
 //
 // Lanyard only answers for Discord accounts that joined https://discord.gg/lanyard.
 // Leave an id blank to keep that card exactly as written in index.html; a 404, a
@@ -10,29 +10,68 @@
 //   1. Join https://discord.gg/lanyard with each developer account (one per card id).
 //   2. Discord → Settings → Advanced → Developer Mode, then right-click the account
 //      → Copy User ID.
-//   3. Paste the id next to the matching card key and re-upload this file.
+//   3. Paste the id next to the matching entry below and re-upload this file.
+//   4. Edit the matching entry in `profiles` for the public profile page: name,
+//      handle, contributions, apps and links. Leave `email` blank to hide the
+//      mail button (the chat box on the profile works either way).
 window.KERNEL_DEVELOPERS = {
   rest: 'https://api.lanyard.rest/v1/users/',
   socket: 'wss://api.lanyard.rest/socket',
   users: [
-    { card: 'founder', id: '1318483518262743072' },
-    { card: 'teammate', id: '' },
+    { card: 'founder', dev: 'founder', id: '1318483518262743072' },
+    { card: 'teammate', dev: 'teammate', id: '' },
   ],
+  profiles: {
+    founder: {
+      name: 'intelnito',
+      handle: '@py.ex',
+      initials: 'IN',
+      badge: 'Maintainer',
+      role: 'Founder',
+      tagline: 'Built the anti-nuke engine, the case ledger and this site.',
+      bio: 'One person, a text editor and a stubborn belief that a moderation bot should be able to prove what it did. I answer the messages this page sends.',
+      email: '',
+      contributions: [
+        { title: 'Anti-nuke snapshot & restore', detail: 'Takes a copy of channels, roles and permissions, compares it after an incident and can put the server back.' },
+        { title: 'Hash-chained case ledger', detail: 'Every moderation case carries the hash of the one before it, so an edited history does not verify.' },
+        { title: 'Owner console', detail: 'A Discord-ID-gated panel for broadcasts, backups, the watchlist, scheduled jobs and release rollbacks.' },
+        { title: '99 slash commands and this site', detail: 'Moderation, automod, tickets, verification, economy and utilities — plus the static site you are reading.' },
+      ],
+      apps: [
+        { name: 'Kernel bot', detail: 'discord.js · 99 slash commands · JSON you own', href: 'https://santiyxz.github.io/kernel/' },
+        { name: 'Kernel site', detail: 'Plain HTML, CSS and JavaScript on GitHub Pages', href: 'https://santiyxz.github.io/kernel/' },
+        { name: 'Owner console', detail: 'Owner-only · opens after a Discord login', href: 'admin.html' },
+      ],
+      links: [
+        { label: 'GitHub', href: 'https://github.com/santiyxz' },
+      ],
+    },
+    teammate: {
+      name: 'Team Member',
+      handle: '@teammate',
+      initials: 'TM',
+      badge: 'Developer',
+      role: 'Developer',
+      tagline: 'Commands, automod and the economy pack.',
+      bio: 'Helps keep the command surface small enough to explain and the edge cases covered. Edit this profile in developers.js.',
+      email: '',
+      contributions: [
+        { title: 'Slash commands', detail: 'Wires new commands through the same permission and cooldown checks as the rest of the bot.' },
+        { title: 'Automod', detail: 'Filters, escalation and the rules that decide when a warning becomes a timeout.' },
+        { title: 'Economy pack', detail: 'Currency, shop and the commands that make a server feel lived-in.' },
+      ],
+      apps: [
+        { name: 'Kernel bot', detail: 'Commands and automod', href: 'https://santiyxz.github.io/kernel/' },
+      ],
+      links: [],
+    },
+  },
 };
 
-(function () {
+// Shared by the cards on index.html and the profile pages. Keeping the presence
+// parsing in one place means a profile and a card can never disagree.
+window.KernelDev = (function () {
   const config = window.KERNEL_DEVELOPERS || {};
-  const cards = new Map();
-  document.querySelectorAll('[data-dev-card]').forEach((card) => cards.set(card.getAttribute('data-dev-card'), card));
-
-  const watched = (Array.isArray(config.users) ? config.users : [])
-    .map((entry) => ({ entry, id: String((entry && entry.id) || '').trim() }))
-    .filter((row) => /^\d{15,22}$/.test(row.id) && cards.has(row.entry.card))
-    .map((row) => ({ ...row, card: cards.get(row.entry.card) }));
-
-  if (!watched.length) return;
-  const byId = new Map(watched.map((row) => [row.id, row]));
-
   const STATUS = {
     online: 'Online',
     idle: 'Idle',
@@ -41,33 +80,81 @@ window.KERNEL_DEVELOPERS = {
   };
   const VERB = { 0: 'Playing', 1: 'Streaming', 2: 'Listening to', 3: 'Watching', 5: 'Competing in' };
 
-  function slot(card, name) {
-    return card.querySelector('[data-dev-slot="' + name + '"]');
+  function idFor(key) {
+    const entry = (Array.isArray(config.users) ? config.users : []).find((row) => row && row.dev === key);
+    const id = String((entry && entry.id) || '').trim();
+    return /^\d{15,22}$/.test(id) ? id : '';
   }
 
-  function avatarUrl(user) {
+  function profileFor(key) {
+    const profiles = config.profiles || {};
+    return Object.prototype.hasOwnProperty.call(profiles, key) ? profiles[key] : null;
+  }
+
+  function avatarUrl(user, size) {
     if (!user || !user.avatar) return null;
     const animated = String(user.avatar).startsWith('a_');
-    return 'https://cdn.discordapp.com/avatars/' + user.id + '/' + user.avatar + '.' + (animated ? 'gif' : 'png') + '?size=96';
+    return 'https://cdn.discordapp.com/avatars/' + user.id + '/' + user.avatar + '.' + (animated ? 'gif' : 'png') + '?size=' + (size || 96);
+  }
+
+  function statusLabel(status) {
+    return STATUS[status] || 'Offline';
   }
 
   function activityLine(presence) {
+    if (!presence) return null;
     if (presence.listening_to_spotify && presence.spotify) {
       const track = [presence.spotify.song, presence.spotify.artist].filter(Boolean).join(' — ');
-      return track ? { spotify: true, text: 'Spotify · ' + track } : null;
+      return track ? { spotify: true, text: 'Spotify · ' + track, art: presence.spotify.album_art_url || null } : null;
     }
     const activity = (presence.activities || []).find((item) => item && item.type !== 4);
     if (!activity) return null;
     const verb = VERB[activity.type] || 'Playing';
     const detail = activity.details || activity.state || '';
-    return { spotify: false, text: verb + ' ' + activity.name + (detail ? ' · ' + detail : '') };
+    return {
+      spotify: false,
+      text: verb + ' ' + activity.name + (detail ? ' · ' + detail : ''),
+      art: activity.assets && activity.assets.large_image && /^https:\/\//.test(activity.assets.large_image) ? activity.assets.large_image : null,
+    };
   }
 
   function customStatus(presence) {
+    if (!presence) return '';
     const activity = (presence.activities || []).find((item) => item && item.type === 4);
     if (!activity) return '';
     const emoji = activity.emoji && activity.emoji.name ? activity.emoji.name + ' ' : '';
     return (emoji + (activity.state || '')).trim();
+  }
+
+  async function fetchPresence(id) {
+    if (!id) return null;
+    const response = await fetch(config.rest + id, { headers: { Accept: 'application/json' } });
+    if (!response.ok) return null;
+    const body = await response.json();
+    return body && body.success && body.data ? body.data : null;
+  }
+
+  return { config, idFor, profileFor, avatarUrl, statusLabel, activityLine, customStatus, fetchPresence };
+})();
+
+(function () {
+  const dev = window.KernelDev;
+  const cards = new Map();
+  document.querySelectorAll('[data-dev-card]').forEach((card) => cards.set(card.getAttribute('data-dev-card'), card));
+
+  const watched = (Array.isArray(dev.config.users) ? dev.config.users : [])
+    .map((entry) => ({
+      entry,
+      id: dev.idFor(entry && entry.dev),
+      card: cards.get(entry && entry.card),
+    }))
+    .filter((row) => row.id && row.card);
+
+  if (!watched.length) return;
+  const byId = new Map(watched.map((row) => [row.id, row]));
+
+  function slot(card, name) {
+    return card.querySelector('[data-dev-slot="' + name + '"]');
   }
 
   function paint(card, presence) {
@@ -81,7 +168,7 @@ window.KERNEL_DEVELOPERS = {
     if (handleEl && user.username) handleEl.textContent = '@' + user.username;
 
     const avatar = slot(card, 'avatar');
-    const url = avatarUrl(user);
+    const url = dev.avatarUrl(user, 96);
     if (avatar && url) {
       avatar.replaceChildren();
       const img = document.createElement('img');
@@ -107,14 +194,14 @@ window.KERNEL_DEVELOPERS = {
       const dot = document.createElement('span');
       dot.className = 'dev-dot';
       dot.setAttribute('aria-hidden', 'true');
-      statusEl.append(dot, document.createTextNode(STATUS[status] || 'Offline'));
-      const custom = customStatus(presence);
+      statusEl.append(dot, document.createTextNode(dev.statusLabel(status)));
+      const custom = dev.customStatus(presence);
       if (custom) statusEl.append(document.createTextNode(' · ' + custom));
     }
 
     const activityEl = slot(card, 'activity');
     if (activityEl) {
-      const line = status === 'offline' ? null : activityLine(presence);
+      const line = status === 'offline' ? null : dev.activityLine(presence);
       activityEl.hidden = !line;
       if (line) {
         activityEl.textContent = line.text;
@@ -129,11 +216,8 @@ window.KERNEL_DEVELOPERS = {
 
   async function fetchOne(row) {
     try {
-      const response = await fetch(config.rest + row.id, { headers: { Accept: 'application/json' } });
-      // 404 = that account never joined discord.gg/lanyard, so its static card stays put.
-      if (!response.ok) return;
-      const body = await response.json();
-      if (body && body.success && body.data) paint(row.card, body.data);
+      const presence = await dev.fetchPresence(row.id);
+      if (presence) paint(row.card, presence);
     } catch (error) {
       /* offline or blocked: the static card is already on screen */
     }
@@ -172,7 +256,7 @@ window.KERNEL_DEVELOPERS = {
     if (document.hidden) return;
     stopSocket();
     try {
-      socket = new WebSocket(config.socket || 'wss://api.lanyard.rest/socket');
+      socket = new WebSocket(dev.config.socket || 'wss://api.lanyard.rest/socket');
     } catch (error) {
       scheduleReconnect();
       return;

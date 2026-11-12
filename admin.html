@@ -28,6 +28,7 @@
       <a href="index.html#features">Features</a>
       <a href="index.html#news">News</a>
       <a href="index.html#commands">Commands</a>
+      <a href="contact.html">Contact</a>
       <a href="index.html#faq">FAQ</a>
     </nav>
     <div class="nav-actions">
@@ -119,6 +120,562 @@
           <span data-ad-fleet-count class="ad-count">—</span>
         </div>
         <div class="dash-servers" data-ad-fleet></div>
+      </section>
+
+      <section class="ad-section" aria-labelledby="ad-tools-title">
+        <div class="dash-list-head">
+          <div>
+            <h2 id="ad-tools-title">Owner tools</h2>
+            <p>Things only the owner console can do. Every list refreshes with the page.</p>
+          </div>
+        </div>
+
+        <div class="ad-tools">
+          <article class="ad-tool" aria-labelledby="ad-jobs-title">
+            <div class="ad-tool-head">
+              <h3 id="ad-jobs-title">Scheduled jobs</h3>
+              <span class="ad-count" data-ad-jobs-count>—</span>
+            </div>
+            <p class="ad-tool-note">Timers stored on the bot: giveaway ends, digests, slowmode releases and anything else queued. A job Kernel can no longer run stays here and is marked overdue.</p>
+            <div class="ad-table" data-ad-jobs></div>
+          </article>
+
+          <article class="ad-tool" aria-labelledby="ad-gaps-title">
+            <div class="ad-tool-head">
+              <h3 id="ad-gaps-title">Not running Kernel</h3>
+              <span class="ad-count" data-ad-gaps-count>—</span>
+            </div>
+            <p class="ad-tool-note" data-ad-gaps-note>Servers you can manage where Kernel is not installed.</p>
+            <div class="ad-rows" data-ad-gaps></div>
+          </article>
+
+          <article class="ad-tool" aria-labelledby="ad-joins-title">
+            <div class="ad-tool-head">
+              <h3 id="ad-joins-title">Newest members</h3>
+              <button class="btn btn-dark btn-sm" type="button" data-ad-joins-refresh>Reload</button>
+            </div>
+            <label class="ad-field">
+              <span>Server</span>
+              <select data-ad-joins-guild></select>
+            </label>
+            <p class="ad-tool-note" data-ad-joins-note>Kernel can only list members it has seen since it started, so a fresh boot shows a partial list.</p>
+            <div class="ad-rows" data-ad-joins></div>
+          </article>
+
+          <article class="ad-tool" aria-labelledby="ad-presence-title">
+            <div class="ad-tool-head">
+              <h3 id="ad-presence-title">Bot status</h3>
+              <span class="ad-count" data-ad-presence-source>—</span>
+            </div>
+            <p class="ad-tool-note" data-ad-presence-now>—</p>
+            <form class="ad-form" data-ad-presence-form>
+              <label class="ad-field">
+                <span>Lines, one per row — prefix a verb if you want it: <code>watching:</code>, <code>playing:</code>, <code>listening:</code>, <code>competing:</code></span>
+                <textarea data-ad-presence-lines rows="6" spellcheck="false" placeholder="watching: over {servers} server(s)"></textarea>
+              </label>
+              <div class="ad-form-row">
+                <label class="ad-inline"><input type="checkbox" data-ad-presence-rotate> Rotate the lines</label>
+                <label class="ad-inline"><span>Every</span><input type="number" min="5" max="300" step="1" data-ad-presence-seconds> <span>seconds</span></label>
+              </div>
+              <p class="ad-tool-note">Placeholders: <code>{servers}</code>, <code>{members}</code>, <code>{commands}</code>, <code>{name}</code>.</p>
+              <div class="ad-form-actions">
+                <button class="btn btn-light btn-sm" type="submit">Apply now</button>
+                <button class="btn btn-dark btn-sm" type="button" data-ad-presence-reset>Back to environment</button>
+                <span class="ad-status" data-ad-presence-status role="status"></span>
+              </div>
+            </form>
+          </article>
+
+          <article class="ad-tool ad-tool-wide" aria-labelledby="ad-test-title">
+            <div class="ad-tool-head">
+              <h3 id="ad-test-title">Automation tester</h3>
+              <span class="ad-count">dry run</span>
+            </div>
+            <p class="ad-tool-note">Paste a message to see which autoresponder, invite guard or link card would react. Nothing is posted and no counters change.</p>
+            <form class="ad-form" data-ad-test-form>
+              <div class="ad-form-row">
+                <label class="ad-field">
+                  <span>Server</span>
+                  <select data-ad-test-guild></select>
+                </label>
+              </div>
+              <label class="ad-field">
+                <span>Message</span>
+                <textarea data-ad-test-text rows="3" placeholder="hey, check discord.gg/example"></textarea>
+              </label>
+              <div class="ad-form-actions">
+                <button class="btn btn-light btn-sm" type="submit">Run test</button>
+                <span class="ad-status" data-ad-test-status role="status"></span>
+              </div>
+            </form>
+            <div class="ad-test-out" data-ad-test-out></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="ad-section" aria-labelledby="ad-admin-title">
+        <div class="dash-list-head">
+          <div>
+            <h2 id="ad-admin-title">Admin server</h2>
+            <p>One channel per function in your administration server. A function with no channel keeps writing to the console only.</p>
+          </div>
+          <span class="ad-count" data-ad-admin-state>—</span>
+        </div>
+
+        <div class="ad-admin-pick">
+          <label class="ad-field">
+            <span>Admin server</span>
+            <select data-ad-admin-guild></select>
+          </label>
+          <button class="btn btn-dark btn-sm" type="button" data-ad-admin-save>Use this server</button>
+          <span class="ad-status" data-ad-admin-status role="status"></span>
+        </div>
+
+        <div class="ad-routes" data-ad-routes>
+          <p class="ad-empty">Loading channel routing…</p>
+        </div>
+
+        <div class="ad-board-row">
+          <div>
+            <h3>Status board</h3>
+            <p class="ad-tool-note" data-ad-board-note>Choose a channel for “Status board”, then post it once. Kernel keeps editing that one message every minute.</p>
+          </div>
+          <button class="btn btn-light btn-sm" type="button" data-ad-board-refresh>Post / refresh now</button>
+        </div>
+      </section>
+
+      <section class="ad-section" aria-labelledby="ad-control-title">
+        <div class="dash-list-head">
+          <div>
+            <h2 id="ad-control-title">Control</h2>
+            <p>Switches, registrations and settings that normally need a slash command. Every change is written to the audit trail below.</p>
+          </div>
+          <span class="ad-count" data-ad-audit-count>—</span>
+        </div>
+
+        <div class="ad-tools">
+          <article class="ad-tool" aria-labelledby="ad-switches-title">
+            <div class="ad-tool-head">
+              <h3 id="ad-switches-title">Server switches</h3>
+              <span class="ad-status" data-ad-switch-status role="status"></span>
+            </div>
+            <label class="ad-field">
+              <span>Server</span>
+              <select data-ad-switch-guild></select>
+            </label>
+            <p class="ad-tool-note">Turning a feature off here writes the same flag the slash command writes. Blocking makes Kernel ignore commands and events in that server until you unblock it.</p>
+            <div class="ad-switch-list" data-ad-switch-list></div>
+            <div class="ad-block-row">
+              <input type="text" data-ad-block-confirm placeholder="Type BLOCK to confirm" aria-label="Type BLOCK to confirm blocking">
+              <button class="btn btn-danger btn-sm" type="button" data-ad-block>Block server</button>
+            </div>
+          </article>
+
+          <article class="ad-tool" aria-labelledby="ad-resync-title">
+            <div class="ad-tool-head">
+              <h3 id="ad-resync-title">Command registration</h3>
+              <span class="ad-status" data-ad-resync-status role="status"></span>
+            </div>
+            <p class="ad-tool-note">Registers the current build's slash commands without restarting. Use per-server when one server is missing commands; global when the shared list is stale.</p>
+            <div class="ad-form-actions">
+              <button class="btn btn-dark btn-sm" type="button" data-ad-resync="guild">This server</button>
+              <button class="btn btn-dark btn-sm" type="button" data-ad-resync="global">All servers</button>
+              <button class="btn btn-dark btn-sm" type="button" data-ad-resync="auto">Let Kernel choose</button>
+            </div>
+            <label class="ad-field">
+              <span>Server for a single registration</span>
+              <select data-ad-resync-guild></select>
+            </label>
+            <pre class="ad-quote" data-ad-resync-out hidden></pre>
+          </article>
+
+          <article class="ad-tool" aria-labelledby="ad-settings-title">
+            <div class="ad-tool-head">
+              <h3 id="ad-settings-title">Settings editor</h3>
+              <span class="ad-status" data-ad-settings-status role="status"></span>
+            </div>
+            <label class="ad-field">
+              <span>Server</span>
+              <select data-ad-settings-guild></select>
+            </label>
+            <label class="ad-field">
+              <span>Setting</span>
+              <select data-ad-settings-field></select>
+            </label>
+            <div class="ad-field">
+              <span>Value</span>
+              <div data-ad-settings-value-slot></div>
+            </div>
+            <p class="ad-tool-note" data-ad-settings-hint>Pick a setting to see what it expects. Leave a channel, role or text field blank to clear it.</p>
+            <div class="ad-form-actions">
+              <button class="btn btn-light btn-sm" type="button" data-ad-settings-save>Save setting</button>
+            </div>
+          </article>
+
+          <article class="ad-tool" aria-labelledby="ad-audit-title">
+            <div class="ad-tool-head">
+              <h3 id="ad-audit-title">Recent owner actions</h3>
+              <button class="btn btn-dark btn-sm" type="button" data-ad-audit-refresh>Reload</button>
+            </div>
+            <p class="ad-tool-note">Broadcasts, switches, settings and registrations, kept on the bot across restarts.</p>
+            <div class="ad-rows" data-ad-audit></div>
+          </article>
+
+          <article class="ad-tool ad-tool-wide" aria-labelledby="ad-broadcast-title">
+            <div class="ad-tool-head">
+              <h3 id="ad-broadcast-title">Broadcast</h3>
+              <span class="ad-count">sends in Discord</span>
+            </div>
+            <p class="ad-tool-note">One embed to the servers you pick, through each server's system channel (or the first channel Kernel can post in). Type SEND to confirm; nothing is sent until then.</p>
+            <form class="ad-form" data-ad-broadcast-form>
+              <div class="ad-broadcast-grid">
+                <div class="ad-broadcast-fields">
+                  <label class="ad-field">
+                    <span>Title</span>
+                    <input type="text" maxlength="256" data-ad-broadcast-title-input placeholder="Maintenance tonight">
+                  </label>
+                  <label class="ad-field">
+                    <span>Description</span>
+                    <textarea rows="4" maxlength="4096" data-ad-broadcast-desc placeholder="Kernel restarts at 20:00 UTC. Commands may be briefly unavailable."></textarea>
+                  </label>
+                  <div class="ad-form-row">
+                    <label class="ad-field">
+                      <span>Colour</span>
+                      <input type="text" maxlength="7" data-ad-broadcast-color placeholder="#5865f2">
+                    </label>
+                    <label class="ad-field">
+                      <span>Footer</span>
+                      <input type="text" maxlength="2048" data-ad-broadcast-footer placeholder="Kernel owner console">
+                    </label>
+                  </div>
+                  <div class="ad-block-row">
+                    <input type="text" data-ad-broadcast-confirm placeholder="Type SEND to confirm" aria-label="Type SEND to confirm the broadcast">
+                    <button class="btn btn-light btn-sm" type="submit">Send broadcast</button>
+                    <span class="ad-status" data-ad-broadcast-status role="status"></span>
+                  </div>
+                </div>
+                <div class="ad-broadcast-side">
+                  <p class="ad-field-label">Servers</p>
+                  <div class="ad-checklist" data-ad-broadcast-guilds></div>
+                  <p class="ad-preview-label">Preview</p>
+                  <div class="ad-embed" data-ad-embed-preview>
+                    <strong data-ad-embed-title>Maintenance tonight</strong>
+                    <p data-ad-embed-desc>Your description appears here.</p>
+                    <span data-ad-embed-footer>Kernel owner console</span>
+                  </div>
+                </div>
+              </div>
+              <pre class="ad-quote" data-ad-broadcast-out hidden></pre>
+            </form>
+          </article>
+        </div>
+      </section>
+
+      <section class="ad-section" aria-labelledby="ad-insight-title">
+        <div class="dash-list-head">
+          <div>
+            <h2 id="ad-insight-title">Insights</h2>
+            <p>How protected each server actually is, exactly how the next weekly report will read, and the coin economy without typing a slash command.</p>
+          </div>
+        </div>
+
+        <div class="ad-tools">
+          <article class="ad-tool ad-tool-wide" aria-labelledby="ad-score-title">
+            <div class="ad-tool-head">
+              <h3 id="ad-score-title">Security scorecard</h3>
+              <span class="ad-count" data-ad-score-average>—</span>
+              <button class="btn btn-dark btn-sm" type="button" data-ad-score-run>Rescan</button>
+            </div>
+            <p class="ad-tool-note">The same readiness score the weekly digest uses, with the findings behind it. “Fix” opens the setting that clears the finding; restore-point findings are slash commands.</p>
+            <div class="ad-rows" data-ad-scorecard></div>
+            <span class="ad-status" data-ad-score-status role="status"></span>
+          </article>
+
+          <article class="ad-tool" aria-labelledby="ad-digest-title">
+            <div class="ad-tool-head">
+              <h3 id="ad-digest-title">Digest preview</h3>
+            </div>
+            <p class="ad-tool-note">The exact embed the next weekly report would post. Nothing is sent.</p>
+            <label class="ad-field">
+              <span>Server</span>
+              <select data-ad-digest-guild></select>
+            </label>
+            <div class="ad-embed" data-ad-digest></div>
+            <span class="ad-status" data-ad-digest-status role="status"></span>
+          </article>
+
+          <article class="ad-tool ad-tool-wide" aria-labelledby="ad-eco-title">
+            <div class="ad-tool-head">
+              <h3 id="ad-eco-title">Economy</h3>
+              <span class="ad-count" data-ad-eco-count>—</span>
+            </div>
+            <p class="ad-tool-note">Top balances in the selected server, read from the same wallets /cash uses. A change records its reason in the server history; “set” replaces the balance, so it asks for SET.</p>
+            <div class="ad-tool-grid">
+              <label class="ad-field">
+                <span>Server</span>
+                <select data-ad-eco-guild></select>
+              </label>
+              <label class="ad-field">
+                <span>Member id</span>
+                <input type="text" data-ad-eco-user placeholder="123456789012345678" autocomplete="off" spellcheck="false">
+              </label>
+              <label class="ad-field">
+                <span>Action</span>
+                <select data-ad-eco-action>
+                  <option value="add">Add / subtract</option>
+                  <option value="set">Set balance</option>
+                </select>
+              </label>
+              <label class="ad-field">
+                <span>Coins</span>
+                <input type="number" data-ad-eco-amount placeholder="500" step="1">
+              </label>
+              <label class="ad-field">
+                <span>Reason</span>
+                <input type="text" data-ad-eco-reason placeholder="Why — it goes in the history" maxlength="120" autocomplete="off">
+              </label>
+              <label class="ad-field">
+                <span>Confirm set</span>
+                <input type="text" data-ad-eco-confirm placeholder="SET" autocomplete="off" spellcheck="false">
+              </label>
+            </div>
+            <div class="ad-form-actions">
+              <button class="btn btn-light btn-sm" type="button" data-ad-eco-apply>Apply</button>
+              <span class="ad-status" data-ad-eco-status role="status"></span>
+            </div>
+            <div class="ad-rows" data-ad-eco-rows></div>
+          </article>
+
+          <article class="ad-tool ad-tool-wide" aria-labelledby="ad-layout-title">
+            <div class="ad-tool-head">
+              <h3 id="ad-layout-title">Layout &amp; readiness drill</h3>
+              <span class="ad-count" data-ad-layout-count>—</span>
+            </div>
+            <p class="ad-tool-note">What the restore point remembers, what it would rebuild right now, and the order Kernel would act in during a real nuke. Rebuilding creates channels and roles, so it asks for RESTORE.</p>
+            <div class="ad-tool-grid">
+              <label class="ad-field">
+                <span>Server</span>
+                <select data-ad-layout-guild></select>
+              </label>
+            </div>
+            <div class="ad-form-actions">
+              <button class="btn btn-dark btn-sm" type="button" data-ad-layout-save>Save restore point</button>
+              <button class="btn btn-dark btn-sm" type="button" data-ad-rehearse>Run drill</button>
+              <label class="ad-inline"><span>Type</span><input type="text" data-ad-layout-confirm placeholder="RESTORE" autocomplete="off" spellcheck="false"> <span>to rebuild</span></label>
+              <button class="btn btn-danger btn-sm" type="button" data-ad-layout-restore>Restore layout</button>
+              <span class="ad-status" data-ad-layout-status role="status"></span>
+            </div>
+            <div class="ad-rows" data-ad-layout></div>
+            <div class="ad-rows" data-ad-rehearsal></div>
+          </article>
+
+          <article class="ad-tool ad-tool-wide" aria-labelledby="ad-usage-title">
+            <div class="ad-tool-head">
+              <h3 id="ad-usage-title">Usage &amp; growth</h3>
+              <span class="ad-count" data-ad-usage-count>—</span>
+              <button class="btn btn-dark btn-sm" type="button" data-ad-usage-refresh>Refresh</button>
+            </div>
+            <p class="ad-tool-note">Which commands servers actually run, and members joining or leaving over the last 30 days. Counting starts when this bot build boots, so the first days are honest zeros rather than invented history.</p>
+            <div class="ad-chart" data-ad-growth></div>
+            <div class="ad-rows" data-ad-usage></div>
+            <div class="ad-rows" data-ad-unused></div>
+            <span class="ad-status" data-ad-usage-status role="status"></span>
+          </article>
+
+          <article class="ad-tool ad-tool-wide" aria-labelledby="ad-adopt-title">
+            <div class="ad-tool-head">
+              <h3 id="ad-adopt-title">Feature adoption</h3>
+              <span class="ad-count" data-ad-adopt-count>—</span>
+              <button class="btn btn-dark btn-sm" type="button" data-ad-adopt-refresh>Refresh</button>
+            </div>
+            <p class="ad-tool-note">Which servers have each feature switched on, read from their stored settings. A row with only anti-nuke lit is a server that installed Kernel and never finished setup.</p>
+            <div class="ad-rows" data-ad-adoption></div>
+            <span class="ad-status" data-ad-adopt-status role="status"></span>
+          </article>
+        </div>
+      </section>
+
+      <section class="ad-section" aria-labelledby="ad-ops-title">
+        <div class="dash-list-head">
+          <div>
+            <h2 id="ad-ops-title">Operations</h2>
+            <p>Announcements that wait for a set time, members watched across every server, the last few builds kept for rollback, and messages the Contact page sends.</p>
+          </div>
+        </div>
+
+        <div class="ad-tools">
+          <article class="ad-tool ad-tool-wide" aria-labelledby="ad-sched-title">
+            <div class="ad-tool-head">
+              <h3 id="ad-sched-title">Scheduled broadcasts</h3>
+              <span class="ad-count" data-ad-sched-count>—</span>
+              <button class="btn btn-dark btn-sm" type="button" data-ad-sched-refresh>Refresh</button>
+            </div>
+            <p class="ad-tool-note">The same embed and sender as Broadcast, queued in <code>data/meta.json</code> so a host restart inside the window still delivers. A post missed by more than the grace window is reported as skipped, never sent late.</p>
+            <div class="ad-rows" data-ad-sched-list></div>
+            <div class="ad-tool-grid">
+              <label class="ad-field">
+                <span>Send at (your time)</span>
+                <input type="datetime-local" data-ad-sched-at>
+              </label>
+              <label class="ad-field">
+                <span>Title</span>
+                <input type="text" maxlength="256" data-ad-sched-title-input placeholder="Maintenance tonight">
+              </label>
+              <label class="ad-field">
+                <span>Description</span>
+                <textarea rows="3" maxlength="4096" data-ad-sched-desc placeholder="Kernel restarts at 20:00 UTC."></textarea>
+              </label>
+              <label class="ad-field">
+                <span>Footer</span>
+                <input type="text" maxlength="2048" data-ad-sched-footer placeholder="Kernel owner console">
+              </label>
+              <label class="ad-field">
+                <span>Note for this list</span>
+                <input type="text" maxlength="120" data-ad-sched-note placeholder="Optional">
+              </label>
+              <label class="ad-field">
+                <span>Confirm</span>
+                <input type="text" data-ad-sched-confirm placeholder="SCHEDULE" autocomplete="off" spellcheck="false">
+              </label>
+            </div>
+            <div class="ad-checklist" data-ad-sched-guilds></div>
+            <div class="ad-form-actions">
+              <button class="btn btn-light btn-sm" type="button" data-ad-sched-add>Schedule</button>
+              <span class="ad-status" data-ad-sched-status role="status"></span>
+            </div>
+          </article>
+
+          <article class="ad-tool ad-tool-wide" aria-labelledby="ad-watch-title">
+            <div class="ad-tool-head">
+              <h3 id="ad-watch-title">Watchlist</h3>
+              <span class="ad-count" data-ad-watch-count>—</span>
+            </div>
+            <p class="ad-tool-note">One member id, checked on every join. An alert posts to the Incidents route; a kick or ban runs before the welcome and asks for WATCH. A failed action is reported with Discord's reason, never retried in a loop.</p>
+            <div class="ad-tool-grid">
+              <label class="ad-field">
+                <span>Member id</span>
+                <input type="text" data-ad-watch-user placeholder="123456789012345678" autocomplete="off" spellcheck="false">
+              </label>
+              <label class="ad-field">
+                <span>Reason</span>
+                <input type="text" maxlength="200" data-ad-watch-reason placeholder="Why — shown in the alert and the audit" autocomplete="off">
+              </label>
+              <label class="ad-field">
+                <span>On join</span>
+                <select data-ad-watch-action>
+                  <option value="alert">Alert only</option>
+                  <option value="kick">Kick</option>
+                  <option value="ban">Ban</option>
+                </select>
+              </label>
+              <label class="ad-field">
+                <span>Scope</span>
+                <select data-ad-watch-scope>
+                  <option value="all">Every server Kernel is in</option>
+                  <option value="one">One server</option>
+                </select>
+              </label>
+              <label class="ad-field">
+                <span>Server (when “one”)</span>
+                <select data-ad-watch-guild></select>
+              </label>
+              <label class="ad-field">
+                <span>Confirm kick/ban</span>
+                <input type="text" data-ad-watch-confirm placeholder="WATCH" autocomplete="off" spellcheck="false">
+              </label>
+            </div>
+            <div class="ad-form-actions">
+              <button class="btn btn-light btn-sm" type="button" data-ad-watch-add>Watch member</button>
+              <span class="ad-status" data-ad-watch-status role="status"></span>
+            </div>
+            <div class="ad-rows" data-ad-watch-list></div>
+            <p class="ad-tool-note">Recent matches</p>
+            <div class="ad-rows" data-ad-watch-hits></div>
+          </article>
+
+          <article class="ad-tool ad-tool-wide" aria-labelledby="ad-build-title">
+            <div class="ad-tool-head">
+              <h3 id="ad-build-title">Release manager</h3>
+              <span class="ad-count" data-ad-build-count>—</span>
+            </div>
+            <p class="ad-tool-note">Copies <code>src/</code> and <code>package.json</code> into <code>data/builds/</code> — settings are never part of a build. The last five are kept. Restoring writes a pre-restore copy and replaces the source; the new code starts after the next restart.</p>
+            <div class="ad-form-actions">
+              <button class="btn btn-dark btn-sm" type="button" data-ad-build-save>Save this build</button>
+              <label class="ad-inline"><span>Type</span><input type="text" data-ad-build-confirm placeholder="RESTORE" autocomplete="off" spellcheck="false"> <span>to roll back</span></label>
+              <span class="ad-status" data-ad-build-status role="status"></span>
+            </div>
+            <div class="ad-rows" data-ad-builds></div>
+          </article>
+
+          <article class="ad-tool ad-tool-wide" aria-labelledby="ad-inbox-title">
+            <div class="ad-tool-head">
+              <h3 id="ad-inbox-title">Messages</h3>
+              <span class="ad-count" data-ad-inbox-count>—</span>
+              <button class="btn btn-dark btn-sm" type="button" data-ad-inbox-refresh>Refresh</button>
+            </div>
+            <p class="ad-tool-note">Everything sent from the Contact page or a developer profile, kept in <code>data/inbox.json</code> (last 500). Reply opens your mail client with the visitor's address already in the To field; nothing is sent from here.</p>
+            <div class="ad-rows" data-ad-inbox-list></div>
+            <div class="ad-form-actions">
+              <span class="ad-status" data-ad-inbox-status role="status"></span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="ad-section" aria-labelledby="ad-safe-title">
+        <div class="dash-list-head">
+          <div>
+            <h2 id="ad-safe-title">Safeguards</h2>
+            <p>Backups, broken references, a grouped error list and a one-button check of the whole deployment. Nothing here changes anything until you press a button.</p>
+          </div>
+        </div>
+
+        <div class="ad-tools">
+          <article class="ad-tool ad-tool-wide" aria-labelledby="ad-backup-title">
+            <div class="ad-tool-head">
+              <h3 id="ad-backup-title">Backups</h3>
+              <span class="ad-count" data-ad-backups-count>—</span>
+            </div>
+            <p class="ad-tool-note">A copy of every settings file, kept on the bot (last 10). Download one before a deploy, or restore after a bad change. Restoring replaces all settings, so it asks for the same typed confirmation as a broadcast.</p>
+            <div class="ad-form-actions">
+              <button class="btn btn-light btn-sm" type="button" data-ad-backup-now>Back up now</button>
+              <label class="ad-inline"><span>Type</span><input type="text" data-ad-restore-confirm placeholder="RESTORE" autocomplete="off" spellcheck="false"> <span>to restore</span></label>
+              <span class="ad-status" data-ad-backup-status role="status"></span>
+            </div>
+            <div class="ad-rows" data-ad-backups></div>
+          </article>
+
+          <article class="ad-tool" aria-labelledby="ad-diag-title">
+            <div class="ad-tool-head">
+              <h3 id="ad-diag-title">Broken references</h3>
+              <button class="btn btn-dark btn-sm" type="button" data-ad-diag-run>Run check</button>
+            </div>
+            <p class="ad-tool-note">Saved channel and role IDs that no longer exist, features switched on with no channel, and the permissions each switched-on module needs. Read-only.</p>
+            <div class="ad-rows" data-ad-diag></div>
+            <span class="ad-status" data-ad-diag-status role="status"></span>
+          </article>
+
+          <article class="ad-tool" aria-labelledby="ad-errors-title">
+            <div class="ad-tool-head">
+              <h3 id="ad-errors-title">Error inbox</h3>
+              <span class="ad-count" data-ad-errors-count>—</span>
+              <button class="btn btn-dark btn-sm" type="button" data-ad-errors-clear>Clear</button>
+            </div>
+            <p class="ad-tool-note">Crashes grouped by stack and counted, kept on the bot across restarts. A repeating stack is one row with a count, not a wall of lines.</p>
+            <div class="ad-rows" data-ad-errors></div>
+            <span class="ad-status" data-ad-errors-status role="status"></span>
+          </article>
+
+          <article class="ad-tool ad-tool-wide" aria-labelledby="ad-doctor-title">
+            <div class="ad-tool-head">
+              <h3 id="ad-doctor-title">Deployment doctor</h3>
+              <button class="btn btn-light btn-sm" type="button" data-ad-doctor-run>Run doctor</button>
+            </div>
+            <p class="ad-tool-note">Tunnel, CORS, owner, admin routing, data folder and environment names. It only reads; secret values are never shown.</p>
+            <div class="ad-rows" data-ad-doctor></div>
+            <span class="ad-status" data-ad-doctor-status role="status"></span>
+          </article>
+        </div>
       </section>
 
       <section class="ad-section" aria-labelledby="ad-log-title">

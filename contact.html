@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact — Kernel</title>
+<meta name="description" content="Contact the Kernel team: send a message straight to the owner console, reach a developer's profile or find the project's public links.">
+<meta name="theme-color" content="#08090a">
+<link rel="icon" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body class="ct-page">
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav-shell" id="top">
+  <div class="nav">
+    <a class="brand" href="index.html" aria-label="Kernel, back to the site">
+      <span class="mark" aria-hidden="true">K</span>
+      <span class="brand-name">Kernel</span>
+    </a>
+    <nav class="links" aria-label="Primary">
+      <a href="index.html#features">Features</a>
+      <a href="index.html#developers">Developers</a>
+      <a href="contact.html" aria-current="page">Contact</a>
+      <a href="status.html">Status</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="nav-support" href="index.html">Back to site</a>
+      <a class="btn btn-light btn-sm" data-link="invite" href="index.html#support">Invite</a>
+    </div>
+  </div>
+</header>
+
+<main id="main" class="ct-main">
+  <div class="shell">
+    <header class="pr-head">
+      <p class="pr-kicker">Contact</p>
+      <h1 tabindex="-1">Talk to the people who run this.</h1>
+      <p class="pr-tagline">One form, no account. Messages land in the owner console and a Discord DM, so they do not
+        disappear into a support queue. Prefer a person? The developer profiles are one click away.</p>
+    </header>
+
+    <div class="ct-grid">
+      <section class="pr-card" aria-labelledby="ct-form-title">
+        <h2 id="ct-form-title">Send a message</h2>
+        <p class="pr-card-note">Bug, idea, permission question or a server that needs a second look — all welcome.
+          Do not paste tokens, passwords or anything you would not post publicly.</p>
+
+        <form class="ct-form" data-contact-form novalidate>
+          <div class="ct-row">
+            <label class="ct-field"><span>Your name</span>
+              <input name="name" maxlength="60" autocomplete="name" placeholder="Alex" required>
+            </label>
+            <label class="ct-field"><span>Email</span>
+              <input name="email" type="email" maxlength="120" autocomplete="email" placeholder="you@example.com" required>
+            </label>
+          </div>
+          <label class="ct-field"><span>Subject</span>
+            <input name="subject" maxlength="120" placeholder="What is this about?" required>
+          </label>
+          <label class="ct-field"><span>Message</span>
+            <textarea name="body" rows="7" maxlength="4000" placeholder="Write between 10 and 4000 characters." required></textarea>
+          </label>
+          <div class="ct-honeypot" aria-hidden="true">
+            <label>Company <input name="company" type="text" tabindex="-1" autocomplete="off"></label>
+          </div>
+          <div class="ct-actions">
+            <button class="btn btn-light btn-sm" type="submit" data-contact-submit>Send message</button>
+            <span class="ct-count" data-contact-count>0 / 4000</span>
+          </div>
+          <p class="ct-status" data-contact-status role="status" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <div class="ct-col">
+        <section class="pr-card" aria-labelledby="ct-people-title">
+          <h2 id="ct-people-title">The people</h2>
+          <div class="ct-people" data-contact-devs>
+            <p class="pr-card-note">Developer profiles load here. <a href="index.html#developers">Open the developer cards</a>.</p>
+          </div>
+        </section>
+
+        <section class="pr-card" aria-labelledby="ct-links-title">
+          <h2 id="ct-links-title">Public links</h2>
+          <ul class="pr-links" data-contact-social></ul>
+          <p class="pr-card-note" data-contact-links-note hidden>No social accounts are listed in developers.js yet.</p>
+          <p class="pr-card-note" data-contact-mail hidden></p>
+        </section>
+
+        <section class="pr-card pr-card-soft" aria-labelledby="ct-help-title">
+          <h2 id="ct-help-title">Before you write</h2>
+          <ul class="ct-list">
+            <li>Is the bot down or slow? Check the <a href="status.html">public status page</a> first — it shows
+              uptime, gateway ping and the aggregate server count.</li>
+            <li>Is a command misbehaving? Include the command name, what you expected and what happened.</li>
+            <li>Never paste a bot token, an ngrok authtoken or a panel password. Nobody here will ask for one.</li>
+          </ul>
+        </section>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="shell foot-base">
+    <p>© <span id="year">2026</span> Kernel. Independent project, not affiliated with Discord Inc.</p>
+    <p class="foot-status"><a href="index.html">Home</a> · <a href="index.html#developers">Developers</a> · <a href="status.html">Status</a> · <a href="dashboard.html">Dashboard</a></p>
+  </div>
+</footer>
+
+<script src="api-config.js"></script>
+<script src="contact-form.js" defer></script>
+<script src="developers.js"></script>
+<script src="contact.js" defer></script>
+</body>
+</html>

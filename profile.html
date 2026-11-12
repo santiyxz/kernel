@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Developer profile — Kernel</title>
+<meta name="description" content="A Kernel developer's public profile: what they built, the apps they look after, live Discord presence via Lanyard and a message box that reaches the owner console.">
+<meta name="theme-color" content="#08090a">
+<link rel="icon" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body class="pr-page">
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav-shell" id="top">
+  <div class="nav">
+    <a class="brand" href="index.html" aria-label="Kernel, back to the site">
+      <span class="mark" aria-hidden="true">K</span>
+      <span class="brand-name">Kernel</span>
+    </a>
+    <nav class="links" aria-label="Primary">
+      <a href="index.html#features">Features</a>
+      <a href="index.html#developers">Developers</a>
+      <a href="contact.html">Contact</a>
+      <a href="status.html">Status</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="nav-support" href="index.html">Back to site</a>
+      <a class="btn btn-light btn-sm" data-link="invite" href="index.html#support">Invite</a>
+    </div>
+  </div>
+</header>
+
+<main id="main" class="pr-main">
+  <div class="shell">
+
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="index.html">Kernel</a><span aria-hidden="true">/</span>
+      <a href="index.html#developers">Developers</a><span aria-hidden="true">/</span>
+      <span aria-current="page" data-pr-name>Profile</span>
+    </nav>
+
+    <div data-pr-missing hidden>
+      <header class="pr-head">
+        <p class="pr-kicker">Profile</p>
+        <h1>That profile does not exist.</h1>
+        <p class="pr-tagline">The developer key in the address is not in <code>developers.js</code>. Head back to the
+          <a href="index.html#developers">developer cards</a> or <a href="contact.html">contact the team</a>.</p>
+      </header>
+    </div>
+
+    <div data-pr-page>
+      <section class="pr-hero" aria-labelledby="pr-title">
+        <div class="pr-id">
+          <div class="pr-avatar" data-pr-avatar aria-hidden="true"><span data-pr-initials>YN</span></div>
+          <div class="pr-id-main">
+            <p class="pr-kicker" data-pr-badge>Maintainer</p>
+            <h1 id="pr-title" tabindex="-1" data-pr-name>Developer</h1>
+            <p class="pr-handle" data-pr-handle>@handle</p>
+            <p class="pr-tagline" data-pr-tagline></p>
+          </div>
+        </div>
+
+        <aside class="pr-live" data-pr-live aria-label="Live Discord presence">
+          <p class="pr-live-label">Live on Discord</p>
+          <p class="pr-status is-offline" data-pr-status>
+            <span class="dev-dot" aria-hidden="true"></span>
+            <span data-pr-status-text>Checking…</span>
+          </p>
+          <div class="pr-activity" data-pr-activity hidden>
+            <img class="pr-activity-art" data-pr-activity-art alt="" loading="lazy" hidden>
+            <p class="pr-activity-text" data-pr-activity-text></p>
+          </div>
+          <p class="pr-live-note" data-pr-live-note>Presence comes from Lanyard. Nothing is invented when it cannot be read.</p>
+        </aside>
+      </section>
+
+      <div class="pr-grid">
+        <div class="pr-col">
+          <section class="pr-card" aria-labelledby="pr-about-title">
+            <h2 id="pr-about-title">About</h2>
+            <p class="pr-bio" data-pr-bio></p>
+            <a class="pr-back" href="index.html#developers">← All developers</a>
+          </section>
+
+          <section class="pr-card" aria-labelledby="pr-contrib-title">
+            <h2 id="pr-contrib-title">What I contributed</h2>
+            <ol class="pr-contrib" data-pr-contrib></ol>
+          </section>
+
+          <section class="pr-card" aria-labelledby="pr-apps-title">
+            <h2 id="pr-apps-title">Linked apps</h2>
+            <div class="pr-apps" data-pr-apps></div>
+          </section>
+        </div>
+
+        <div class="pr-col">
+          <section class="pr-card pr-message" id="message" aria-labelledby="pr-message-title">
+            <h2 id="pr-message-title">Send a message</h2>
+            <p class="pr-card-note">It goes to the owner console and a Discord DM. No account needed — replies go to the email you type.</p>
+
+            <form class="ct-form" data-contact-form novalidate>
+              <div class="ct-row">
+                <label class="ct-field"><span>Your name</span>
+                  <input name="name" maxlength="60" autocomplete="name" placeholder="Alex" required>
+                </label>
+                <label class="ct-field"><span>Email</span>
+                  <input name="email" type="email" maxlength="120" autocomplete="email" placeholder="you@example.com" required>
+                </label>
+              </div>
+              <label class="ct-field"><span>Subject</span>
+                <input name="subject" maxlength="120" placeholder="A question about the watchlist" required>
+              </label>
+              <label class="ct-field"><span>Message</span>
+                <textarea name="body" rows="6" maxlength="4000" placeholder="Write between 10 and 4000 characters." required></textarea>
+              </label>
+              <div class="ct-honeypot" aria-hidden="true">
+                <label>Company <input name="company" type="text" tabindex="-1" autocomplete="off"></label>
+              </div>
+              <div class="ct-actions">
+                <button class="btn btn-light btn-sm" type="submit" data-contact-submit>Send message</button>
+                <span class="ct-count" data-contact-count>0 / 4000</span>
+              </div>
+              <p class="ct-status" data-contact-status role="status" aria-live="polite"></p>
+            </form>
+
+            <p class="pr-mail" data-pr-mail hidden>
+              <span>Prefer email?</span>
+              <a class="btn btn-dark btn-sm" data-pr-mail-link href="#">Email me</a>
+            </p>
+          </section>
+
+          <section class="pr-card" aria-labelledby="pr-links-title">
+            <h2 id="pr-links-title">Elsewhere</h2>
+            <ul class="pr-links" data-pr-links></ul>
+            <p class="pr-card-note" data-pr-links-note hidden>No public links yet — the message box above is the reliable way to reach me.</p>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="shell foot-base">
+    <p>© <span id="year">2026</span> Kernel. Independent project, not affiliated with Discord Inc.</p>
+    <p class="foot-status"><a href="index.html">Home</a> · <a href="index.html#developers">Developers</a> · <a href="contact.html">Contact</a> · <a href="status.html">Status</a></p>
+  </div>
+</footer>
+
+<script src="api-config.js"></script>
+<script src="developers.js"></script>
+<script src="contact-form.js" defer></script>
+<script src="profile.js" defer></script>
+</body>
+</html>

@@ -35,6 +35,7 @@
       <a href="#commands">Commands</a>
       <a href="#proof">Proof</a>
       <a href="#developers">Developers</a>
+      <a href="contact.html">Contact</a>
       <a href="#faq">FAQ</a>
     </nav>
 
@@ -62,6 +63,7 @@
     <a href="#proof">Proof</a>
     <a href="#setup">Setup</a>
     <a href="#developers">Developers</a>
+    <a href="contact.html">Contact</a>
     <a href="#faq">FAQ</a>
     <a data-owner-link hidden href="admin.html">Admin</a>
     <a href="#support">Support</a>
@@ -941,31 +943,43 @@
         </p>
       </header>
 
-      <!-- EDIT ME: replace the placeholder name, @handle, role, tags and link in each card.
-           To add a developer, copy one whole <article class="dev-card">…</article> block. -->
+      <!-- Owner-only: un-hidden by owner-status.js after /api/owner answers 200 for this Discord id.
+           Everyone else never sees this element, so nothing hints that the console exists. -->
+      <div class="dev-ownerbar" data-owner-bot hidden role="status" aria-live="polite">
+        <span class="dev-dot" aria-hidden="true"></span>
+        <p><strong>Owner view</strong> · <span data-owner-bot-state>Checking…</span> · uptime <b data-owner-bot-uptime>—</b> · gateway <b data-owner-bot-ping>—</b> · <b data-owner-bot-servers>—</b> servers · <b data-owner-bot-members>—</b> members · v<b data-owner-bot-version>—</b></p>
+        <span class="dev-ownerbar-note">only your Discord id sees this · <span data-owner-bot-at>—</span></span>
+      </div>
+
+      <!-- Cards stay usable without JavaScript and light up when developers.js has an id.
+           EDIT ME: replace the placeholder name, @handle, role, tags and link in each card. -->
       <div class="dev-grid">
-        <article class="dev-card" data-reveal>
+        <article class="dev-card" data-dev-card="founder" data-reveal>
           <div class="dev-top">
-            <span class="dev-avatar" aria-hidden="true">YN</span>
+            <span class="dev-avatar" aria-hidden="true" data-dev-slot="avatar"><span data-dev-slot="initials">YN</span></span>
             <span class="dev-badge">Maintainer</span>
           </div>
-          <h3>Your Name</h3>
-          <p class="dev-handle">@yourhandle</p>
+          <h3 data-dev-slot="name">Your Name</h3>
+          <p class="dev-handle" data-dev-slot="handle">@yourhandle</p>
+          <p class="dev-status" data-dev-slot="status" hidden></p>
+          <p class="dev-activity" data-dev-slot="activity" hidden></p>
           <p class="dev-role">Founder · anti-nuke engine, case ledger and the site.</p>
           <ul class="dev-tags"><li>Node.js</li><li>discord.js</li><li>Security</li></ul>
-          <div class="dev-links"><a href="#support">Say hello</a></div>
+          <div class="dev-links"><a href="profile.html?dev=founder">Say hello →</a></div>
         </article>
 
-        <article class="dev-card" data-reveal>
+        <article class="dev-card" data-dev-card="teammate" data-reveal>
           <div class="dev-top">
-            <span class="dev-avatar" aria-hidden="true">TM</span>
+            <span class="dev-avatar" aria-hidden="true" data-dev-slot="avatar"><span data-dev-slot="initials">TM</span></span>
             <span class="dev-badge">Developer</span>
           </div>
-          <h3>Team Member</h3>
-          <p class="dev-handle">@teammate</p>
+          <h3 data-dev-slot="name">Team Member</h3>
+          <p class="dev-handle" data-dev-slot="handle">@teammate</p>
+          <p class="dev-status" data-dev-slot="status" hidden></p>
+          <p class="dev-activity" data-dev-slot="activity" hidden></p>
           <p class="dev-role">Commands, automod and the economy pack.</p>
           <ul class="dev-tags"><li>discord.js</li><li>Commands</li><li>Automod</li></ul>
-          <div class="dev-links"><a href="#support">Say hello</a></div>
+          <div class="dev-links"><a href="profile.html?dev=teammate">Say hello →</a></div>
         </article>
 
         <article class="dev-card is-accent" data-reveal>
@@ -1105,6 +1119,7 @@
       <h5>Resources</h5>
       <a href="#proof">Proof</a>
       <a href="#developers">Developers</a>
+      <a href="contact.html">Contact</a>
       <a href="#faq">FAQ</a>
       <a href="dashboard.html">Dashboard</a>
       <a data-link="support" href="#support">Support</a>
@@ -1114,6 +1129,7 @@
       <h5>Get started</h5>
       <a data-link="invite" href="#support">Invite Kernel</a>
       <a data-link="community" href="#support">Join the server</a>
+      <a href="status.html">Service status</a>
       <a href="#commands">All 99 commands</a>
     </nav>
   </div>
@@ -1127,6 +1143,8 @@
 <script src="auth.js"></script>
 <script src="background-3d.js"></script>
 <script src="app.js"></script>
+<script src="developers.js" defer></script>
 <script src="owner-nav.js"></script>
+<script src="owner-status.js"></script>
 </body>
 </html>
