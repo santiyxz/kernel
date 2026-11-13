@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy — Kernel</title>
+<meta name="description" content="What Kernel stores and what it does not: no passwords, no IP logs, no analytics scripts. A plain list of every record the site and bot keep.">
+<meta property="og:title" content="Privacy — Kernel">
+<meta property="og:description" content="What Kernel stores and what it does not: no passwords, no IP logs, no analytics scripts.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kernel">
+<meta property="og:url" content="https://santiyxz.github.io/kernel/privacy.html">
+<meta property="og:image" content="https://santiyxz.github.io/kernel/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Privacy — Kernel">
+<meta name="twitter:description" content="What Kernel stores and what it does not.">
+<meta name="twitter:image" content="https://santiyxz.github.io/kernel/og.png">
+<link rel="canonical" href="https://santiyxz.github.io/kernel/privacy.html">
+<meta name="theme-color" content="#08090a">
+<link rel="icon" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=20261113e">
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body class="ct-page has-bg privacy-page">
+
+<a class="skip" href="#main">Skip to content</a>
+<div class="bg-layer" aria-hidden="true"><canvas data-bg-waves></canvas></div>
+
+<header class="nav-shell" id="top">
+  <div class="nav">
+    <a class="brand" href="index.html" aria-label="Kernel, back to the site">
+      <span class="mark" aria-hidden="true">K</span>
+      <span class="brand-name">Kernel</span>
+    </a>
+    <nav class="links" aria-label="Primary">
+      <a href="index.html#features">Features</a>
+      <a href="index.html#how">How it works</a>
+      <a href="commands.html">Commands</a>
+      <a href="docs.html">Docs</a>
+      <a href="servers.html">Servers</a>
+      <a href="reviews.html">Reviews</a>
+      <a href="premium.html">Premium</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="nav-support nav-support-site" href="index.html#support">Support</a>
+      <a class="nav-login" data-login href="dashboard.html">
+        <span data-login-label="Log in" data-login-label-signed-in="Dashboard">Log in</span>
+      </a>
+      <a class="btn btn-light btn-sm" data-link="invite" href="index.html#support">Invite</a>
+      <button class="burger" id="burger" aria-expanded="false" aria-controls="drawer" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="drawer" id="drawer">
+  <nav aria-label="Mobile">
+    <a href="index.html#features">Features</a>
+    <a href="index.html#how">How it works</a>
+    <a href="commands.html">Commands</a>
+    <a href="docs.html">Docs</a>
+    <a href="servers.html">Servers</a>
+    <a href="reviews.html">Reviews</a>
+    <a href="premium.html">Premium</a>
+    <a href="status.html">Status</a>
+    <a href="contact.html">Contact</a>
+    <a href="index.html#faq">FAQ</a>
+    <a class="btn btn-dark" data-login href="dashboard.html">
+      <span data-login-label="Log in with Discord" data-login-label-signed-in="Open dashboard">Log in with Discord</span>
+    </a>
+  </nav>
+</div>
+
+<main id="main" class="ct-main">
+  <div class="shell">
+    <header class="pr-head">
+      <p class="pr-kicker">Privacy</p>
+      <h1 tabindex="-1">Every record Kernel keeps, in one list.</h1>
+      <p class="pr-tagline">
+        Short version: no passwords, no IP addresses, no analytics scripts, no advertising pixels. The long
+        version is the list below — if something is not on it, the site and bot do not store it.
+      </p>
+      <div class="page-actions">
+        <a class="btn btn-dark btn-sm" href="terms.html">Read the terms</a>
+      </div>
+    </header>
+
+    <article class="legal">
+      <section class="doc-section" data-reveal>
+        <h2>What is stored</h2>
+        <table class="doc-table">
+          <thead>
+            <tr><th>Record</th><th>Contents</th><th>Why</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Server settings</td><td>Guild id, channel ids, role ids, module switches</td><td>So commands know where to log and what is enabled</td></tr>
+            <tr><td>Cases</td><td>Case id, guild id, target id, moderator id, reason, timestamp</td><td>Moderation history the staff asked for</td></tr>
+            <tr><td>Verification grant</td><td>Guild id, member id, timestamp</td><td>To stop the gate asking twice</td></tr>
+            <tr><td>Premium grant</td><td>Discord user id, tier, granted date</td><td>To check a role; granted by hand</td></tr>
+            <tr><td>Reviews</td><td>Discord user id, username, rating, text, timestamp</td><td>Published reviews and one-per-account enforcement</td></tr>
+            <tr><td>Contact messages</td><td>Name, email, subject, message, timestamp</td><td>So the owner can reply</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="doc-section" data-reveal>
+        <h2>What is not stored</h2>
+        <ul>
+          <li><strong>No Discord password.</strong> Sign-in is OAuth; the password never leaves Discord.</li>
+          <li><strong>No IP addresses or location.</strong> Neither the site nor the bot writes an IP to disk.</li>
+          <li><strong>No login history.</strong> A session ends when the browser tab closes or the token expires.</li>
+          <li><strong>No message archive.</strong> Automod inspects a message to decide, then discards it. Deleted messages are kept only if a log event is configured, in that channel, and only as the log embed shows.</li>
+          <li><strong>No analytics, cookies or pixels.</strong> There is no Google Analytics, no ad script, no fingerprinting.</li>
+        </ul>
+      </section>
+
+      <section class="doc-section" data-reveal>
+        <h2>Dashboard session</h2>
+        <p>
+          After Discord sign-in, the access token is kept in <code>sessionStorage</code> for that tab only. It
+          is sent to the Kernel API as a bearer token, never to a third party. Closing the tab discards it;
+          logging out clears it immediately.
+        </p>
+        <p>
+          The dashboard decides what you can see from your Discord id and your roles in the selected server.
+          A member without a staff role receives a 404 from the owner API, not a list of hidden features.
+        </p>
+      </section>
+
+      <section class="doc-section" data-reveal>
+        <h2>Third parties</h2>
+        <ul>
+          <li><strong>Discord</strong> — OAuth sign-in and the bot connection.</li>
+          <li><strong>Hosting</strong> — GitHub Pages serves this site; the bot runs on a separate host.</li>
+          <li><strong>Payment provider</strong> — Premium opens an external payment page. Card details go to that provider; Kernel never sees them.</li>
+          <li><strong>Fonts</strong> — Google Fonts serves Inter and JetBrains Mono. If that request is blocked, the site falls back to system fonts.</li>
+        </ul>
+      </section>
+
+      <section class="doc-section" data-reveal>
+        <h2>Removal</h2>
+        <p>
+          Removing Kernel from a server deletes that server's settings on the next cleanup. To remove a case,
+          a review or a Premium grant tied to your account, <a href="contact.html">send a message</a> with the
+          server id and what should go; the owner answers and deletes it. There is no automated export because
+          there is nothing beyond the rows listed above.
+        </p>
+        <p class="pr-card-note">Last updated 13 November 2026.</p>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="shell foot-base">
+    <p>© <span id="year">2026</span> Kernel. Independent project, not affiliated with Discord Inc.</p>
+    <p class="foot-status">
+      <a href="index.html">Home</a> · <a href="commands.html">Commands</a> · <a href="docs.html">Docs</a> ·
+      <a href="servers.html">Servers</a> · <a href="reviews.html">Reviews</a> · <a href="premium.html">Premium</a> ·
+      <a href="status.html">Status</a> · <a href="terms.html">Terms</a>
+    </p>
+  </div>
+</footer>
+
+<script src="api-config.js"></script>
+<script src="site-content.js"></script>
+<script src="auth.js"></script>
+<script src="site-bg.js?v=20261113e"></script>
+<script src="app.js"></script>
+<script>document.getElementById('year').textContent = String(new Date().getFullYear());</script>
+</body>
+</html>

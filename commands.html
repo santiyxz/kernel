@@ -1,0 +1,616 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Commands — Kernel</title>
+<meta name="description" content="All 99 Kernel slash commands, grouped and searchable: anti-nuke, moderation, automod, community, utility, economy, games and verification. Nothing hidden.">
+<meta property="og:title" content="Commands — Kernel">
+<meta property="og:description" content="All 99 Kernel slash commands, grouped and searchable. Nothing held back for a paid tier.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kernel">
+<meta property="og:url" content="https://santiyxz.github.io/kernel/commands.html">
+<meta property="og:image" content="https://santiyxz.github.io/kernel/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Commands — Kernel">
+<meta name="twitter:description" content="All 99 Kernel slash commands, grouped and searchable.">
+<meta name="twitter:image" content="https://santiyxz.github.io/kernel/og.png">
+<link rel="canonical" href="https://santiyxz.github.io/kernel/commands.html">
+<meta name="theme-color" content="#08090a">
+<link rel="icon" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=20261113e">
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body class="ct-page has-bg commands-page">
+
+<a class="skip" href="#main">Skip to content</a>
+<div class="bg-layer" aria-hidden="true"><canvas data-bg-waves></canvas></div>
+
+<header class="nav-shell" id="top">
+  <div class="nav">
+    <a class="brand" href="index.html" aria-label="Kernel, back to the site">
+      <span class="mark" aria-hidden="true">K</span>
+      <span class="brand-name">Kernel</span>
+    </a>
+    <nav class="links" aria-label="Primary">
+      <a href="index.html#features">Features</a>
+      <a href="index.html#how">How it works</a>
+      <a href="commands.html" aria-current="page">Commands</a>
+      <a href="docs.html">Docs</a>
+      <a href="servers.html">Servers</a>
+      <a href="reviews.html">Reviews</a>
+      <a href="premium.html">Premium</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="nav-support nav-support-site" href="index.html#support">Support</a>
+      <a class="nav-login" data-login href="dashboard.html">
+        <span data-login-label="Log in" data-login-label-signed-in="Dashboard">Log in</span>
+      </a>
+      <a class="btn btn-light btn-sm" data-link="invite" href="index.html#support">Invite</a>
+      <button class="burger" id="burger" aria-expanded="false" aria-controls="drawer" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="drawer" id="drawer">
+  <nav aria-label="Mobile">
+    <a href="index.html#features">Features</a>
+    <a href="index.html#how">How it works</a>
+    <a href="commands.html">Commands</a>
+    <a href="docs.html">Docs</a>
+    <a href="servers.html">Servers</a>
+    <a href="reviews.html">Reviews</a>
+    <a href="premium.html">Premium</a>
+    <a href="status.html">Status</a>
+    <a href="contact.html">Contact</a>
+    <a href="index.html#faq">FAQ</a>
+    <a class="btn btn-dark" data-login href="dashboard.html">
+      <span data-login-label="Log in with Discord" data-login-label-signed-in="Open dashboard">Log in with Discord</span>
+    </a>
+  </nav>
+</div>
+
+<main id="main" class="ct-main">
+  <div class="shell">
+    <header class="pr-head">
+      <p class="pr-kicker">Command index</p>
+      <h1 tabindex="-1">Every command, nothing hidden.</h1>
+      <p class="pr-tagline">
+        All 99 commands across nine areas, from anti-nuke to blackjack. Filter by group or search by name —
+        nothing is held back for a paid tier. Slash commands only, because prefixes collide with the other bots
+        you already run.
+      </p>
+      <div class="page-actions">
+        <a class="btn btn-light btn-sm" data-link="invite" href="index.html#support">Add to Discord</a>
+        <a class="btn btn-dark btn-sm" href="docs.html">Read the setup docs</a>
+      </div>
+    </header>
+
+    <div class="cmd-directory" data-cmd-dir>
+        <div class="cmd-toolbar" data-reveal>
+          <div class="cmd-total"><b>99</b><span>slash commands</span></div>
+          <div class="cmd-filters" role="group" aria-label="Filter commands by area">
+            <button type="button" class="is-active" data-filter="all" aria-pressed="true">All</button>
+            <button type="button" data-filter="guard" aria-pressed="false">Guard</button>
+            <button type="button" data-filter="moderation" aria-pressed="false">Moderation</button>
+            <button type="button" data-filter="automation" aria-pressed="false">Automation</button>
+            <button type="button" data-filter="boosts" aria-pressed="false">Boosts & access</button>
+            <button type="button" data-filter="community" aria-pressed="false">Community & tickets</button>
+            <button type="button" data-filter="utility" aria-pressed="false">Utility</button>
+            <button type="button" data-filter="economy" aria-pressed="false">Economy</button>
+            <button type="button" data-filter="games" aria-pressed="false">Games</button>
+            <button type="button" data-filter="verification" aria-pressed="false">Verification</button>
+          </div>
+          <label class="cmd-search">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.4" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M10.4 10.4L14 14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+            <input type="search" placeholder="Search 99 commands" aria-label="Search commands">
+          </label>
+        </div>
+
+        <div class="cmd-groups">
+          <article class="cmd-group" data-group="guard" data-reveal>
+            <header class="cmd-group-head">
+              <h3>Guard</h3>
+              <span>9 commands</span>
+            </header>
+            <dl class="cmd-list">
+              <div class="cmd" data-cmd>
+                <dt><code>/antinuke</code></dt>
+                <dd>setup, status, drill, owner, exempt, snapshot, restore, lockdown, history and modules.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/security</code></dt>
+                <dd>audit, baseline, watch, alerts and the weekly digest.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/antiwebhook</code></dt>
+                <dd>webhook guard with shield, punishment, log channel and sweep.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/botlanding</code></dt>
+                <dd>stop unauthorised bots before they create anything.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/tokenguard</code></dt>
+                <dd>credential-leak guard for tokens and pasted secrets.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/whitelist</code></dt>
+                <dd>trusted users and roles every guard checks before it acts.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/extraowner</code></dt>
+                <dd>people who may change Kernel settings.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/nukehooks</code></dt>
+                <dd>scan every webhook, then remove what should not exist.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/roleaudit</code></dt>
+                <dd>every role, and the permissions it really holds.</dd>
+              </div>
+            </dl>
+          </article>
+          <article class="cmd-group" data-group="moderation" data-reveal>
+            <header class="cmd-group-head">
+              <h3>Moderation</h3>
+              <span>17 commands</span>
+            </header>
+            <dl class="cmd-list">
+              <div class="cmd" data-cmd>
+                <dt><code>/ban</code></dt>
+                <dd>ban a member; the reason is stored on the ban.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/unban</code></dt>
+                <dd>remove someone from the ban list.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/kick</code></dt>
+                <dd>remove a member with a recorded reason.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/timeout</code></dt>
+                <dd>time a member out, or remove an existing timeout.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/warn</code></dt>
+                <dd>warn add, list, clear, remove and the escalation config.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/cases</code></dt>
+                <dd>verify, show, case, user and export the chained record.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/checkrep</code></dt>
+                <dd>the record Kernel really holds on one member.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/banlist</code></dt>
+                <dd>who is banned, with the reason on each entry.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/clean</code></dt>
+                <dd>bulk-delete messages, or remove a single one.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/slowmode</code></dt>
+                <dd>seconds between messages, timed or permanent.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/lock</code></dt>
+                <dd>close a channel to @everyone until it is unlocked.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/unlock</code></dt>
+                <dd>undo a Kernel channel lock.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/lockrole</code></dt>
+                <dd>hide every channel from one role.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/unlockrole</code></dt>
+                <dd>undo a role lock, channel by channel.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/jail</code></dt>
+                <dd>role-based jail with a saved role list.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/nuke</code></dt>
+                <dd>replace a channel with an identical empty one.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/announce</code></dt>
+                <dd>post into a real Announcement channel.</dd>
+              </div>
+            </dl>
+          </article>
+          <article class="cmd-group" data-group="automation" data-reveal>
+            <header class="cmd-group-head">
+              <h3>Automation</h3>
+              <span>11 commands</span>
+            </header>
+            <dl class="cmd-list">
+              <div class="cmd" data-cmd>
+                <dt><code>/automod</code></dt>
+                <dd>spam, caps, links, domains, words and mentions; delete, timeout or warn.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/antilink</code></dt>
+                <dd>invite and link control with allowlists and bypass roles.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/autoslowmode</code></dt>
+                <dd>per-channel slowmode on a schedule.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/autorole</code></dt>
+                <dd>roles on join or level-up; announce, guild tag, repping and badge.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/avatarrole</code></dt>
+                <dd>give a role to members who set a profile picture.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/picrole</code></dt>
+                <dd>reaction and button role menus from one message.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/setlogs</code></dt>
+                <dd>main, message, level-up and join log channels.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/autodcvc</code></dt>
+                <dd>verify a voice connection and keep a roster.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/audit</code></dt>
+                <dd>search Discord&#x27;s own audit log by person and action.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/layout</code></dt>
+                <dd>save, rebuild, back up and auto-save server structure.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/remove</code></dt>
+                <dd>reset one Kernel setting to its default.</dd>
+              </div>
+            </dl>
+          </article>
+          <article class="cmd-group" data-group="boosts" data-reveal>
+            <header class="cmd-group-head">
+              <h3>Boosts &amp; access</h3>
+              <span>6 commands</span>
+            </header>
+            <dl class="cmd-list">
+              <div class="cmd" data-cmd>
+                <dt><code>/boost</code></dt>
+                <dd>the boost roster, its perks and a sync.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/boosterperks</code></dt>
+                <dd>choose which roles boosters earn and when.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/bsetup</code></dt>
+                <dd>where and how Kernel thanks a new booster.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/premiumperks</code></dt>
+                <dd>the public perks board for boosting here.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/privateall</code></dt>
+                <dd>make the server private, keeping per-member permissions.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/unprivateall</code></dt>
+                <dd>bring the server back into view for @everyone.</dd>
+              </div>
+            </dl>
+          </article>
+          <article class="cmd-group" data-group="community" data-reveal>
+            <header class="cmd-group-head">
+              <h3>Community &amp; tickets</h3>
+              <span>14 commands</span>
+            </header>
+            <dl class="cmd-list">
+              <div class="cmd" data-cmd>
+                <dt><code>/welcome</code></dt>
+                <dd>design the join greeting and test it before saving.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/welcomemsg</code></dt>
+                <dd>edit the welcome text without opening the designer.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/leave</code></dt>
+                <dd>design the message posted when a member leaves.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/leavemsg</code></dt>
+                <dd>edit the leave text directly.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/rules</code></dt>
+                <dd>show, set or reset the server rules message.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/ticket</code></dt>
+                <dd>open, close, claim, rename, prioritise and transcript tickets.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/ticketset</code></dt>
+                <dd>panel, staff, limits, idle, autoclose and transcript settings.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/tsetup</code></dt>
+                <dd>create the ticket category, panel and archive in one step.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/gstart</code></dt>
+                <dd>start, stop and list giveaways.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/poll</code></dt>
+                <dd>a native Discord poll with your question and choices.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/ps</code></dt>
+                <dd>partnership board: apply, approve, reject and setup.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/rank</code></dt>
+                <dd>an XP level card for you or another member.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/membercount</code></dt>
+                <dd>the server population as a card.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/afk</code></dt>
+                <dd>set, clear or check an away status.</dd>
+              </div>
+            </dl>
+          </article>
+          <article class="cmd-group" data-group="utility" data-reveal>
+            <header class="cmd-group-head">
+              <h3>Utility</h3>
+              <span>23 commands</span>
+            </header>
+            <dl class="cmd-list">
+              <div class="cmd" data-cmd>
+                <dt><code>/help</code></dt>
+                <dd>the full command map, generated from this build.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/stats</code></dt>
+                <dd>uptime, host, guards and honest downtime.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/ping</code></dt>
+                <dd>gateway and API latency.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/shards</code></dt>
+                <dd>shard status, or an honest “not sharded”.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/serverinfo</code></dt>
+                <dd>stats about the server and its Kernel setup.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/userinfo</code></dt>
+                <dd>what Kernel can actually see about a member.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/invite</code></dt>
+                <dd>server icon, banner and a fresh invite.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/avatar</code></dt>
+                <dd>full-size avatar for anyone.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/banner</code></dt>
+                <dd>full-size profile banner.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/enlarge</code></dt>
+                <dd>emoji, sticker or attachment, bigger.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/snipe</code></dt>
+                <dd>what was deleted in this channel recently.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/translate</code></dt>
+                <dd>read a message in another language.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/languages</code></dt>
+                <dd>what /translate supports.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/roblox</code></dt>
+                <dd>look up a Roblox account.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/instagram</code></dt>
+                <dd>look up an Instagram account.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/tiktok</code></dt>
+                <dd>look up a TikTok account.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/autoembed</code></dt>
+                <dd>link previews built without fetching the page.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/autoresponder</code></dt>
+                <dd>trigger and reply pairs, with test and exemptions.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/autosend</code></dt>
+                <dd>recurring posts to a channel.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/settings</code></dt>
+                <dd>every Kernel setting in one view.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/support</code></dt>
+                <dd>help, the support server and the invite.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/tuts</code></dt>
+                <dd>how a Kernel setting works and what changes it.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/prefix</code></dt>
+                <dd>confirms Kernel has no legacy prefix.</dd>
+              </div>
+            </dl>
+          </article>
+          <article class="cmd-group" data-group="economy" data-reveal>
+            <header class="cmd-group-head">
+              <h3>Economy</h3>
+              <span>6 commands</span>
+            </header>
+            <dl class="cmd-list">
+              <div class="cmd" data-cmd>
+                <dt><code>/cash</code></dt>
+                <dd>balance, level and daily streak.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/dailycash</code></dt>
+                <dd>daily reward with a streak bonus up to 7 days.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/weekly</code></dt>
+                <dd>the big weekly drop.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/send</code></dt>
+                <dd>transfer cash to another member.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/devcash</code></dt>
+                <dd>adjust a balance; owner or Administrator only.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/leaderboard</code></dt>
+                <dd>cash and XP rankings.</dd>
+              </div>
+            </dl>
+          </article>
+          <article class="cmd-group" data-group="games" data-reveal>
+            <header class="cmd-group-head">
+              <h3>Games</h3>
+              <span>11 commands</span>
+            </header>
+            <dl class="cmd-list">
+              <div class="cmd" data-cmd>
+                <dt><code>/blackjack</code></dt>
+                <dd>one hand against the dealer.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/casino</code></dt>
+                <dd>odds, settings, your record and the game list.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/coinflip</code></dt>
+                <dd>heads or tails for 2x, no house edge.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/crash</code></dt>
+                <dd>set a risk and cash out before the crash.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/dice</code></dt>
+                <dd>two dice, bet on the total.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/gamblelb</code></dt>
+                <dd>the server gambling board.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/hilo</code></dt>
+                <dd>call high or low on one card.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/mines</code></dt>
+                <dd>reveal safe tiles and cash out.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/roulette</code></dt>
+                <dd>European wheel, single zero.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/ship</code></dt>
+                <dd>set a risk and reveal the multiplier.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/slots</code></dt>
+                <dd>spin three reels.</dd>
+              </div>
+            </dl>
+          </article>
+          <article class="cmd-group" data-group="verification" data-reveal>
+            <header class="cmd-group-head">
+              <h3>Verification</h3>
+              <span>2 commands</span>
+            </header>
+            <dl class="cmd-list">
+              <div class="cmd" data-cmd>
+                <dt><code>/verification</code></dt>
+                <dd>setup, status and disable the member gate.</dd>
+              </div>
+              <div class="cmd" data-cmd>
+                <dt><code>/verifysetup</code></dt>
+                <dd>check, start, repair and stop readiness.</dd>
+              </div>
+            </dl>
+          </article>
+        </div>
+
+        <p class="cmd-empty" hidden>No command matches that search. Clear the box or choose <strong>All</strong>.</p>
+      </div>
+
+    <p class="cmd-note" data-reveal>
+      Looking for how a feature fits together? The <a href="docs.html">docs</a> walk through anti-nuke,
+      automod, cases and permissions in the order you would set them up.
+    </p>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="shell foot-base">
+    <p>© <span id="year">2026</span> Kernel. Independent project, not affiliated with Discord Inc.</p>
+    <p class="foot-status">
+      <a href="index.html">Home</a> · <a href="docs.html">Docs</a> · <a href="servers.html">Servers</a> ·
+      <a href="reviews.html">Reviews</a> · <a href="premium.html">Premium</a> · <a href="status.html">Status</a> ·
+      <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a>
+    </p>
+  </div>
+</footer>
+
+<script src="api-config.js"></script>
+<script src="site-content.js"></script>
+<script src="auth.js"></script>
+<script src="site-bg.js?v=20261113e"></script>
+<script src="app.js"></script>
+<script>document.getElementById('year').textContent = String(new Date().getFullYear());</script>
+</body>
+</html>

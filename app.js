@@ -228,7 +228,7 @@ function setupReveals() {
         }, 900);
       });
     },
-    { rootMargin: '0px 0px -8% 0px', threshold: 0.12 },
+    { rootMargin: '0px 0px -6% 0px', threshold: 0.05 },
   );
 
   items.forEach((el) => io.observe(el));
@@ -379,10 +379,10 @@ function serverCard(server) {
   return card;
 }
 
-function emptyCard() {
+function emptyCard(href = '#support') {
   const card = document.createElement('a');
   card.className = 'server-card';
-  card.href = '#support';
+  card.href = href;
   card.innerHTML =
     '<span class="server-icon" aria-hidden="true">+</span>' +
     '<span class="server-info"><span class="server-name">Your server here</span>' +
@@ -453,10 +453,13 @@ async function fetchLiveServers() {
   const base =
     typeof window.KERNEL_API_BASE === 'string' ? window.KERNEL_API_BASE.trim().replace(/\/+$/, '') : '';
   if (!base) return null;
+  const controller = new AbortController();
+  const timer = window.setTimeout(() => controller.abort(), 3500);
   try {
     const response = await fetch(base + '/api/public/servers', {
       cache: 'no-store',
       headers: { 'ngrok-skip-browser-warning': '1' },
+      signal: controller.signal,
     });
     if (!response.ok) return null;
     const data = await response.json();
@@ -464,15 +467,18 @@ async function fetchLiveServers() {
     return data;
   } catch (error) {
     return null;
+  } finally {
+    window.clearTimeout(timer);
   }
 }
 
 async function setupServers() {
   const preview = document.querySelector('[data-servers-preview]');
   const grid = document.querySelector('[data-servers-grid]');
+  const staticGrid = document.querySelector('[data-servers-static]');
   const countEl = document.querySelector('[data-servers-count]');
   const note = document.querySelector('[data-servers-note]');
-  if (!preview && !grid) return;
+  if (!preview && !grid && !staticGrid) return;
 
   let payload = await fetchLiveServers();
   if (!payload) {
@@ -509,9 +515,14 @@ async function setupServers() {
   if (preview) {
     preview.replaceChildren();
     if (servers.length) {
-      const row = marqueeRow(servers.slice(0, 6), { speed: 46 });
-      preview.append(row.marquee);
-      rows.push(row);
+      const sides = [[], []];
+      servers.slice(0, 8).forEach((server, index) => sides[index % 2].push(server));
+      sides.forEach((items, index) => {
+        if (!items.length) return;
+        const row = marqueeRow(items, { speed: index === 1 ? 52 : 44, reverse: index === 1 });
+        preview.append(row.marquee);
+        rows.push(row);
+      });
     } else {
       preview.append(emptyCard());
     }
@@ -530,6 +541,15 @@ async function setupServers() {
       });
     } else {
       grid.append(emptyCard());
+    }
+  }
+
+  if (staticGrid) {
+    staticGrid.replaceChildren();
+    if (servers.length) {
+      servers.forEach((server) => staticGrid.append(serverCard(server)));
+    } else {
+      staticGrid.append(emptyCard('index.html#support'));
     }
   }
 
@@ -555,6 +575,68 @@ async function setupServers() {
         : label;
     }
   }
+
+  setHeroTotals(servers, !sample);
+}
+
+function setHeroTotals(servers, live) {
+  const wrap = document.querySelector('[data-hero-powering]');
+  if (!wrap) return;
+  if (!live || !servers.length) {
+    wrap.hidden = true;
+    return;
+  }
+
+  const totalMembers = servers.reduce((sum, server) => sum + (Number(server.memberCount) || 0), 0);
+  const count = wrap.querySelector('[data-hero-servers]');
+  const members = wrap.querySelector('[data-hero-members]');
+  const membersWrap = wrap.querySelector('.powering-members');
+  if (membersWrap) membersWrap.hidden = totalMembers <= 0;
+  if (count) {
+    count.textContent = String(servers.length);
+    count.dataset.countTo = String(servers.length);
+  }
+  if (members) {
+    members.textContent = formatCount(totalMembers) || '0';
+    members.dataset.countTo = String(totalMembers);
+    members.dataset.format = 'compact';
+  }
+  wrap.hidden = false;
+  // motion.js animates counters it has not seen yet; without it the final value stays on screen.
+  document.dispatchEvent(new CustomEvent('kernel:counters'));
+}
+
+/* The hero pill reads the bot's own health route, so "Online" only appears when the API answered. */
+function setupHeroStatus() {
+  const pill = document.querySelector('[data-hero-status-pill]');
+  const label = document.querySelector('[data-hero-status]');
+  if (!pill || !label) return;
+
+  const base =
+    typeof window.KERNEL_API_BASE === 'string' ? window.KERNEL_API_BASE.trim().replace(/\/+$/, '') : '';
+  if (!base) {
+    label.textContent = 'Live status on the status page';
+    return;
+  }
+
+  const controller = new AbortController();
+  const timer = window.setTimeout(() => controller.abort(), 4000);
+  fetch(base + '/api/health', {
+    cache: 'no-store',
+    headers: { 'ngrok-skip-browser-warning': '1' },
+    signal: controller.signal,
+  })
+    .then((response) => (response.ok ? response.json() : Promise.reject(new Error('HTTP ' + response.status))))
+    .then((data) => {
+      if (!data || data.ok !== true) throw new Error('Unexpected health payload');
+      pill.classList.add('is-live');
+      label.textContent = data.ready === false ? 'Online · gateway starting' : 'Online · gateway ready';
+    })
+    .catch(() => {
+      pill.classList.add('is-down');
+      label.textContent = 'Status page · live checks';
+    })
+    .finally(() => window.clearTimeout(timer));
 }
 
 /* --------------------------------------------------------------- bootstrap */
@@ -565,6 +647,7 @@ function boot() {
   setupNav();
   setupReveals();
   setupDirectory();
+  setupHeroStatus();
 
   const year = document.getElementById('year');
   if (year) year.textContent = String(new Date().getFullYear());

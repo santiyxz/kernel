@@ -236,6 +236,10 @@
     premiumGrant: document.querySelector('[data-ad-premium-grant]'),
     premiumGrantStatus: document.querySelector('[data-ad-premium-grant-status]'),
     premiumMembers: document.querySelector('[data-ad-premium-members]'),
+    reviewCount: document.querySelector('[data-ad-review-count]'),
+    reviewRefresh: document.querySelector('[data-ad-review-refresh]'),
+    reviewList: document.querySelector('[data-ad-review-list]'),
+    reviewStatus: document.querySelector('[data-ad-review-status]'),
   };
 
   const state = {
@@ -2390,6 +2394,79 @@
     }
   }
 
+  function renderReviews(data) {
+    if (!ui.reviewList) return;
+    const rows = Array.isArray(data && data.reviews) ? data.reviews : [];
+    const hidden = rows.filter((row) => row.hidden).length;
+    if (ui.reviewCount) {
+      ui.reviewCount.textContent = rows.length
+        ? rows.length + (rows.length === 1 ? ' review' : ' reviews') + (hidden ? ' · ' + hidden + ' hidden' : '')
+        : 'none';
+    }
+    ui.reviewList.replaceChildren();
+    if (!rows.length) {
+      ui.reviewList.append(el('p', { className: 'ad-empty', text: 'No reviews yet. The public page shows an empty state until someone writes one.' }));
+      return;
+    }
+
+    // Reviews are stored as ISO strings; relativeTime() expects milliseconds.
+    const when = (value) => {
+      const ms = typeof value === 'number' ? value : Date.parse(value);
+      return Number.isFinite(ms) ? relativeTime(ms) : null;
+    };
+
+    rows.forEach((row) => {
+      const stars = '★'.repeat(Math.max(1, Math.min(5, Number(row.rating) || 0))) + '☆'.repeat(5 - Math.max(1, Math.min(5, Number(row.rating) || 0)));
+      const toggle = el('button', {
+        className: 'btn btn-dark btn-sm',
+        type: 'button',
+        dataset: { adReviewToggle: row.id },
+        text: row.hidden ? 'Unhide' : 'Hide',
+      });
+      toggle.addEventListener('click', () => { toggleReview(row, !row.hidden); });
+
+      ui.reviewList.append(el('div', { className: 'ad-row' },
+        el('div', { className: 'ad-row-main' },
+          el('div', { className: 'ad-row-name', text: stars + ' · ' + (row.username || 'Unknown member') + (row.serverName ? ' · ' + row.serverName : '') }),
+          el('div', { className: 'ad-row-meta', text: [
+            row.body,
+            row.userId ? 'user ' + row.userId : 'no user id',
+            when(row.createdAt) ? 'posted ' + when(row.createdAt) : null,
+            when(row.editedAt) ? 'edited ' + when(row.editedAt) : null,
+            row.hidden ? 'hidden' + (row.hiddenReason ? ' · ' + row.hiddenReason : '') : null,
+          ].filter(Boolean).join(' · ') })),
+        el('div', { className: 'ad-row-side' }, toggle)));
+    });
+  }
+
+  async function loadReviews() {
+    if (!ui.reviewList) return;
+    try {
+      renderReviews(await get('/api/owner/reviews'));
+    } catch (error) {
+      if (error.session) throw error;
+      toolMissing(ui.reviewList, 'The review inbox');
+      if (ui.reviewCount) ui.reviewCount.textContent = 'unavailable';
+    }
+  }
+
+  async function toggleReview(row, hidden) {
+    setStatus(ui.reviewStatus, hidden ? 'Hiding…' : 'Restoring…');
+    try {
+      await request('POST', '/api/owner/reviews/hide', {
+        id: row.id,
+        hidden,
+        reason: hidden ? 'Hidden in the owner console.' : null,
+      });
+      setStatus(ui.reviewStatus, hidden ? 'Hidden. It no longer shows on the site.' : 'Visible again.', 'ok');
+      await loadReviews();
+    } catch (error) {
+      if (error.session) return gate('Your Discord session expired. Log in again.');
+      if (error.denied) return show('denied');
+      setStatus(ui.reviewStatus, error.message, 'bad');
+    }
+  }
+
   function chartGroup(label, rows, key, tone, note) {
     const values = rows.map((row) => Number(row[key]) || 0);
     const peak = Math.max(1, ...values);
@@ -2897,7 +2974,7 @@
       state.overview = await get('/api/owner');
       renderOverview();
       populateToolSelects();
-      await Promise.all([loadLogs(), loadJobs(), loadCoverage(), loadPresence(), loadAdmin(), loadControl(), loadAudit(), loadBackups(), loadErrors(), loadScorecard(), loadScheduled(), loadWatch(), loadBuilds(), loadInbox(), loadUsage(), loadAdoption(), loadNews()]);
+      await Promise.all([loadLogs(), loadJobs(), loadCoverage(), loadPresence(), loadAdmin(), loadControl(), loadAudit(), loadBackups(), loadErrors(), loadScorecard(), loadScheduled(), loadWatch(), loadBuilds(), loadInbox(), loadUsage(), loadAdoption(), loadNews(), loadReviews()]);
       if (!silent) {
         await loadJoins(true);
         await loadSettings();
@@ -3159,6 +3236,7 @@
       field.addEventListener('input', updateTplPreview);
       field.addEventListener('change', updateTplPreview);
     });
+    if (ui.reviewRefresh) ui.reviewRefresh.addEventListener('click', () => { loadReviews().catch(report); });
     if (ui.ticketRefresh) ui.ticketRefresh.addEventListener('click', () => { loadTickets().catch(report); });
     if (ui.ticketScope) ui.ticketScope.addEventListener('change', () => { loadTickets().catch(report); });
 

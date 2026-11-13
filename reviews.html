@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reviews — Kernel</title>
+<meta name="description" content="Reviews from servers running Kernel. Signed-in Discord users can submit one; nothing is edited to sound better.">
+<meta property="og:title" content="Reviews — Kernel">
+<meta property="og:description" content="What servers running Kernel actually say. Signed-in Discord users can add theirs.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kernel">
+<meta property="og:url" content="https://santiyxz.github.io/kernel/reviews.html">
+<meta property="og:image" content="https://santiyxz.github.io/kernel/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Reviews — Kernel">
+<meta name="twitter:description" content="What servers running Kernel actually say.">
+<meta name="twitter:image" content="https://santiyxz.github.io/kernel/og.png">
+<link rel="canonical" href="https://santiyxz.github.io/kernel/reviews.html">
+<meta name="theme-color" content="#08090a">
+<link rel="icon" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=20261113e">
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body class="ct-page has-bg reviews-page">
+
+<a class="skip" href="#main">Skip to content</a>
+<div class="bg-layer" aria-hidden="true"><canvas data-bg-waves></canvas></div>
+
+<header class="nav-shell" id="top">
+  <div class="nav">
+    <a class="brand" href="index.html" aria-label="Kernel, back to the site">
+      <span class="mark" aria-hidden="true">K</span>
+      <span class="brand-name">Kernel</span>
+    </a>
+    <nav class="links" aria-label="Primary">
+      <a href="index.html#features">Features</a>
+      <a href="index.html#how">How it works</a>
+      <a href="commands.html">Commands</a>
+      <a href="docs.html">Docs</a>
+      <a href="servers.html">Servers</a>
+      <a href="reviews.html" aria-current="page">Reviews</a>
+      <a href="premium.html">Premium</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="nav-support nav-support-site" href="index.html#support">Support</a>
+      <a class="nav-login" data-login href="dashboard.html">
+        <span data-login-label="Log in" data-login-label-signed-in="Dashboard">Log in</span>
+      </a>
+      <a class="btn btn-light btn-sm" data-link="invite" href="index.html#support">Invite</a>
+      <button class="burger" id="burger" aria-expanded="false" aria-controls="drawer" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="drawer" id="drawer">
+  <nav aria-label="Mobile">
+    <a href="index.html#features">Features</a>
+    <a href="index.html#how">How it works</a>
+    <a href="commands.html">Commands</a>
+    <a href="docs.html">Docs</a>
+    <a href="servers.html">Servers</a>
+    <a href="reviews.html">Reviews</a>
+    <a href="premium.html">Premium</a>
+    <a href="status.html">Status</a>
+    <a href="contact.html">Contact</a>
+    <a href="index.html#faq">FAQ</a>
+    <a class="btn btn-dark" data-login href="dashboard.html">
+      <span data-login-label="Log in with Discord" data-login-label-signed-in="Open dashboard">Log in with Discord</span>
+    </a>
+  </nav>
+</div>
+
+<main id="main" class="ct-main">
+  <div class="shell">
+    <header class="pr-head">
+      <p class="pr-kicker">Reviews</p>
+      <h1 tabindex="-1">What people say once the honeymoon ends.</h1>
+      <p class="pr-tagline">
+        Reviews are written by signed-in Discord users and published as written. Bad ones stay up; a review
+        is only removed if it contains a token, a password, personal data or an attack on a person.
+      </p>
+      <div class="page-actions">
+        <span class="showcase-count" data-review-count>Loading reviews…</span>
+      </div>
+    </header>
+
+    <div class="review-layout">
+      <div class="review-list" data-reviews-list>
+        <p class="review-empty" data-reviews-empty>
+          <b>No reviews yet.</b>
+          The list fills as members of listed servers submit one — there are no seeded quotes here.
+        </p>
+      </div>
+
+      <aside class="review-form-card" aria-labelledby="review-form-title">
+        <h2 id="review-form-title">Write a review</h2>
+        <p class="pr-card-note">
+          One review per Discord account, editable after posting. Say what you actually ran into: setup,
+          anti-nuke, the dashboard or support.
+        </p>
+
+        <div class="review-gate" data-review-gate>
+          Sign in with Discord to write a review. Sign-in reads your username, avatar and the list of servers
+          you are in (used to confirm staff access). Kernel stores no password, IP address or login history.
+          <br>
+          <a class="btn btn-light btn-sm" data-login href="dashboard.html">Log in with Discord</a>
+        </div>
+
+        <form class="ct-form" data-review-form hidden novalidate>
+          <label class="ct-field"><span>Rating</span>
+            <select name="rating" required>
+              <option value="5">5 — does exactly what it says</option>
+              <option value="4">4 — works, one rough edge</option>
+              <option value="3">3 — fine, not special</option>
+              <option value="2">2 — needs work</option>
+              <option value="1">1 — did not work for me</option>
+            </select>
+          </label>
+          <label class="ct-field"><span>Your review</span>
+            <textarea name="body" rows="6" minlength="20" maxlength="600" placeholder="Between 20 and 600 characters." required></textarea>
+          </label>
+          <div class="ct-honeypot" aria-hidden="true">
+            <label>Company <input name="company" type="text" tabindex="-1" autocomplete="off"></label>
+          </div>
+          <div class="ct-actions">
+            <button class="btn btn-light btn-sm" type="submit" data-review-submit>Publish review</button>
+            <span class="ct-count" data-review-count-char>0 / 600</span>
+          </div>
+          <p class="ct-status" data-review-status role="status" aria-live="polite"></p>
+        </form>
+      </aside>
+    </div>
+
+    <section class="pr-card reviews-policy" aria-labelledby="reviews-policy-title">
+      <h2 id="reviews-policy-title">How reviews are handled</h2>
+      <ul class="ct-list">
+        <li><strong>Sign-in required.</strong> The bot checks your Discord token server-side; there is no anonymous posting and no email form.</li>
+        <li><strong>No editing by the owner.</strong> A review can be hidden only for tokens, personal data, spam or harassment, and the reason is recorded.</li>
+        <li><strong>One per account.</strong> Submitting again updates your previous review instead of stacking a second one.</li>
+      </ul>
+      <p class="pr-card-note">Something wrong with a review? <a href="contact.html">Send a message</a> with the username and what to look at.</p>
+    </section>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="shell foot-base">
+    <p>© <span id="year">2026</span> Kernel. Independent project, not affiliated with Discord Inc.</p>
+    <p class="foot-status">
+      <a href="index.html">Home</a> · <a href="commands.html">Commands</a> · <a href="docs.html">Docs</a> ·
+      <a href="servers.html">Servers</a> · <a href="premium.html">Premium</a> · <a href="status.html">Status</a> ·
+      <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a>
+    </p>
+  </div>
+</footer>
+
+<script src="api-config.js"></script>
+<script src="site-content.js"></script>
+<script src="auth.js"></script>
+<script src="site-bg.js?v=20261113e"></script>
+<script src="app.js"></script>
+<script src="reviews.js" defer></script>
+<script>document.getElementById('year').textContent = String(new Date().getFullYear());</script>
+</body>
+</html>
