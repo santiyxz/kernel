@@ -23,7 +23,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20261113h">
+<link rel="stylesheet" href="styles.css?v=20261113i">
 <script>document.documentElement.classList.add('js');</script>
 </head>
 <body class="ct-page has-bg reviews-page">
@@ -92,6 +92,15 @@
         <span class="showcase-count" data-review-count>Loading reviews…</span>
       </div>
     </header>
+
+    <div class="review-toolbar" data-review-toolbar hidden>
+      <span class="review-toolbar-label">Sort</span>
+      <div class="review-sort" role="group" aria-label="Sort reviews">
+        <button type="button" class="is-active" data-review-sort="newest" aria-pressed="true">Newest</button>
+        <button type="button" data-review-sort="highest" aria-pressed="false">Highest rated</button>
+        <button type="button" data-review-sort="lowest" aria-pressed="false">Lowest rated</button>
+      </div>
+    </div>
 
     <div class="review-layout">
       <div class="review-list" data-reviews-list>
@@ -174,17 +183,18 @@
     <p class="foot-status">
       <a href="index.html">Home</a> · <a href="commands.html">Commands</a> · <a href="docs.html">Docs</a> ·
       <a href="bots.html">Bots</a> · <a href="servers.html">Servers</a> · <a href="premium.html">Premium</a> · <a href="status.html">Status</a> ·
-      <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a>
+      <a href="security.html">Security</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a>
     </p>
   </div>
 </footer>
 
 <script src="api-config.js"></script>
-<script src="site-content.js"></script>
+<script src="site-content.js?v=20261113i"></script>
 <script src="auth.js"></script>
 <script src="site-bg.js?v=20261113g"></script>
-<script src="app.js?v=20261113g"></script>
-<script src="reviews.js?v=20261113h" defer></script>
+<script src="app.js?v=20261113i"></script>
+<script src="reviews.js?v=20261113i" defer></script>
 <script>document.getElementById('year').textContent = String(new Date().getFullYear());</script>
+<script src="search.js?v=20261113i" defer></script>
 </body>
 </html>

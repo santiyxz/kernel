@@ -73,6 +73,18 @@
     if (body) body.addEventListener('input', count);
     count();
 
+    // A report link from the reviews page arrives as ?subject=…&body=…. Only empty fields are
+    // filled, so a stale link never overwrites something the person already typed.
+    const params = new URLSearchParams(window.location.search);
+    const preSubject = String(params.get('subject') || '').slice(0, 120);
+    const preBody = String(params.get('body') || '').slice(0, MAX_BODY);
+    const subjectField = form.elements.namedItem('subject');
+    if (preSubject && subjectField && !subjectField.value) subjectField.value = preSubject;
+    if (preBody && body && !body.value) {
+      body.value = preBody;
+      count();
+    }
+
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
       if (form.dataset.busy === '1') return;

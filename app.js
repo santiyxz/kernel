@@ -251,6 +251,13 @@ function setupDirectory() {
   const defaultLabel = totalLabel ? totalLabel.textContent : 'slash commands';
   let filter = 'all';
 
+  // Match against the command and its description only, so the Copy button added below cannot make
+  // a search for "copy" match all 100 rows.
+  const haystack = new Map(rows.map((row) => [
+    row,
+    Array.from(row.querySelectorAll('dt code, dd')).map((node) => node.textContent).join(' ').toLowerCase(),
+  ]));
+
   function apply() {
     const query = (search ? search.value : '').trim().toLowerCase();
     let shown = 0;
@@ -258,7 +265,7 @@ function setupDirectory() {
     rows.forEach((row) => {
       const group = row.closest('.cmd-group');
       const inFilter = filter === 'all' || (group && group.dataset.group === filter);
-      const matches = inFilter && (!query || row.textContent.toLowerCase().includes(query));
+      const matches = inFilter && (!query || String(haystack.get(row) || '').includes(query));
       row.hidden = !matches;
       if (matches) shown += 1;
     });
@@ -274,27 +281,113 @@ function setupDirectory() {
     if (totalLabel) totalLabel.textContent = active ? 'commands shown' : defaultLabel;
   }
 
+  // A filtered view is worth sharing: ?group= and ?q= survive a reload, and a group click is its own
+  // history entry so Back returns to the previous filter.
+  let syncing = false;
+  function syncUrl(mode) {
+    if (syncing) return;
+    const url = new URL(window.location.href);
+    const query = search ? search.value.trim() : '';
+    if (filter === 'all') url.searchParams.delete('group');
+    else url.searchParams.set('group', filter);
+    if (query) url.searchParams.set('q', query);
+    else url.searchParams.delete('q');
+    const next = url.pathname + (url.search || '') + url.hash;
+    window.history[mode === 'push' ? 'pushState' : 'replaceState'](null, '', next);
+  }
+
+  function selectFilter(next) {
+    filter = next;
+    buttons.forEach((other) => {
+      const isActive = other.dataset.filter === next;
+      other.classList.toggle('is-active', isActive);
+      other.setAttribute('aria-pressed', String(isActive));
+    });
+  }
+
+  function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(text).then(() => true, () => false);
+    }
+    const field = document.createElement('textarea');
+    field.value = text;
+    field.setAttribute('readonly', '');
+    field.style.position = 'fixed';
+    field.style.opacity = '0';
+    document.body.append(field);
+    field.select();
+    let ok = false;
+    try {
+      ok = document.execCommand('copy');
+    } catch (error) {
+      ok = false;
+    }
+    field.remove();
+    return Promise.resolve(ok);
+  }
+
+  rows.forEach((row) => {
+    const code = row.querySelector('dt code');
+    const head = row.querySelector('dt');
+    if (!code || !head || head.querySelector('.cmd-copy')) return;
+    const command = code.textContent.trim();
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'cmd-copy';
+    button.textContent = 'Copy';
+    button.setAttribute('aria-label', 'Copy ' + command);
+    button.addEventListener('click', async () => {
+      const ok = await copyText(command);
+      button.textContent = ok ? 'Copied' : 'Press Ctrl+C';
+      button.classList.toggle('is-done', ok);
+      window.setTimeout(() => {
+        button.textContent = 'Copy';
+        button.classList.remove('is-done');
+      }, 1600);
+    });
+    head.append(button);
+  });
+
+  const params = new URLSearchParams(window.location.search);
+  const wantedGroup = String(params.get('group') || '').toLowerCase();
+  if (wantedGroup && buttons.some((button) => button.dataset.filter === wantedGroup)) {
+    selectFilter(wantedGroup);
+  }
+  if (search && params.get('q')) search.value = params.get('q');
+  if (wantedGroup || (search && search.value)) apply();
+
   buttons.forEach((button) => {
     button.addEventListener('click', () => {
-      filter = button.dataset.filter || 'all';
-      buttons.forEach((other) => {
-        const isActive = other === button;
-        other.classList.toggle('is-active', isActive);
-        other.setAttribute('aria-pressed', String(isActive));
-      });
+      selectFilter(button.dataset.filter || 'all');
       apply();
+      syncUrl('push');
     });
   });
 
   if (search) {
-    search.addEventListener('input', apply);
+    search.addEventListener('input', () => {
+      apply();
+      syncUrl();
+    });
     search.addEventListener('keydown', (event) => {
       if (event.key !== 'Escape' || !search.value) return;
       event.stopPropagation();
       search.value = '';
       apply();
+      syncUrl();
     });
   }
+
+  // Re-applying the URL after a back/forward navigation is cheap and keeps the view honest.
+  window.addEventListener('popstate', () => {
+    syncing = true;
+    const next = new URLSearchParams(window.location.search);
+    const group = String(next.get('group') || '').toLowerCase();
+    selectFilter(group && buttons.some((button) => button.dataset.filter === group) ? group : 'all');
+    if (search) search.value = next.get('q') || '';
+    apply();
+    syncing = false;
+  });
 }
 
 /* ----------------------------------------------------------------- servers */

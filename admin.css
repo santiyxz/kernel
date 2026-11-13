@@ -143,6 +143,23 @@
 }
 .ad-admin-pick .ad-field { flex: 1 1 240px; max-width: 380px; }
 
+/* Badge progress: the number is read live, so the bar only ever shows what Discord holds. */
+.ad-progress {
+  height: 8px;
+  margin: 12px 0 8px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, .08);
+  overflow: hidden;
+}
+.ad-progress span { display: block; height: 100%; width: 0; border-radius: 99px; background: #ffffff; transition: width .3s ease; }
+
+/* The scrollbar sits inside the card, so leave it room instead of letting it clip the count. */
+.ad-automod-rows { max-height: 290px; padding-right: 10px; }
+.ad-automod-rows .ad-row-side { flex: 0 0 auto; white-space: nowrap; }
+
+/* Deep-link scrolling should not park a heading under the sticky nav. */
+.ad-section { scroll-margin-top: 92px; }
+
 .ad-routes {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
@@ -267,6 +284,14 @@
 }
 .ad-job.is-overdue .ad-row-meta { color: #d6d9dd; }
 .ad-row-side { display: flex; align-items: center; gap: 6px; flex: none; }
+.ad-faq-row {
+  display: grid;
+  gap: 8px;
+  padding: 10px 0;
+  border-top: 1px solid rgba(255, 255, 255, .05);
+}
+.ad-faq-row:first-child { border-top: 0; }
+.ad-faq-row .ad-form-actions { justify-content: flex-end; }
 .ad-row-icon {
   display: grid;
   place-items: center;

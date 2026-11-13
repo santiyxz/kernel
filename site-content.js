@@ -31,6 +31,86 @@
     });
   }
 
+  function faqParagraphs(value) {
+    return String(value || '').split(/\n\s*\n/).map((line) => line.trim()).filter(Boolean);
+  }
+
+  function faqItem(question, answer) {
+    const details = document.createElement('details');
+    const summary = document.createElement('summary');
+    summary.textContent = question;
+    const body = document.createElement('div');
+    body.className = 'faq-body';
+    faqParagraphs(answer).forEach((line) => {
+      const p = document.createElement('p');
+      p.textContent = line;
+      body.append(p);
+    });
+    if (!body.children.length) {
+      const p = document.createElement('p');
+      p.textContent = answer;
+      body.append(p);
+    }
+    details.append(summary, body);
+    return details;
+  }
+
+  // Owner answers replace a shipped question worded the same way; anything else is added above the
+  // shipped list. Text nodes only, so an answer cannot inject markup.
+  function applyFaq(content) {
+    const items = content && Array.isArray(content.faq) ? content.faq : [];
+    const box = document.querySelector('.faq');
+    if (!box || !items.length) return;
+    const byQuestion = new Map();
+    box.querySelectorAll('details').forEach((node) => {
+      const summary = node.querySelector('summary');
+      if (summary) byQuestion.set(summary.textContent.trim().toLowerCase(), node);
+    });
+    const added = [];
+    items.forEach((item) => {
+      const question = String(item && item.q ? item.q : '').trim();
+      const answer = String(item && item.a ? item.a : '').trim();
+      if (!question || !answer) return;
+      const existing = byQuestion.get(question.toLowerCase());
+      if (existing) {
+        const body = existing.querySelector('.faq-body');
+        if (body) body.replaceChildren(...faqParagraphs(answer).map((line) => {
+          const p = document.createElement('p');
+          p.textContent = line;
+          return p;
+        }));
+        return;
+      }
+      added.push(faqItem(question, answer));
+    });
+    if (added.length) box.prepend(...added);
+    refreshFaqLd(box);
+  }
+
+  // The FAQPage schema must describe what the page actually shows, so it is rebuilt after an edit.
+  function refreshFaqLd(box) {
+    const node = document.querySelector('script[data-faq-ld]');
+    if (!node) return;
+    const questions = Array.from(box.querySelectorAll('details')).map((item) => {
+      const summary = item.querySelector('summary');
+      const body = item.querySelector('.faq-body');
+      return {
+        '@type': 'Question',
+        name: summary ? summary.textContent.trim() : '',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: body ? body.textContent.replace(/\s+/g, ' ').trim() : '',
+        },
+      };
+    }).filter((entry) => entry.name && entry.acceptedAnswer.text);
+    if (!questions.length) return;
+    node.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: questions,
+    });
+  }
+
   function applyBanner(content) {
     const banner = content && content.banner ? content.banner : null;
     if (!banner || !banner.enabled || !banner.text) return;
@@ -189,6 +269,9 @@
       state.content = content;
       applyHero(content);
       applyBanner(content);
+      applyFaq(content);
+      const faqBox = document.querySelector('.faq');
+      if (faqBox) refreshFaqLd(faqBox);
       applyNews(content.announcements);
       applyPremium(content.premium);
       return content;

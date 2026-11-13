@@ -12,8 +12,11 @@
   const submit = document.querySelector('[data-review-submit]');
   const charEl = document.querySelector('[data-review-count-char]');
   const textarea = form ? form.querySelector('textarea[name="body"]') : null;
+  const toolbar = document.querySelector('[data-review-toolbar]');
+  const sortButtons = Array.from(document.querySelectorAll('[data-review-sort]'));
   const apiBase = (window.KERNEL_API_BASE || '').replace(/\/$/, '');
   const auth = window.KernelAuth;
+  const state = { items: [], sort: 'newest' };
 
   const session = auth && typeof auth.session === 'function' ? auth.session() : null;
   if (session) {
@@ -82,26 +85,65 @@
     body.className = 'review-body';
     body.textContent = review.body || '';
 
-    article.append(head, body);
+    // Reporting prefills the contact form with the review itself, so the owner can find it without
+    // a screenshot. The author's display name is already public on this page.
+    const foot = document.createElement('div');
+    foot.className = 'review-foot';
+    const report = document.createElement('a');
+    report.className = 'review-report';
+    report.href = 'contact.html?subject=' + encodeURIComponent('Report a review')
+      + '&body=' + encodeURIComponent(
+        'Review by ' + (review.username || 'a Discord user')
+        + (review.createdAt ? ' (' + timeAgo(review.createdAt) + ')' : '')
+        + ':\n\n"' + (review.body || '') + '"\n\nWhat is wrong with it: ',
+      );
+    report.textContent = 'Report';
+    foot.append(report);
+
+    article.append(head, body, foot);
     return article;
+  }
+
+  function sortLabel() {
+    if (state.sort === 'highest') return 'highest rated first';
+    if (state.sort === 'lowest') return 'lowest rated first';
+    return 'newest first';
+  }
+
+  function ordered(items) {
+    const copy = items.slice();
+    if (state.sort === 'highest' || state.sort === 'lowest') {
+      const direction = state.sort === 'highest' ? -1 : 1;
+      copy.sort((a, b) => {
+        const diff = ((Number(a.rating) || 0) - (Number(b.rating) || 0)) * direction;
+        if (diff) return diff;
+        return (Date.parse(b.createdAt) || 0) - (Date.parse(a.createdAt) || 0);
+      });
+      return copy;
+    }
+    return copy.sort((a, b) => (Date.parse(b.createdAt) || 0) - (Date.parse(a.createdAt) || 0));
   }
 
   // The empty card is page markup, not user input. Keep it so a failed request can be undone.
   const emptyMarkup = empty ? empty.innerHTML : '';
 
   function render(reviews) {
-    const items = Array.isArray(reviews) ? reviews.filter((r) => r && r.body) : [];
+    if (reviews !== undefined) {
+      state.items = Array.isArray(reviews) ? reviews.filter((r) => r && r.body) : [];
+    }
+    const items = state.items;
     list.querySelectorAll('.review-card').forEach((node) => node.remove());
     if (empty) {
       empty.innerHTML = emptyMarkup;
       empty.hidden = items.length > 0;
     }
+    if (toolbar) toolbar.hidden = items.length === 0;
 
-    items.slice(0, 30).forEach((review) => list.append(card(review)));
+    ordered(items).slice(0, 30).forEach((review) => list.append(card(review)));
 
     if (countEl) {
       countEl.textContent = items.length
-        ? `${items.length} ${items.length === 1 ? 'review' : 'reviews'} \u00b7 newest first`
+        ? `${items.length} ${items.length === 1 ? 'review' : 'reviews'} \u00b7 ${sortLabel()}`
         : 'No reviews yet \u00b7 be the first';
     }
   }
@@ -229,6 +271,19 @@
       }
     });
   }
+
+  sortButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const next = button.dataset.reviewSort;
+      state.sort = next === 'highest' || next === 'lowest' ? next : 'newest';
+      sortButtons.forEach((other) => {
+        const isActive = other === button;
+        other.classList.toggle('is-active', isActive);
+        other.setAttribute('aria-pressed', String(isActive));
+      });
+      render();
+    });
+  });
 
   load();
 })();

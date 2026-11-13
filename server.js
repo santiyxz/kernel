@@ -34,6 +34,7 @@
     content: el('[data-srv-content]'),
     moreWrap: el('[data-srv-more-wrap]'),
     more: el('[data-srv-more]'),
+    crumb: el('[data-srv-crumb]'),
     error: el('[data-srv-error]'),
     errorTitle: el('[data-srv-error-title]'),
     errorNote: el('[data-srv-error-note]'),
@@ -120,6 +121,28 @@
     return link;
   }
 
+  // The breadcrumb trail describes the page that actually loaded, not a guessed title.
+  function paintBreadcrumb(guildName) {
+    if (ui.crumb) ui.crumb.textContent = guildName;
+    // Written only once the guild is known, so the page never ships an empty JSON-LD block.
+    let node = document.querySelector('script[data-server-ld]');
+    if (!node) {
+      node = document.createElement('script');
+      node.type = 'application/ld+json';
+      node.setAttribute('data-server-ld', '');
+      document.head.append(node);
+    }
+    node.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: location.origin + location.pathname.replace(/server\.html$/, 'index.html') },
+        { '@type': 'ListItem', position: 2, name: 'Servers', item: location.origin + location.pathname.replace(/server\.html$/, 'servers.html') },
+        { '@type': 'ListItem', position: 3, name: guildName, item: location.origin + location.pathname + '?id=' + encodeURIComponent(id) },
+      ],
+    });
+  }
+
   function render(server, all) {
     if (ui.stats) ui.stats.hidden = false;
     if (ui.content) ui.content.hidden = false;
@@ -127,6 +150,7 @@
 
     document.title = server.name + ' — Kernel';
     ui.name.textContent = server.name;
+    paintBreadcrumb(server.name);
     paintIcon(server, ui.icon);
 
     const banner = safeUrl(server.banner);

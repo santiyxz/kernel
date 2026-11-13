@@ -23,9 +23,16 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20261113h">
+<link rel="stylesheet" href="styles.css?v=20261113i">
 <style>
   .srv-hero { position: relative; padding: 46px 0 0; }
+  .srv-crumbs {
+    display: flex; align-items: center; gap: 7px; flex-wrap: wrap;
+    margin-bottom: 16px; font-size: .72rem; color: #7d8086;
+  }
+  .srv-crumbs a { color: #a8abb1; text-decoration: none; }
+  .srv-crumbs a:hover { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
+  .srv-crumbs span[aria-current] { color: #e8eaec; overflow-wrap: anywhere; }
   .srv-banner {
     position: relative; height: clamp(150px, 26vw, 250px); margin: 0 var(--gut);
     max-width: 1180px; margin-inline: auto; border-radius: 20px; overflow: hidden;
@@ -181,6 +188,13 @@
   <div class="srv-hero">
     <div class="srv-banner is-empty" data-srv-banner aria-hidden="true"></div>
     <div class="shell">
+      <nav class="srv-crumbs" aria-label="Breadcrumb">
+        <a href="index.html">Home</a>
+        <span aria-hidden="true">/</span>
+        <a href="servers.html">Servers</a>
+        <span aria-hidden="true">/</span>
+        <span data-srv-crumb aria-current="page">This server</span>
+      </nav>
       <div class="srv-head">
         <span class="srv-icon" data-srv-icon aria-hidden="true">?</span>
         <div>
@@ -257,11 +271,12 @@
 </footer>
 
 <script src="api-config.js"></script>
-<script src="site-content.js"></script>
+<script src="site-content.js?v=20261113i"></script>
 <script src="auth.js"></script>
 <script src="site-bg.js?v=20261113g"></script>
-<script src="app.js?v=20261113g"></script>
-<script src="server.js?v=20261113g" defer></script>
+<script src="app.js?v=20261113i"></script>
+<script src="server.js?v=20261113i" defer></script>
 <script>document.getElementById('year').textContent = String(new Date().getFullYear());</script>
+<script src="search.js?v=20261113i" defer></script>
 </body>
 </html>

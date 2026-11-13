@@ -57,6 +57,17 @@
     adminGuild: document.querySelector('[data-ad-admin-guild]'),
     adminSave: document.querySelector('[data-ad-admin-save]'),
     adminStatus: document.querySelector('[data-ad-admin-status]'),
+    adminInvite: document.querySelector('[data-ad-admin-invite]'),
+    adminResolve: document.querySelector('[data-ad-admin-resolve]'),
+    adminInviteStatus: document.querySelector('[data-ad-admin-invite-status]'),
+    automodCount: document.querySelector('[data-ad-automod-count]'),
+    automodBar: document.querySelector('[data-ad-automod-bar]'),
+    automodNote: document.querySelector('[data-ad-automod-note]'),
+    automodRows: document.querySelector('[data-ad-automod]'),
+    automodConfirm: document.querySelector('[data-ad-automod-confirm]'),
+    automodSeed: document.querySelector('[data-ad-automod-seed]'),
+    automodRefresh: document.querySelector('[data-ad-automod-refresh]'),
+    automodStatus: document.querySelector('[data-ad-automod-status]'),
     routes: document.querySelector('[data-ad-routes]'),
     boardNote: document.querySelector('[data-ad-board-note]'),
     boardRefresh: document.querySelector('[data-ad-board-refresh]'),
@@ -184,6 +195,15 @@
     siteSave: document.querySelector('[data-ad-site-save]'),
     siteReset: document.querySelector('[data-ad-site-reset]'),
     siteStatus: document.querySelector('[data-ad-site-status]'),
+    faqList: document.querySelector('[data-ad-faq-list]'),
+    faqCount: document.querySelector('[data-ad-faq-count]'),
+    faqAdd: document.querySelector('[data-ad-faq-add]'),
+    faqSave: document.querySelector('[data-ad-faq-save]'),
+    faqStatus: document.querySelector('[data-ad-faq-status]'),
+    feedList: document.querySelector('[data-ad-feed-list]'),
+    feedCount: document.querySelector('[data-ad-feed-count]'),
+    feedRefresh: document.querySelector('[data-ad-feed-refresh]'),
+    feedStatus: document.querySelector('[data-ad-feed-status]'),
     showList: document.querySelector('[data-ad-show-list]'),
     showCount: document.querySelector('[data-ad-show-count]'),
     showRefresh: document.querySelector('[data-ad-show-refresh]'),
@@ -251,11 +271,13 @@
     timer: 0,
     presenceTouched: false,
     adminGuildTouched: false,
+    automodPoll: 0,
     control: null,
     settings: null,
     settingsGuildTouched: false,
     showcaseRules: { hidden: [], order: [] },
     showcaseDraft: [],
+    siteFaq: [],
     templates: [],
     newsEditing: '',
     premium: null,
@@ -749,7 +771,122 @@
         ? 'Board message is live in ' + (where || 'the status channel') + '.' + when
         : 'Choose a channel for “Status board”, then post it once. Kernel keeps editing that one message every minute.';
     }
+
+    if (ui.adminInvite && !ui.adminInvite.value && data.invite) ui.adminInvite.value = data.invite;
   }
+
+  function renderAutomod(data) {
+    if (!ui.automodRows) return;
+    const total = Number(data.total) || 0;
+    const threshold = Number(data.threshold) || 100;
+    const remaining = Math.max(0, Number(data.remaining) || threshold - total);
+    const guilds = Array.isArray(data.guilds) ? data.guilds : [];
+    const max = Number(data.maxPerGuild) || 9;
+
+    if (ui.automodCount) ui.automodCount.textContent = total + ' / ' + threshold + ' active';
+    if (ui.automodBar) {
+      const percent = Math.min(100, Math.round((total / threshold) * 100));
+      ui.automodBar.setAttribute('aria-valuenow', String(percent));
+      const fill = ui.automodBar.querySelector('span');
+      if (fill) fill.style.width = percent + '%';
+    }
+
+    if (ui.automodNote) {
+      const seeding = data.seed && data.seed.running
+        ? ' Creating rules now: ' + data.seed.created + ' created so far.'
+        : '';
+      if (data.reached) {
+        ui.automodNote.textContent = 'The count has reached ' + threshold + '. Discord grants the badge on its own schedule, usually within 12–48 hours; nothing in this panel can speed that up.';
+      } else if (!data.supported) {
+        ui.automodNote.textContent = 'This bot build cannot read AutoMod rules. Update the bot first.';
+      } else {
+        const need = Math.max(1, Math.ceil(remaining / max));
+        const room = Number(data.eligible) || 0;
+        ui.automodNote.textContent = remaining + ' more active rule(s) are needed. A server holds at most ' + max + '. '
+          + (room
+            ? room + ' server(s) can still take some, and 100 rules need at least ' + need + ' servers in total.'
+            : 'Kernel is already at the limit in every server it can manage, so it needs to be invited to more servers where you can manage it.')
+          + seeding;
+      }
+    }
+
+    if (data.seed && data.seed.running && !state.automodPoll) watchAutomod();
+
+    ui.automodRows.replaceChildren();
+    if (!guilds.length) {
+      ui.automodRows.append(el('p', { className: 'ad-empty', text: 'Kernel is not in any server.' }));
+      return;
+    }
+
+    guilds.forEach((guild) => {
+      const state = guild.error
+        ? guild.error
+        : guild.eligible
+          ? 'can take ' + Math.max(0, max - Number(guild.total || 0)) + ' more'
+          : (guild.canManage ? 'full' : 'needs Manage Server');
+      ui.automodRows.append(el('div', { className: 'ad-row' },
+        el('div', { className: 'ad-row-main' },
+          el('div', { className: 'ad-row-name', text: guild.name }),
+          el('div', { className: 'ad-row-meta', text: Number(guild.active || 0) + ' of ' + max + ' active by Kernel · ' + Number(guild.total || 0) + ' rule(s) in the server' })),
+        el('div', { className: 'ad-row-side' },
+          el('span', { className: 'ad-count', text: state }))));
+    });
+  }
+
+  async function loadAutomod() {
+    if (!ui.automodRows) return;
+    try {
+      renderAutomod(await get('/api/owner/automod'));
+    } catch (error) {
+      if (error.session) throw error;
+      if (ui.automodCount) ui.automodCount.textContent = 'unavailable';
+      if (ui.automodNote) ui.automodNote.textContent = 'The AutoMod counter is not in this bot build yet. Update the bot.';
+      ui.automodRows.replaceChildren();
+    }
+  }
+
+  function watchAutomod() {
+    if (state.automodPoll) clearInterval(state.automodPoll);
+    state.automodPoll = setInterval(async () => {
+      try {
+        const data = await get('/api/owner/automod');
+        renderAutomod(data);
+        if (!(data.seed && data.seed.running)) {
+          clearInterval(state.automodPoll);
+          state.automodPoll = 0;
+          loadAudit();
+        }
+      } catch (error) {
+        clearInterval(state.automodPoll);
+        state.automodPoll = 0;
+        if (ui.automodStatus) {
+          ui.automodStatus.className = 'ad-status is-bad';
+          ui.automodStatus.textContent = error.message;
+        }
+      }
+    }, 2000);
+  }
+
+  async function seedAutomod() {
+    if (!ui.automodSeed) return;
+    if (!ui.automodConfirm || ui.automodConfirm.value.trim().toUpperCase() !== 'SEED') {
+      setStatus(ui.automodStatus, 'Type SEED in the box first.', 'bad');
+      return;
+    }
+    setStatus(ui.automodStatus, 'Starting…');
+    try {
+      const data = await request('POST', '/api/owner/automod/seed', { confirm: 'SEED' });
+      if (ui.automodConfirm) ui.automodConfirm.value = '';
+      setStatus(ui.automodStatus, data.message || 'Creating rules…', 'ok');
+      await loadAutomod();
+      watchAutomod();
+    } catch (error) {
+      if (error.session) return gate('Your Discord session expired. Log in again.');
+      if (error.denied) return show('denied');
+      setStatus(ui.automodStatus, error.message, 'bad');
+    }
+  }
+
 
   async function saveRoute(kind, channelId) {
     ui.adminStatus.className = 'ad-status';
@@ -2051,6 +2188,51 @@
       ui.siteStamp.textContent = data && data.updatedAt ? 'saved ' + relativeTime(data.updatedAt) : 'shipped copy';
     }
     state.showcaseRules = content.showcase || { hidden: [], order: [] };
+    state.siteFaq = Array.isArray(content.faq) ? content.faq.map((entry) => ({ q: entry.q || '', a: entry.a || '' })) : [];
+    renderFaq();
+  }
+
+  function renderFaq() {
+    if (!ui.faqList) return;
+    ui.faqList.replaceChildren();
+    const rows = state.siteFaq || [];
+    if (ui.faqCount) ui.faqCount.textContent = rows.length ? rows.length + ' answered' : 'shipped FAQ';
+    if (!rows.length) {
+      ui.faqList.append(el('p', { className: 'ad-empty', text: 'No overrides. The homepage keeps the questions that shipped with the site.' }));
+      return;
+    }
+    rows.forEach((row, index) => {
+      const q = el('input', { type: 'text', maxlength: '160', value: row.q, 'aria-label': 'Question ' + (index + 1) });
+      q.addEventListener('input', () => { row.q = q.value; });
+      const a = el('textarea', { rows: '2', maxlength: '600', 'aria-label': 'Answer ' + (index + 1) });
+      a.value = row.a;
+      a.addEventListener('input', () => { row.a = a.value; });
+      const remove = el('button', { className: 'btn btn-dark btn-sm', type: 'button', text: 'Remove' });
+      remove.addEventListener('click', () => {
+        state.siteFaq.splice(index, 1);
+        renderFaq();
+      });
+      ui.faqList.append(el('div', { className: 'ad-faq-row' },
+        el('div', { className: 'ad-field' }, el('span', { text: 'Question' }), q),
+        el('div', { className: 'ad-field' }, el('span', { text: 'Answer' }), a),
+        el('div', { className: 'ad-form-actions' }, remove)));
+    });
+  }
+
+  async function saveFaq() {
+    if (!ui.faqSave) return;
+    const rows = (state.siteFaq || []).map((row) => ({ q: row.q.trim(), a: row.a.trim() })).filter((row) => row.q && row.a);
+    setStatus(ui.faqStatus, 'Saving…');
+    try {
+      const data = await request('PUT', '/api/owner/site', { faq: rows });
+      renderSite(data);
+      setStatus(ui.faqStatus, 'FAQ saved. Reload the homepage to see it.', 'ok');
+      loadAudit();
+    } catch (error) {
+      if (error.session) return gate('Your Discord session expired. Log in again.');
+      if (error.denied) return show('denied');
+      setStatus(ui.faqStatus, error.message, 'bad');
+    }
   }
 
   async function loadSite() {
@@ -2930,6 +3112,56 @@
     }
   }
 
+  const FEED_KINDS = {
+    logs: 'Logs',
+    alerts: 'Alerts',
+    incidents: 'Incidents',
+    backups: 'Backups',
+    digest: 'Digest',
+    broadcast: 'Broadcast',
+    audit: 'Audit',
+    status: 'Status board',
+  };
+
+  function renderFeed(data) {
+    if (!ui.feedList) return;
+    const entries = data && Array.isArray(data.entries) ? data.entries : [];
+    if (ui.feedCount) ui.feedCount.textContent = entries.length ? entries.length + ' recent' : 'empty';
+    if (!entries.length) {
+      ui.feedList.replaceChildren(el('p', {
+        className: 'ad-empty',
+        text: 'Nothing posted yet. Kernel records each routed post here the moment it sends or fails.',
+      }));
+      return;
+    }
+    ui.feedList.replaceChildren(...entries.map((entry) => {
+      const kind = FEED_KINDS[entry.kind] || entry.kind || 'Post';
+      const outcome = entry.ok ? 'sent' : 'failed';
+      const where = entry.ok
+        ? (entry.channelName ? '#' + entry.channelName : 'channel ' + entry.channelId)
+        : (entry.reason || 'could not send');
+      const summary = entry.summary || '(no text)';
+      return el('div', { className: 'ad-row' },
+        el('div', { className: 'ad-row-main' },
+          el('div', { className: 'ad-row-name' }, kind + (entry.ok ? '' : ' · failed')),
+          el('div', { className: 'ad-row-meta', text: summary }),
+          el('div', { className: 'ad-row-meta', text: where + ' · ' + relativeTime(entry.at) })),
+        el('div', { className: 'ad-row-side' },
+          el('span', { className: 'ad-count', text: outcome })));
+    }));
+  }
+
+  async function loadFeed() {
+    if (!ui.feedList) return;
+    try {
+      renderFeed(await get('/api/owner/admin/feed?limit=40'));
+      setStatus(ui.feedStatus, '', '');
+    } catch (error) {
+      if (error.session) throw error;
+      ui.feedStatus.textContent = 'Admin activity is not in this bot build yet. Update the bot.';
+    }
+  }
+
   async function loadJoins(quiet) {
     const guildId = ui.joinsGuild ? ui.joinsGuild.value : '';
     if (!guildId) return;
@@ -2974,7 +3206,7 @@
       state.overview = await get('/api/owner');
       renderOverview();
       populateToolSelects();
-      await Promise.all([loadLogs(), loadJobs(), loadCoverage(), loadPresence(), loadAdmin(), loadControl(), loadAudit(), loadBackups(), loadErrors(), loadScorecard(), loadScheduled(), loadWatch(), loadBuilds(), loadInbox(), loadUsage(), loadAdoption(), loadNews(), loadReviews()]);
+      await Promise.all([loadLogs(), loadJobs(), loadCoverage(), loadPresence(), loadAdmin(), loadAutomod(), loadFeed(), loadControl(), loadAudit(), loadBackups(), loadErrors(), loadScorecard(), loadScheduled(), loadWatch(), loadBuilds(), loadInbox(), loadUsage(), loadAdoption(), loadNews(), loadReviews()]);
       if (!silent) {
         await loadJoins(true);
         await loadSettings();
@@ -3132,6 +3364,37 @@
       });
     }
 
+    if (ui.adminResolve) {
+      ui.adminResolve.addEventListener('click', async () => {
+        ui.adminInviteStatus.className = 'ad-status';
+        ui.adminInviteStatus.textContent = 'Asking Discord…';
+        try {
+          const data = await request('POST', '/api/owner/admin/resolve-invite', {
+            invite: ui.adminInvite ? ui.adminInvite.value.trim() : '',
+            save: true,
+          });
+          if (ui.adminInvite && data.inviteUrl) ui.adminInvite.value = data.inviteUrl;
+          if (data.admin) {
+            state.adminGuildTouched = false;
+            renderAdmin(data.admin);
+          }
+          ui.adminInviteStatus.className = 'ad-status is-ok';
+          ui.adminInviteStatus.textContent = 'Connected ' + (data.guildName || data.guildId)
+            + (data.memberCount ? ' · ' + data.memberCount + ' members' : '') + '.';
+          if (ui.adminStatus) {
+            ui.adminStatus.className = 'ad-status is-ok';
+            ui.adminStatus.textContent = 'Admin server saved from the invite. Choose channels below.';
+          }
+        } catch (error) {
+          ui.adminInviteStatus.className = 'ad-status is-bad';
+          ui.adminInviteStatus.textContent = error.message;
+        }
+      });
+    }
+
+    if (ui.automodSeed) ui.automodSeed.addEventListener('click', seedAutomod);
+    if (ui.automodRefresh) ui.automodRefresh.addEventListener('click', loadAutomod);
+
     if (ui.boardRefresh) {
       ui.boardRefresh.addEventListener('click', async () => {
         ui.adminStatus.className = 'ad-status';
@@ -3227,6 +3490,18 @@
 
     if (ui.siteSave) ui.siteSave.addEventListener('click', () => { saveSite(false); });
     if (ui.siteReset) ui.siteReset.addEventListener('click', () => { saveSite(true); });
+    if (ui.faqAdd) ui.faqAdd.addEventListener('click', () => {
+      if (state.siteFaq.length >= 10) {
+        setStatus(ui.faqStatus, 'The homepage shows at most 10 owner answers.', 'bad');
+        return;
+      }
+      state.siteFaq.push({ q: '', a: '' });
+      renderFaq();
+      const inputs = ui.faqList.querySelectorAll('input');
+      if (inputs.length) inputs[inputs.length - 1].focus();
+    });
+    if (ui.faqSave) ui.faqSave.addEventListener('click', () => { saveFaq(); });
+    if (ui.feedRefresh) ui.feedRefresh.addEventListener('click', () => { loadFeed().catch(report); });
     if (ui.showRefresh) ui.showRefresh.addEventListener('click', () => { loadShowcase().catch(report); });
     if (ui.showSave) ui.showSave.addEventListener('click', () => { saveShowcase(); });
     if (ui.tplSave) ui.tplSave.addEventListener('click', () => { saveTemplate(); });

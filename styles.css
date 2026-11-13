@@ -943,7 +943,7 @@ body.explore-open .hero-cta { position: relative; z-index: 60; }
 .cmd-list { margin: 0; }
 .cmd { padding: 11px 0; border-bottom: 1px solid var(--line); }
 .cmd:last-child { border-bottom: none; }
-.cmd dt { margin-bottom: 3px; }
+.cmd dt { margin-bottom: 3px; display: flex; align-items: center; gap: 8px; }
 .cmd dt code {
   background: none;
   border: none;
@@ -952,6 +952,23 @@ body.explore-open .hero-cta { position: relative; z-index: 60; }
   font-weight: 500;
   color: #f0f1f3;
 }
+.cmd-copy {
+  margin-left: auto;
+  padding: 2px 8px;
+  border: 1px solid rgba(255, 255, 255, .14);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, .03);
+  font-family: var(--mono);
+  font-size: .58rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #90939a;
+  cursor: pointer;
+  transition: border-color .16s ease, color .16s ease, background .16s ease;
+}
+.cmd-copy:hover { border-color: rgba(255, 255, 255, .36); color: #f0f1f3; }
+.cmd-copy.is-done { border-color: rgba(255, 255, 255, .5); color: #fff; background: rgba(255, 255, 255, .1); }
+.cmd-copy:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
 .cmd dd { margin: 0; font-size: .79rem; line-height: 1.5; color: #8f9298; }
 .cmd[hidden], .cmd-group[hidden], .cmd-empty[hidden] { display: none; }
 
@@ -4157,6 +4174,43 @@ body.has-bg { background: transparent; }
 }
 .doc-table td code { font-size: .78rem; }
 
+.doc-copy {
+  margin-left: 6px;
+  padding: 1px 6px;
+  border: 1px solid rgba(255, 255, 255, .14);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, .03);
+  font-family: var(--mono);
+  font-size: .55rem;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: #85898f;
+  cursor: pointer;
+  vertical-align: 1px;
+  transition: border-color .16s ease, color .16s ease, background .16s ease;
+}
+.doc-copy:hover { border-color: rgba(255, 255, 255, .36); color: #f0f1f3; }
+.doc-copy.is-done { border-color: rgba(255, 255, 255, .5); color: #fff; background: rgba(255, 255, 255, .1); }
+.doc-copy:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+.doc-next {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 10px;
+  margin-top: 34px;
+}
+.doc-next-card {
+  display: block;
+  padding: 16px 18px;
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, .025);
+  transition: border-color .2s var(--ease), background .2s var(--ease);
+}
+.doc-next-card:hover { border-color: rgba(255, 255, 255, .26); background: rgba(255, 255, 255, .05); }
+.doc-next-card b { display: block; font-size: .86rem; font-weight: 600; color: #f0f1f3; }
+.doc-next-card span { display: block; margin-top: 4px; font-size: .76rem; line-height: 1.55; color: #8f9298; }
+
 /* -------------------------------------------------------------- reviews */
 
 .review-layout {
@@ -4166,6 +4220,43 @@ body.has-bg { background: transparent; }
   align-items: start;
   margin-top: 8px;
 }
+.review-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 6px 0 10px;
+}
+.review-toolbar[hidden] { display: none; }
+.review-toolbar-label {
+  font-family: var(--mono);
+  font-size: .6rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #7d8086;
+}
+.review-sort { display: flex; flex-wrap: wrap; gap: 6px; }
+.review-sort button {
+  padding: 5px 11px;
+  border: 1px solid rgba(255, 255, 255, .14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .02);
+  font-size: .72rem;
+  color: #a6a9af;
+  cursor: pointer;
+  transition: border-color .16s ease, color .16s ease, background .16s ease;
+}
+.review-sort button:hover { border-color: rgba(255, 255, 255, .34); color: #fff; }
+.review-sort button.is-active { background: #f4f4f5; border-color: #f4f4f5; color: #08090a; }
+.review-sort button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.review-foot { display: flex; justify-content: flex-end; margin-top: 12px; }
+.review-report {
+  font-size: .68rem;
+  color: #7d8086;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.review-report:hover { color: #fff; }
 .review-list { display: grid; gap: 12px; }
 .review-card {
   padding: clamp(18px, 2.6vw, 24px);
@@ -4312,4 +4403,166 @@ body.has-bg { background: transparent; }
   .doc-section { padding: 20px 18px; }
   .review-card { padding: 18px; }
   .review-stars { font-size: .68rem; }
+}
+
+/* ============================================================================
+   Site search — one overlay, opened from the nav or Ctrl/Cmd+K.
+   ========================================================================== */
+
+.nav-search {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex: none;
+  border: 1px solid rgba(255, 255, 255, .14);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .03);
+  color: #c9cbd1;
+  cursor: pointer;
+  transition: border-color .16s ease, color .16s ease, background .16s ease;
+}
+.nav-search:hover { border-color: rgba(255, 255, 255, .38); color: #fff; background: rgba(255, 255, 255, .07); }
+.nav-search:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.nav-search svg { width: 15px; height: 15px; }
+
+body.has-site-search { overflow: hidden; }
+
+.site-search {
+  position: fixed;
+  inset: 0;
+  z-index: 140;
+  display: grid;
+  place-items: start center;
+  padding: min(14vh, 140px) 16px 16px;
+}
+.site-search[hidden] { display: none; }
+.site-search-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 4, 6, .74);
+  backdrop-filter: blur(10px);
+}
+.site-search-panel {
+  position: relative;
+  width: min(620px, 100%);
+  max-height: min(72vh, 660px);
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: 18px;
+  background: linear-gradient(165deg, rgba(21, 22, 25, .985), rgba(11, 12, 14, .985));
+  box-shadow: 0 44px 100px -34px rgba(0, 0, 0, .95), inset 0 1px 0 rgba(255, 255, 255, .05);
+  overflow: hidden;
+}
+.site-search-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.site-search-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, .08);
+}
+.site-search-field svg { width: 16px; height: 16px; flex: none; color: #7d8086; }
+.site-search-field input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: .95rem;
+  color: #f0f1f3;
+}
+.site-search-field input::placeholder { color: #6f7278; }
+.site-search-field input:focus { outline: none; }
+.site-search-field kbd {
+  flex: none;
+  padding: 2px 6px;
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: 5px;
+  font-family: var(--mono);
+  font-size: .6rem;
+  color: #9ba0a7;
+}
+.site-search-results {
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.site-search-result a {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "title kind" "meta kind";
+  column-gap: 12px;
+  align-items: center;
+  padding: 9px 11px;
+  border-radius: 10px;
+  color: inherit;
+  text-decoration: none;
+}
+.site-search-result b {
+  grid-area: title;
+  font-size: .86rem;
+  font-weight: 600;
+  color: #f0f1f3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.site-search-result span {
+  grid-area: meta;
+  margin-top: 1px;
+  font-size: .72rem;
+  line-height: 1.5;
+  color: #8a8e95;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.site-search-result em {
+  grid-area: kind;
+  font-family: var(--mono);
+  font-size: .55rem;
+  font-style: normal;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: #6f7278;
+}
+.site-search-result.is-active a,
+.site-search-result a:hover { background: rgba(255, 255, 255, .07); }
+.site-search-empty {
+  padding: 22px 14px;
+  text-align: center;
+  font-size: .82rem;
+  color: #8a8e95;
+}
+.site-search-hint {
+  margin: 0;
+  padding: 9px 16px 12px;
+  border-top: 1px solid rgba(255, 255, 255, .06);
+  font-size: .66rem;
+  color: #6f7278;
+}
+
+@media (max-width: 720px) {
+  .site-search { padding-top: 9vh; }
+  .site-search-hint { display: none; }
+  .nav-search { width: 32px; height: 32px; }
+}
+
+/* The dashboards keep two owner links in the nav and have no drawer; on a 360px phone the invite
+   button is the one that has to give way for the search button. */
+@media (max-width: 420px) {
+  .dash-page .nav { padding-left: 12px; }
+  .dash-page .nav-actions { gap: 10px; }
+  .dash-page .nav-actions .btn-sm { display: none; }
 }

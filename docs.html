@@ -23,7 +23,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20261113h">
+<link rel="stylesheet" href="styles.css?v=20261113i">
 <script>document.documentElement.classList.add('js');</script>
 </head>
 <body class="ct-page has-bg docs-page">
@@ -104,6 +104,7 @@
         <a href="#verification">5 · Verification</a>
         <a href="#logging">6 · Logging</a>
         <a href="#permissions">7 · Roles and dashboard</a>
+        <a href="#troubleshooting">Troubleshooting</a>
         <a href="#support">Support</a>
       </aside>
 
@@ -261,8 +262,28 @@
           </ul>
           <p>
             If you lose access because you changed roles, ask a server owner to re-grant <code>Manage Server</code>
-            or use the slash commands directly.
+            or use the slash commands directly. The <a href="security.html">permissions and data page</a> lists
+            every permission Kernel asks for and what each one is used for.
           </p>
+        </section>
+
+        <section class="doc-section" id="troubleshooting" data-reveal>
+          <h2>Troubleshooting</h2>
+          <p>Start with <code>/setup</code> and <code>/antinuke</code> — both print a checklist of what is missing. The table maps the usual symptoms to the section that explains the fix.</p>
+          <table class="doc-table">
+            <thead>
+              <tr><th>Symptom</th><th>Check first</th><th>Where</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Slash commands do not appear</td><td>Kernel registers commands globally; Discord can take up to an hour to roll them out. Re-invite with <code>applications.commands</code> if <code>/setup</code> is missing entirely.</td><td><a href="#setup">Setup</a></td></tr>
+              <tr><td>“Missing permission” after setup</td><td>Grant the exact permission <code>/setup</code> names, then run it again — do not grant Administrator to silence the list.</td><td><a href="#setup">Setup</a></td></tr>
+              <tr><td>Verification button does nothing</td><td><code>/verifysetup check</code>: the role must sit below Kernel’s highest role, and Kernel needs <code>Manage Roles</code>.</td><td><a href="#verification">Verification</a></td></tr>
+              <tr><td>No log messages arrive</td><td>Kernel needs View Channel, Send Messages and Embed Links in the log channel. Moving channels means re-running <code>/setup</code>.</td><td><a href="#logging">Logging</a></td></tr>
+              <tr><td>Anti-nuke stayed quiet during an attack</td><td>It ships in monitoring mode: it alerts, it does not act, until you enable auto-response. Check the thresholds too.</td><td><a href="#antinuke">Anti-nuke</a></td></tr>
+              <tr><td>A deleted channel came back with a new id</td><td>Restore rebuilds an equivalent channel, not the same one. Point anything that referenced the old id at the new one.</td><td><a href="#antinuke">Anti-nuke</a></td></tr>
+              <tr><td>Dashboard answers 404</td><td>You need <code>Manage Server</code> in that server. Sign in again after changing roles.</td><td><a href="#permissions">Roles</a></td></tr>
+            </tbody>
+          </table>
         </section>
 
         <section class="doc-section" id="support" data-reveal>
@@ -277,6 +298,25 @@
             <a class="btn btn-dark btn-sm" href="contact.html">Send a message</a>
           </div>
         </section>
+
+        <nav class="doc-next" aria-label="Where to go next" data-reveal>
+          <a class="doc-next-card" href="commands.html">
+            <b>All 100 commands</b>
+            <span>Every slash command, filterable and copyable.</span>
+          </a>
+          <a class="doc-next-card" href="dashboard.html">
+            <b>Open the dashboard</b>
+            <span>Per-server settings without typing a command.</span>
+          </a>
+          <a class="doc-next-card" href="security.html">
+            <b>Permissions and data</b>
+            <span>What Kernel asks for and what it stores.</span>
+          </a>
+          <a class="doc-next-card" href="status.html">
+            <b>Live status</b>
+            <span>Whether the bot and site are up right now.</span>
+          </a>
+        </nav>
       </article>
     </div>
   </div>
@@ -294,10 +334,12 @@
 </footer>
 
 <script src="api-config.js"></script>
-<script src="site-content.js"></script>
+<script src="site-content.js?v=20261113i"></script>
 <script src="auth.js"></script>
 <script src="site-bg.js?v=20261113g"></script>
-<script src="app.js?v=20261113g"></script>
+<script src="app.js?v=20261113i"></script>
+<script src="docs.js?v=20261113i"></script>
 <script>document.getElementById('year').textContent = String(new Date().getFullYear());</script>
+<script src="search.js?v=20261113i" defer></script>
 </body>
 </html>

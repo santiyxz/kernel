@@ -23,7 +23,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20261113h">
+<link rel="stylesheet" href="styles.css?v=20261113i">
 <script>document.documentElement.classList.add('js');</script>
 </head>
 <body class="ct-page has-bg privacy-page">
@@ -117,7 +117,7 @@
           <li><strong>No Discord password.</strong> Sign-in is OAuth; the password never leaves Discord.</li>
           <li><strong>No IP addresses or location.</strong> Neither the site nor the bot writes an IP to disk.</li>
           <li><strong>No login history.</strong> A session ends when the browser tab closes or the token expires.</li>
-          <li><strong>No message archive.</strong> Automod inspects a message to decide, then discards it. Deleted messages are kept only if a log event is configured, in that channel, and only as the log embed shows.</li>
+          <li><strong>No permanent message archive.</strong> Automod inspects a message to decide, then discards it. The last ten deleted messages per channel stay in memory for <code>/snipe</code> and vanish on restart; a configured log event also posts what it was set to log in that channel.</li>
           <li><strong>No analytics, cookies or pixels.</strong> There is no Google Analytics, no ad script, no fingerprinting.</li>
         </ul>
       </section>
@@ -165,16 +165,17 @@
     <p class="foot-status">
       <a href="index.html">Home</a> · <a href="commands.html">Commands</a> · <a href="docs.html">Docs</a> ·
       <a href="bots.html">Bots</a> · <a href="servers.html">Servers</a> · <a href="reviews.html">Reviews</a> · <a href="premium.html">Premium</a> ·
-      <a href="status.html">Status</a> · <a href="terms.html">Terms</a>
+      <a href="status.html">Status</a> · <a href="security.html">Security</a> · <a href="terms.html">Terms</a>
     </p>
   </div>
 </footer>
 
 <script src="api-config.js"></script>
-<script src="site-content.js"></script>
+<script src="site-content.js?v=20261113i"></script>
 <script src="auth.js"></script>
 <script src="site-bg.js?v=20261113g"></script>
-<script src="app.js?v=20261113g"></script>
+<script src="app.js?v=20261113i"></script>
 <script>document.getElementById('year').textContent = String(new Date().getFullYear());</script>
+<script src="search.js?v=20261113i" defer></script>
 </body>
 </html>

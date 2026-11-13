@@ -18,12 +18,81 @@
 <meta name="twitter:description" content="100 slash commands, one invite, zero paywalls.">
 <meta name="twitter:image" content="https://santiyxz.github.io/kernel/og.png">
 <link rel="canonical" href="https://santiyxz.github.io/kernel/">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Kernel",
+  "applicationCategory": "Discord application",
+  "operatingSystem": "Discord",
+  "url": "https://santiyxz.github.io/kernel/",
+  "description": "One Discord bot for anti-nuke, moderation, logging and the rest of your toolkit. 100 slash commands, one invite, zero paywalls.",
+  "isAccessibleForFree": true,
+  "publisher": { "@type": "Organization", "name": "Kernel" }
+}
+</script>
+<script type="application/ld+json" data-faq-ld>
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Does Kernel need Administrator?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Anti-nuke restore and channel locks touch permissions across every channel, which in practice means a very high-privilege role. That is exactly why /security audit exists: it lists everyone who holds Administrator, including Kernel itself, so you can see what you granted instead of remembering it. Give Kernel the least you can live with, and re-run the audit after any change."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does it do the second an attack starts?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "By default, nothing but an alert. Kernel ships in monitoring mode because a bot that acts on a wrong guess can lock out your own staff. When you turn auto-response on, Kernel can lock the channel, remove the offending role or kick the account, and it logs each of those as a numbered case."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can a moderator edit the case history?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "They can edit the file on the host — Kernel cannot stop someone with access to the disk. What they cannot do is get away with it. Editing one field breaks every hash after it and moves the chain head, and the head is mirrored in a second file. /cases export exists so you can keep a copy somewhere Kernel has no write access to."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Will my other bots still work?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Kernel uses slash commands only and never registers a text prefix, so there is nothing to collide with. It also stays quiet about messages it did not ask for; automod rules can be scoped to specific channels or exempted per role and per bot."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is the data sent anywhere?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Configuration, cases, wallets and snapshots are written to local JSON files in the data/ folder next to the bot. There is no analytics endpoint and no third-party service. Backing Kernel up means copying that folder, and wiping it wipes the server's config."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is Kernel not?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It is not a music bot, not an AI chatbot, and not a level system with role rewards yet. It cannot undo a channel delete — restore rebuilds an equivalent channel under a new id, so anything that referenced the old id needs pointing again. And it is a small project: if your server needs a support SLA, use a commercial bot."
+      }
+    }
+  ]
+}
+</script>
 <meta name="theme-color" content="#08090a">
 <link rel="icon" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20261113h">
+<link rel="stylesheet" href="styles.css?v=20261113i">
 <script>document.documentElement.classList.add('js');</script>
 </head>
 <body class="home">
@@ -764,7 +833,7 @@
       <a data-link="invite" href="#support">Invite Kernel</a>
       <a data-link="community" href="#support">Join the server</a>
       <a href="dashboard.html">Dashboard</a>
-      <a href="privacy.html">Privacy</a>
+      <a href="security.html">Security</a> · <a href="privacy.html">Privacy</a>
       <a href="terms.html">Terms</a>
     </nav>
   </div>
@@ -775,13 +844,14 @@
 </footer>
 
 <script src="api-config.js"></script>
-<script src="site-content.js"></script>
+<script src="site-content.js?v=20261113i"></script>
 <script src="auth.js"></script>
 <script src="site-bg.js?v=20261113g"></script>
-<script src="app.js?v=20261113g"></script>
+<script src="app.js?v=20261113i"></script>
 <script src="developers.js" defer></script>
 <script src="owner-nav.js"></script>
 <script src="owner-status.js"></script>
 <script src="motion.js?v=20261113e"></script>
+<script src="search.js?v=20261113i" defer></script>
 </body>
 </html>

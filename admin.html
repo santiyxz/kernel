@@ -10,8 +10,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20261113h">
-<link rel="stylesheet" href="admin.css?v=20261112b">
+<link rel="stylesheet" href="styles.css?v=20261113i">
+<link rel="stylesheet" href="admin.css?v=20261113a">
 <script>document.documentElement.classList.add('js');</script>
 </head>
 <body class="dash-page admin-page">
@@ -233,6 +233,17 @@
           <span class="ad-status" data-ad-admin-status role="status"></span>
         </div>
 
+        <div class="ad-admin-pick">
+          <label class="ad-field">
+            <span>Admin invite</span>
+            <input type="text" data-ad-admin-invite placeholder="https://discord.gg/tHSWtvfTGS" autocomplete="off" spellcheck="false">
+          </label>
+          <button class="btn btn-light btn-sm" type="button" data-ad-admin-resolve>Find and connect</button>
+          <span class="ad-status" data-ad-admin-invite-status role="status"></span>
+        </div>
+
+        <p class="ad-tool-note">An invite link does not contain the server id, so Kernel asks Discord to resolve the link first. It only connects a server Kernel is already in; the dropdown above is for a server it already sees.</p>
+
         <div class="ad-routes" data-ad-routes>
           <p class="ad-empty">Loading channel routing…</p>
         </div>
@@ -244,6 +255,44 @@
           </div>
           <button class="btn btn-light btn-sm" type="button" data-ad-board-refresh>Post / refresh now</button>
         </div>
+
+        <div class="ad-tool ad-tool-wide">
+          <div class="ad-tool-head">
+            <h3>Recent admin-server activity</h3>
+            <span class="ad-count" data-ad-feed-count>—</span>
+            <button class="btn btn-dark btn-sm" type="button" data-ad-feed-refresh>Refresh</button>
+          </div>
+          <p class="ad-tool-note">The last posts Kernel made to this server, including any it could not deliver and why. <code>/kernel logs</code> in Discord reads the same list; a post that reached a channel also exists in that channel.</p>
+          <div class="ad-rows" data-ad-feed-list>
+            <p class="ad-empty">Loading admin activity…</p>
+          </div>
+          <span class="ad-status" data-ad-feed-status role="status"></span>
+        </div>
+      </section>
+
+      <section class="ad-section" aria-labelledby="ad-automod-title">
+        <div class="dash-list-head">
+          <div>
+            <h2 id="ad-automod-title">AutoMod badge</h2>
+            <p>Discord counts active AutoMod rules Kernel created across every server it is in. The badge is granted by Discord once that total reaches 100, usually within 12–48 hours.</p>
+          </div>
+          <span class="ad-count" data-ad-automod-count>—</span>
+        </div>
+
+        <article class="ad-tool ad-tool-wide" aria-labelledby="ad-automod-progress-title">
+          <div class="ad-tool-head">
+            <h3 id="ad-automod-progress-title">Progress</h3>
+            <button class="btn btn-dark btn-sm" type="button" data-ad-automod-refresh>Refresh</button>
+          </div>
+          <div class="ad-progress" data-ad-automod-bar role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span></span></div>
+          <p class="ad-tool-note" data-ad-automod-note>Reading Discord…</p>
+          <div class="ad-form-actions">
+            <label class="ad-inline"><span>Type</span><input type="text" data-ad-automod-confirm placeholder="SEED" autocomplete="off" spellcheck="false"> <span>to create rules</span></label>
+            <button class="btn btn-light btn-sm" type="button" data-ad-automod-seed>Create missing rules</button>
+            <span class="ad-status" data-ad-automod-status role="status"></span>
+          </div>
+          <div class="ad-rows ad-automod-rows" data-ad-automod></div>
+        </article>
       </section>
 
       <section class="ad-section" aria-labelledby="ad-control-title">
@@ -733,6 +782,20 @@
             </div>
           </article>
 
+          <article class="ad-tool" aria-labelledby="ad-faq-title">
+            <div class="ad-tool-head">
+              <h3 id="ad-faq-title">Homepage FAQ</h3>
+              <span class="ad-count" data-ad-faq-count>—</span>
+            </div>
+            <p class="ad-tool-note">Answers that replace the shipped FAQ on the homepage. A question worded the same as a shipped one swaps its answer; a new question is added at the top. Answers are plain text — no HTML.</p>
+            <div class="ad-rows" data-ad-faq-list></div>
+            <div class="ad-form-actions">
+              <button class="btn btn-dark btn-sm" type="button" data-ad-faq-add>Add question</button>
+              <button class="btn btn-light btn-sm" type="button" data-ad-faq-save>Save FAQ</button>
+              <span class="ad-status" data-ad-faq-status role="status"></span>
+            </div>
+          </article>
+
           <article class="ad-tool" aria-labelledby="ad-show-title">
             <div class="ad-tool-head">
               <h3 id="ad-show-title">Server showcase</h3>
@@ -980,6 +1043,7 @@
 
 <script src="api-config.js"></script>
 <script src="auth.js"></script>
-<script src="admin.js"></script>
+<script src="admin.js?v=20261113j"></script>
+<script src="search.js?v=20261113i" defer></script>
 </body>
 </html>
