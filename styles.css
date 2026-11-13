@@ -435,19 +435,28 @@ section[id], [id="top"] { scroll-margin-top: 100px; }
   flex-wrap: wrap;
 }
 
-.nav-more { position: relative; }
+.nav-more { position: relative; z-index: 95; }
+.nav-more.is-open { z-index: 300; }
 .nav-more > .btn[aria-expanded="true"] { background: rgba(255, 255, 255, .09); border-color: rgba(255, 255, 255, .22); }
+/* The hero section is its own stacking context, and the next section paints over it at equal
+   z-index. While the menu is open the hero is lifted, so the panel is never clipped or covered. */
+body.explore-open .hero-cine { z-index: 12; }
+/* The reveal animation leaves the CTA with a transform, which makes it a stacking context below
+   the later status pill. Lift the whole CTA while the menu is open so the panel wins. */
+body.explore-open .hero-cta { position: relative; z-index: 60; }
 .nav-menu {
   position: absolute;
   top: calc(100% + 10px);
   right: 0;
-  z-index: 90;
-  min-width: 218px;
+  z-index: 300;
+  min-width: 232px;
   padding: 8px;
   border: 1px solid var(--line-strong);
   border-radius: var(--r-md);
-  background: rgba(16, 17, 19, .98);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, .55);
+  /* Opaque on purpose: a translucent panel let the hero headline show through the links. */
+  background: #101113;
+  isolation: isolate;
+  box-shadow: 0 28px 70px rgba(0, 0, 0, .8), 0 2px 10px rgba(0, 0, 0, .5);
   opacity: 0;
   visibility: hidden;
   transform: translateY(-6px);

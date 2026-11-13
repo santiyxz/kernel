@@ -106,9 +106,22 @@
     }
   }
 
+  // The bot answers { error: { code, message } }, an older build may answer { error: 'text' },
+  // and a proxy can answer HTML. Always end up with one readable sentence, never "[object Object]".
+  function errorText(payload, status) {
+    const raw = payload && payload.error;
+    if (typeof raw === 'string' && raw.trim()) return raw.trim();
+    if (raw && typeof raw.message === 'string' && raw.message.trim()) return raw.message.trim();
+    if (status === 401) return 'Log in with Discord first.';
+    if (status === 404) return 'This Kernel build does not publish reviews yet.';
+    if (status === 429) return 'Too many requests. Wait a minute and try again.';
+    if (status >= 500) return 'Kernel had an error on its side. Try again in a moment.';
+    return 'The API refused the request (HTTP ' + status + ').';
+  }
+
   // A failed read is not the same as an empty list: say the list is unavailable instead of
   // claiming nobody has reviewed Kernel.
-  function unavailable() {
+  function unavailable(reason) {
     list.querySelectorAll('.review-card').forEach((node) => node.remove());
     if (empty) {
       empty.hidden = false;
@@ -116,7 +129,9 @@
       title.textContent = 'Reviews are unavailable right now.';
       empty.replaceChildren(
         title,
-        ' Kernel could not be reached, so nothing is shown rather than pretending the list is empty.',
+        ' ' +
+          (reason ||
+            'Kernel could not be reached, so nothing is shown rather than pretending the list is empty.'),
       );
     }
     if (countEl) countEl.textContent = 'Reviews unavailable';
@@ -129,7 +144,18 @@
     }
     try {
       const response = await fetch(apiBase + '/api/public/reviews', { cache: 'no-store' });
-      if (!response.ok) throw new Error('HTTP ' + response.status);
+      if (!response.ok) {
+        if (response.status === 401 || response.status === 404) {
+          unavailable('The bot behind this page has not been updated with reviews yet.');
+          return;
+        }
+        unavailable(
+          response.status === 502 || response.status === 503
+            ? 'Kernel is restarting or offline, so the list cannot load.'
+            : 'Kernel answered with an error, so the list cannot load.',
+        );
+        return;
+      }
       const data = await response.json();
       render(data && data.reviews);
     } catch (error) {
@@ -175,7 +201,11 @@
         });
         const payload = await response.json().catch(() => ({}));
         if (!response.ok) {
-          throw new Error(payload && payload.error ? payload.error : 'HTTP ' + response.status);
+          if (response.status === 401) {
+            if (statusEl) statusEl.textContent = 'Your session expired. Log in again, then publish the review.';
+            return;
+          }
+          throw new Error(errorText(payload, response.status));
         }
         form.reset();
         if (charEl) charEl.textContent = '0 / 600';
@@ -184,9 +214,9 @@
       } catch (error) {
         if (statusEl) {
           statusEl.textContent =
-            error && error.message && !/^HTTP/.test(error.message)
-              ? error.message
-              : 'Could not reach the API. Check the status page and try again.';
+            error instanceof TypeError
+              ? 'Could not reach the API. Check the status page and try again.'
+              : (error && error.message) || 'Something went wrong. Try again.';
         }
       } finally {
         if (submit) submit.disabled = false;

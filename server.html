@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Server — Kernel</title>
+<meta name="description" content="A server running Kernel: member count, boosts, creation date and the features Kernel can run there. Public data only, straight from Discord.">
+<meta property="og:title" content="Server — Kernel">
+<meta property="og:description" content="A server running Kernel, with the public numbers Discord already shows.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kernel">
+<meta property="og:url" content="https://santiyxz.github.io/kernel/server.html">
+<meta property="og:image" content="https://santiyxz.github.io/kernel/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Server — Kernel">
+<meta name="twitter:description" content="A server running Kernel, with the public numbers Discord already shows.">
+<meta name="twitter:image" content="https://santiyxz.github.io/kernel/og.png">
+<link rel="canonical" href="https://santiyxz.github.io/kernel/servers.html">
+<meta name="theme-color" content="#08090a">
+<link rel="icon" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=20261113g">
+<style>
+  .srv-hero { position: relative; padding: 46px 0 0; }
+  .srv-banner {
+    position: relative; height: clamp(150px, 26vw, 250px); margin: 0 var(--gut);
+    max-width: 1180px; margin-inline: auto; border-radius: 20px; overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, .1);
+    background:
+      radial-gradient(80% 140% at 18% 10%, rgba(255, 255, 255, .16), transparent 62%),
+      radial-gradient(70% 130% at 88% 90%, rgba(255, 255, 255, .09), transparent 60%),
+      linear-gradient(150deg, #1a1c21, #0b0c0f);
+  }
+  .srv-banner img { width: 100%; height: 100%; object-fit: cover; opacity: .55; display: block; }
+  .srv-banner.is-empty { height: clamp(104px, 15vw, 156px); }
+  .srv-banner::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(5, 5, 6, .1) 0%, rgba(5, 5, 6, .55) 62%, #050506 100%);
+  }
+  .srv-head {
+    display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 20px; align-items: end;
+    margin-top: -56px; position: relative; z-index: 2; padding-bottom: 8px;
+  }
+  .srv-icon {
+    width: 96px; height: 96px; border-radius: 24px; overflow: hidden; flex: none;
+    display: grid; place-items: center; border: 2px solid #0a0b0d;
+    background: linear-gradient(150deg, #33363c, #131418);
+    box-shadow: 0 18px 40px -18px rgba(0, 0, 0, .9), inset 0 1px 0 rgba(255, 255, 255, .1);
+    font-weight: 800; font-size: 1.7rem; letter-spacing: -.04em; color: #e8eaec;
+  }
+  .srv-icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .srv-tags { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .srv-tag {
+    display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px;
+    font-size: .66rem; font-weight: 550; letter-spacing: .02em; color: #cfd3d8;
+    border: 1px solid rgba(255, 255, 255, .16); background: rgba(255, 255, 255, .04);
+  }
+  .srv-tag::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: #8fe6b4; }
+  .srv-tag.is-plain::before { background: #a9aeb5; }
+  .srv-head h1 { margin: 0 0 6px; font-size: clamp(1.8rem, 4.2vw, 2.7rem); letter-spacing: -.035em; color: #f4f5f6; overflow-wrap: anywhere; }
+  .srv-meta { margin: 0; font-size: .86rem; color: #9aa0a7; }
+  .srv-cta { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; padding-bottom: 6px; }
+
+  .srv-body { padding-top: 30px; }
+  .srv-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin-bottom: 22px; }
+  .srv-stat { padding: 15px 16px; border-radius: 14px; border: 1px solid rgba(255, 255, 255, .09); background: rgba(13, 14, 17, .6); }
+  .srv-stat span { display: block; font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: #8b8f96; margin-bottom: 6px; }
+  .srv-stat b { font-size: 1.1rem; font-weight: 600; color: #f1f2f4; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+  .srv-stat small { display: block; margin-top: 4px; font-size: .68rem; color: #7f838a; }
+
+  .srv-cols { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 16px; margin-bottom: 30px; }
+  .srv-card { padding: 22px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, .09); background: rgba(13, 14, 17, .6); }
+  .srv-card h2 { margin: 0 0 10px; font-size: 1rem; letter-spacing: -.01em; color: #eef0f2; }
+  .srv-card p { margin: 0; font-size: .86rem; line-height: 1.7; color: #a8adb4; overflow-wrap: anywhere; }
+  .srv-card .ct-list { margin-top: 2px; }
+  .srv-card-note { margin: 12px 0 0; font-size: .74rem; line-height: 1.6; color: #85898f; }
+  .linkish {
+    background: none; border: 0; padding: 0; margin-left: 4px; cursor: pointer;
+    font: inherit; color: #d6d8db; text-decoration: underline; text-underline-offset: 3px;
+  }
+  .linkish:hover { color: #fff; }
+
+  .srv-more { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .srv-mini {
+    display: flex; align-items: center; gap: 11px; padding: 12px 14px;
+    border: 1px solid rgba(255, 255, 255, .1); border-radius: 13px;
+    background: rgba(255, 255, 255, .028); min-width: 0;
+    transition: background .2s var(--ease), border-color .2s var(--ease);
+  }
+  .srv-mini:hover { background: rgba(255, 255, 255, .055); border-color: rgba(255, 255, 255, .18); }
+  .srv-mini-icon {
+    width: 34px; height: 34px; flex: none; border-radius: 9px; overflow: hidden;
+    display: grid; place-items: center; border: 1px solid rgba(255, 255, 255, .12);
+    background: linear-gradient(145deg, #2b2e33, #101113);
+    font-size: .68rem; font-weight: 700; color: #e8eaec;
+  }
+  .srv-mini-icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .srv-mini span { min-width: 0; }
+  .srv-mini b { display: block; font-size: .8rem; font-weight: 550; color: #e8eaec; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .srv-mini small { display: block; font-size: .68rem; color: #85898f; }
+
+  .srv-state { max-width: 560px; padding: 26px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, .1); background: rgba(13, 14, 17, .65); }
+  .srv-state h2 { margin: 0 0 8px; font-size: 1.05rem; color: #f0f1f3; }
+  .srv-state p { margin: 0 0 16px; font-size: .86rem; line-height: 1.65; color: #9aa0a7; }
+  .srv-skel { border-radius: 8px; background: linear-gradient(90deg, rgba(255, 255, 255, .05), rgba(255, 255, 255, .1), rgba(255, 255, 255, .05)); background-size: 200% 100%; animation: srvShimmer 1.4s linear infinite; }
+  @keyframes srvShimmer { to { background-position: -200% 0; } }
+
+  @media (max-width: 980px) {
+    .srv-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .srv-cols { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 720px) {
+    .srv-head { grid-template-columns: auto minmax(0, 1fr); align-items: start; }
+    .srv-icon { width: 72px; height: 72px; border-radius: 18px; font-size: 1.3rem; }
+    .srv-cta { grid-column: 1 / -1; justify-content: flex-start; padding-top: 6px; }
+    .srv-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .srv-more { grid-template-columns: minmax(0, 1fr); }
+    .srv-banner { border-radius: 16px; }
+  }
+</style>
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body class="ct-page has-bg server-page">
+
+<a class="skip" href="#main">Skip to content</a>
+<div class="bg-layer" aria-hidden="true"><canvas data-bg-waves></canvas></div>
+
+<header class="nav-shell" id="top">
+  <div class="nav">
+    <a class="brand" href="index.html" aria-label="Kernel, back to the site">
+      <span class="mark" aria-hidden="true">K</span>
+      <span class="brand-name">Kernel</span>
+    </a>
+    <nav class="links" aria-label="Primary">
+      <a href="index.html#features">Features</a>
+      <a href="index.html#how">How it works</a>
+      <a href="commands.html">Commands</a>
+      <a href="docs.html">Docs</a>
+      <a href="bots.html">Bots</a>
+      <a href="servers.html">Servers</a>
+      <a href="reviews.html">Reviews</a>
+      <a href="premium.html">Premium</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="nav-support nav-support-site" href="contact.html">Contact</a>
+      <a class="nav-login" data-login href="dashboard.html">
+        <span data-login-label="Log in" data-login-label-signed-in="Dashboard">Log in</span>
+      </a>
+      <a class="btn btn-light btn-sm" data-link="invite" href="index.html#support">Invite</a>
+      <button class="burger" id="burger" aria-expanded="false" aria-controls="drawer" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="drawer" id="drawer">
+  <nav aria-label="Mobile">
+    <a href="index.html#features">Features</a>
+    <a href="index.html#how">How it works</a>
+    <a href="commands.html">Commands</a>
+    <a href="docs.html">Docs</a>
+    <a href="bots.html">Bots</a>
+    <a href="servers.html" aria-current="page">Servers</a>
+    <a href="reviews.html">Reviews</a>
+    <a href="premium.html">Premium</a>
+    <a href="status.html">Status</a>
+    <a href="contact.html">Contact</a>
+    <a href="index.html#faq">FAQ</a>
+    <a class="btn btn-dark" data-login href="dashboard.html">
+      <span data-login-label="Log in with Discord" data-login-label-signed-in="Open dashboard">Log in with Discord</span>
+    </a>
+  </nav>
+</div>
+
+<main id="main">
+  <div class="srv-hero">
+    <div class="srv-banner is-empty" data-srv-banner aria-hidden="true"></div>
+    <div class="shell">
+      <div class="srv-head">
+        <span class="srv-icon" data-srv-icon aria-hidden="true">?</span>
+        <div>
+          <div class="srv-tags">
+            <span class="srv-tag" data-srv-tag>Kernel is here</span>
+            <span class="srv-tag is-plain" data-srv-tier>Boost tier —</span>
+          </div>
+          <h1 data-srv-name tabindex="-1">Loading this server…</h1>
+          <p class="srv-meta" data-srv-meta>Reading the public server list from Kernel.</p>
+        </div>
+        <div class="srv-cta">
+          <a class="btn btn-light btn-sm" data-link="invite" href="index.html#support">Add Kernel</a>
+          <a class="btn btn-dark btn-sm" href="servers.html">All servers</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="shell srv-body">
+    <div class="srv-grid" data-srv-stats>
+      <div class="srv-stat"><span>Members</span><b data-srv-members>—</b><small>Discord member count</small></div>
+      <div class="srv-stat"><span>Boosts</span><b data-srv-boosts>—</b><small>Server boosts</small></div>
+      <div class="srv-stat"><span>Boost tier</span><b data-srv-boost-tier>—</b><small>Perks unlocked</small></div>
+      <div class="srv-stat"><span>Created</span><b data-srv-created>—</b><small>Server age</small></div>
+      <div class="srv-stat"><span>Language</span><b data-srv-locale>—</b><small>Preferred locale</small></div>
+    </div>
+
+    <div class="srv-cols" data-srv-content>
+      <article class="srv-card">
+        <h2>About this server</h2>
+        <p data-srv-about>Loading…</p>
+      </article>
+      <aside class="srv-card">
+        <h2>What Kernel can run here</h2>
+        <ul class="ct-list">
+          <li><strong>Anti-nuke and automod.</strong> Available to admins; the server decides which rules are on.</li>
+          <li><strong>Message logging and tickets.</strong> Set per channel from the dashboard.</li>
+          <li><strong>99 slash commands.</strong> Moderation, community, utility, economy and games.</li>
+        </ul>
+        <p class="srv-card-note">Kernel never reads DMs and never stores message content beyond the logs a server asks for.</p>
+      </aside>
+    </div>
+
+    <div class="srv-state" data-srv-error hidden>
+      <h2 data-srv-error-title>This server is not available</h2>
+      <p data-srv-error-note>Kernel could not load the public list.</p>
+      <div class="srv-cta">
+        <button class="btn btn-light btn-sm" type="button" data-srv-retry>Try again</button>
+        <a class="btn btn-dark btn-sm" href="servers.html">Back to servers</a>
+      </div>
+    </div>
+
+    <section data-srv-more-wrap hidden aria-labelledby="srv-more-title">
+      <div class="pr-head" style="margin-bottom:14px">
+        <p class="pr-kicker">More communities</p>
+        <h2 id="srv-more-title" style="margin:0;font-size:1.2rem;letter-spacing:-.02em">Other servers running Kernel</h2>
+      </div>
+      <div class="srv-more" data-srv-more></div>
+    </section>
+
+    <p class="pr-card-note" style="margin-top:24px">
+      Only what Discord already exposes is shown: name, icon, member count, boosts, creation date and locale.
+      Kernel publishes no member list, no channel list and no settings for this server.
+      <button class="linkish" type="button" data-srv-copy>Copy this page’s link</button>
+    </p>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="shell foot-base">
+    <p>© <span id="year">2026</span> Kernel. Independent project, not affiliated with Discord Inc.</p>
+    <p class="foot-status"><a href="index.html">Home</a> · <a href="servers.html">Servers</a> · <a href="status.html">Status</a> · <a href="contact.html">Contact</a></p>
+  </div>
+</footer>
+
+<script src="api-config.js"></script>
+<script src="site-content.js"></script>
+<script src="auth.js"></script>
+<script src="site-bg.js?v=20261113g"></script>
+<script src="app.js?v=20261113g"></script>
+<script src="server.js?v=20261113g" defer></script>
+<script>document.getElementById('year').textContent = String(new Date().getFullYear());</script>
+</body>
+</html>

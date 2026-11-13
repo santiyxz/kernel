@@ -144,6 +144,7 @@ function setupNav() {
     if (!explore || !exploreWrap) return;
     exploreWrap.classList.toggle('is-open', open);
     explore.setAttribute('aria-expanded', String(open));
+    document.body.classList.toggle('explore-open', open);
     if (!open && restoreFocus) explore.focus({ preventScroll: true });
   }
 
@@ -329,9 +330,19 @@ function paletteFor(id) {
   return PALETTES[hash % PALETTES.length];
 }
 
+function serverHref(server) {
+  const id = server && server.id ? String(server.id) : '';
+  return id && !id.startsWith('example-') ? 'server.html?id=' + encodeURIComponent(id) : '';
+}
+
 function serverCard(server) {
-  const card = document.createElement('div');
+  const href = serverHref(server);
+  const card = document.createElement(href ? 'a' : 'div');
   card.className = 'server-card';
+  if (href) {
+    card.href = href;
+    card.setAttribute('aria-label', server.name + ' — open the server page');
+  }
   const members = formatCount(server.memberCount);
   card.title = server.name + (members ? ` — ${members} members` : '');
 
@@ -341,11 +352,17 @@ function serverCard(server) {
   icon.style.setProperty('--c1', c1);
   icon.style.setProperty('--c2', c2);
 
-  const hash = typeof server.icon === 'string' ? server.icon.trim() : '';
-  if (hash && server.id && !String(server.id).startsWith('example-')) {
+  // The bot sends a full CDN url; the shipped servers.json may carry a bare hash.
+  const raw = typeof server.icon === 'string' ? server.icon.trim() : '';
+  let src = '';
+  if (/^https?:\/\//i.test(raw)) src = raw;
+  else if (raw && server.id && !String(server.id).startsWith('example-')) {
+    const ext = raw.startsWith('a_') ? 'gif' : 'png';
+    src = `https://cdn.discordapp.com/icons/${server.id}/${raw}.${ext}?size=128`;
+  }
+  if (src) {
     const img = document.createElement('img');
-    const ext = hash.startsWith('a_') ? 'gif' : 'png';
-    img.src = `https://cdn.discordapp.com/icons/${server.id}/${hash}.${ext}?size=128`;
+    img.src = src;
     img.alt = '';
     img.loading = 'lazy';
     img.decoding = 'async';
