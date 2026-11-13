@@ -1674,7 +1674,7 @@ body.explore-open .hero-cta { position: relative; z-index: 60; }
 .mg-meta { margin: 6px 0 0; font-size: .82rem; color: var(--muted-2); }
 .mg-head-actions { display: flex; align-items: flex-end; gap: 10px; flex-wrap: wrap; }
 .mg-picker { display: flex; flex-direction: column; gap: 6px; }
-.mg-picker span {
+.mg-picker > span {
   font-size: .62rem;
   letter-spacing: .14em;
   text-transform: uppercase;
@@ -4566,3 +4566,215 @@ body.has-site-search { overflow: hidden; }
   .dash-page .nav-actions { gap: 10px; }
   .dash-page .nav-actions .btn-sm { display: none; }
 }
+
+/* ============================================================================
+   UI kit — custom select control and press feedback.
+
+   Every native <select> is wrapped by ui-kit.js; the real select stays in the
+   DOM for form values but is painted by the trigger below. The listbox is
+   fixed-positioned so scroll containers cannot clip it.
+   ========================================================================== */
+
+.ui-select {
+  position: relative;
+  display: inline-grid;
+  min-width: 0;
+  max-width: 100%;
+  vertical-align: middle;
+}
+.ui-select.is-hidden,
+.ui-select[hidden] { display: none; }
+.ui-select > select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+.ui-select-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+  padding: 9px 11px;
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: 10px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .055), rgba(255, 255, 255, .015)),
+    #0a0b0d;
+  color: #f1f2f4;
+  font: inherit;
+  font-size: .8rem;
+  line-height: 1.35;
+  text-align: left;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: border-color .18s var(--ease), background .18s var(--ease),
+    box-shadow .18s var(--ease), scale .16s var(--ease);
+}
+.ui-select-btn:hover { border-color: rgba(255, 255, 255, .3); }
+.ui-select-btn:disabled { opacity: .45; cursor: not-allowed; }
+.ui-select-btn.is-open {
+  border-color: rgba(255, 255, 255, .46);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, .07), inset 0 1px 0 rgba(255, 255, 255, .1);
+}
+.ui-select-btn:focus-visible { outline: 2px solid rgba(255, 255, 255, .8); outline-offset: 2px; }
+.ui-select-value {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ui-select-value.is-placeholder { color: #81858c; }
+.ui-select-chevron {
+  width: 12px;
+  height: 12px;
+  flex: none;
+  color: #9a9ea5;
+  transition: transform .2s var(--ease), color .2s var(--ease);
+}
+.ui-select-btn.is-open .ui-select-chevron { transform: rotate(180deg); color: #fff; }
+
+.ui-select-menu {
+  position: fixed;
+  z-index: 140;
+  max-height: min(340px, 62vh);
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: 5px;
+  border: 1px solid rgba(255, 255, 255, .15);
+  border-radius: 12px;
+  background: rgba(12, 13, 15, .96);
+  color: #f1f2f4;
+  box-shadow:
+    0 24px 64px -18px rgba(0, 0, 0, .95),
+    inset 0 1px 0 rgba(255, 255, 255, .07);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  transform-origin: top center;
+  animation: ui-select-in .15s var(--ease) both;
+}
+.ui-select-menu[data-side="up"] { transform-origin: bottom center; animation-name: ui-select-in-up; }
+@keyframes ui-select-in {
+  from { opacity: 0; transform: translateY(-5px) scale(.985); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes ui-select-in-up {
+  from { opacity: 0; transform: translateY(5px) scale(.985); }
+  to { opacity: 1; transform: none; }
+}
+.ui-select-opt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 34px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  font-size: .8rem;
+  line-height: 1.35;
+  color: #d5d7db;
+  cursor: pointer;
+  user-select: none;
+}
+.ui-select-opt.is-active { background: rgba(255, 255, 255, .08); color: #fff; }
+.ui-select-opt.is-selected { color: #fff; font-weight: 560; }
+.ui-select-opt.is-placeholder { color: #8b8f96; }
+.ui-select-opt.is-disabled { opacity: .35; cursor: not-allowed; }
+.ui-select-opt-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ui-select-check { width: 13px; height: 13px; flex: none; color: #fff; }
+.ui-select-group {
+  padding: 8px 10px 4px;
+  font-size: .6rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #7e828a;
+}
+
+/* Context sizing so the trigger sits at the same height as its neighbours. */
+.ad-field .ui-select,
+.ad-inline .ui-select,
+.mg-field .ui-select,
+.mg-picker .ui-select { max-width: 100%; }
+.ad-inline .ui-select-btn { padding: 9px 10px; border-radius: 9px; font-size: .78rem; }
+.ad-field .ui-select-btn { font-size: .8rem; }
+.ad-route .ui-select { width: 168px; flex: 0 0 auto; }
+.ad-route .ui-select-btn {
+  padding: 7px 9px;
+  border-radius: 9px;
+  background: #0b0c0e;
+  font-size: .74rem;
+}
+.mg-picker .ui-select { min-width: 190px; }
+.mg-picker .ui-select-btn { padding: 9px 12px; font-size: .82rem; }
+.mg-field .ui-select-btn { padding: 10px 12px; font-size: .85rem; }
+
+@media (max-width: 680px) {
+  .ad-route .ui-select { width: 100%; flex: 1 1 auto; }
+}
+@media (max-width: 760px) {
+  .mg-picker .ui-select { width: 100%; min-width: 0; }
+}
+
+/* Press feedback: the console buttons add a ripple where the pointer landed;
+   every .btn gets the same soft compress without any script. */
+.ui-ripple-host { position: relative; }
+.ui-ripple {
+  position: absolute;
+  z-index: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(255, 255, 255, .3), rgba(255, 255, 255, .08) 46%, transparent 72%);
+  transform: scale(0);
+  opacity: .85;
+  animation: ui-ripple .52s var(--ease) forwards;
+}
+.btn-light .ui-ripple {
+  background: radial-gradient(circle, rgba(0, 0, 0, .16), rgba(0, 0, 0, .05) 46%, transparent 72%);
+}
+@keyframes ui-ripple {
+  to { transform: scale(1); opacity: 0; }
+}
+/* Press feedback tuned against Kanaro's controls: a 2px hover lift and a 0.95 press,
+   so the click lands instead of just changing colour. */
+.btn { transition: background .2s var(--ease), border-color .2s var(--ease), color .2s var(--ease), box-shadow .2s var(--ease), transform .2s var(--ease); }
+.btn:hover { transform: translateY(-2px); }
+.btn:active { transform: translateY(0) scale(.95); }
+.ui-select-btn:active { transform: scale(.97); }
+.cmd-copy { transition: border-color .18s var(--ease), color .18s var(--ease), background .18s var(--ease), transform .14s var(--ease); }
+.cmd-copy:active { transform: scale(.94); }
+.ad-tab:active,
+.mg-tabs button:active { transform: scale(.97); }
+.rating-opt .rating-face { transition: border-color .16s ease, background .16s ease, color .16s ease, transform .16s var(--ease); }
+.rating-opt:active .rating-face { transform: scale(.985); }
+a.server-card { transition: background .18s var(--ease), border-color .18s var(--ease), transform .18s var(--ease); }
+a.server-card:active { transform: scale(.99); }
+.links a:active,
+.foot-links a:active { opacity: .55; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-ripple { display: none; }
+  .btn:hover,
+  .btn:active,
+  .ui-select-btn:active,
+  .cmd-copy:active,
+  .ad-tab:active,
+  .mg-tabs button:active,
+  .rating-opt:active .rating-face,
+  a.server-card:active { transform: none; }
+  .links a:active,
+  .foot-links a:active { opacity: 1; }
+  .ui-select-menu { animation: none; }
+}
+.ui-select-menu { max-width: min(420px, 92vw); }

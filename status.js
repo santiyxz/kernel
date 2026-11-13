@@ -147,7 +147,6 @@
     else if (gw === 'warn') reasons.push('Discord has not reported a gateway ping yet');
     if (api.latency != null && api.latency > 1500) reasons.push('the API is answering slowly');
     if (probeState() === 'bad') reasons.push('the last external check failed');
-    if (probeState() === 'warn') reasons.push('the external probe has not reported in a while');
     return reasons;
   }
 
@@ -212,6 +211,15 @@
     if (reasons.length) {
       setBanner('warn', 'Partially degraded', reasons.join(' · ') + '.', 'Degraded');
       document.title = 'Degraded — Kernel status';
+    } else if (probeState() === 'warn') {
+      setBanner(
+        'warn',
+        'Monitoring delayed',
+        'Gateway and API are answering. External checks are ' + shortAgo(probe.lastAt) +
+          ' because GitHub’s scheduled probe has not run; the services themselves are up.',
+        'Probe stale',
+      );
+      document.title = 'Monitoring delayed — Kernel status';
     } else {
       setBanner('ok', 'All systems operational', healthySummary(), 'Live');
       document.title = 'All systems operational — Kernel status';
@@ -399,7 +407,7 @@
     } else if (state === 'bad') {
       service('probe', 'bad', 'Failed', shortAgo(lastAt), 'The last external check did not get an answer');
     } else {
-      service('probe', 'warn', 'Stale', shortAgo(lastAt), 'No external check in over 45 minutes');
+      service('probe', 'warn', 'Stale', shortAgo(lastAt), 'The scheduled probe is behind — it usually runs every 15 minutes');
     }
     evaluate();
   }

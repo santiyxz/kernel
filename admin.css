@@ -380,7 +380,8 @@
 .ad-field select,
 .ad-field textarea,
 .ad-field input[type="number"],
-.ad-field input[type="text"] {
+.ad-field input[type="text"],
+.ad-field input[type="datetime-local"] {
   width: 100%;
   padding: 9px 11px;
   border: 1px solid var(--line);
@@ -404,6 +405,18 @@
 .ad-inline { display: inline-flex; align-items: center; gap: 7px; font-size: .76rem; color: var(--muted); }
 .ad-inline input[type="number"] {
   width: 84px;
+  padding: 7px 9px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: #0b0c0e;
+  color: var(--text);
+  font: inherit;
+  font-size: .78rem;
+}
+.ad-inline input[type="text"] {
+  width: auto;
+  min-width: 150px;
+  max-width: 230px;
   padding: 7px 9px;
   border: 1px solid var(--line);
   border-radius: 9px;
