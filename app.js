@@ -252,7 +252,7 @@ function setupDirectory() {
   let filter = 'all';
 
   // Match against the command and its description only, so the Copy button added below cannot make
-  // a search for "copy" match all 100 rows.
+  // a search for "copy" match all 99 rows.
   const haystack = new Map(rows.map((row) => [
     row,
     Array.from(row.querySelectorAll('dt code, dd')).map((node) => node.textContent).join(' ').toLowerCase(),

@@ -12,7 +12,7 @@
   if (window.KernelSearch) return;
 
   const PAGES = [
-    { title: 'Home', meta: 'Kernel, 100 commands, one invite', href: 'index.html' },
+    { title: 'Home', meta: 'Kernel, 99 commands, one invite', href: 'index.html' },
     { title: 'Commands', meta: 'Every slash command, filterable and copyable', href: 'commands.html' },
     { title: 'Docs', meta: 'Setup, anti-nuke, automod, verification, logging', href: 'docs.html' },
     { title: 'Bots', meta: 'The Kernel family and builds', href: 'bots.html' },

@@ -35,10 +35,10 @@ window.KERNEL_DEVELOPERS = {
         { title: 'Anti-nuke snapshot & restore', detail: 'Takes a copy of channels, roles and permissions, compares it after an incident and can put the server back.' },
         { title: 'Hash-chained case ledger', detail: 'Every moderation case carries the hash of the one before it, so an edited history does not verify.' },
         { title: 'Owner console', detail: 'A Discord-ID-gated panel for broadcasts, backups, the watchlist, scheduled jobs and release rollbacks.' },
-        { title: '100 slash commands and this site', detail: 'Moderation, automod, tickets, verification, economy and utilities — plus the static site you are reading.' },
+        { title: '99 slash commands and this site', detail: 'Moderation, automod, tickets, verification, economy and utilities — plus the static site you are reading.' },
       ],
       apps: [
-        { name: 'Kernel bot', detail: 'discord.js · 100 slash commands · JSON you own', href: 'https://santiyxz.github.io/kernel/' },
+        { name: 'Kernel bot', detail: 'discord.js · 99 slash commands · JSON you own', href: 'https://santiyxz.github.io/kernel/' },
         { name: 'Kernel site', detail: 'Plain HTML, CSS and JavaScript on GitHub Pages', href: 'https://santiyxz.github.io/kernel/' },
         { name: 'Owner console', detail: 'Owner-only · opens after a Discord login', href: 'admin.html' },
       ],
