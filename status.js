@@ -155,7 +155,7 @@
     const data = api.data || {};
     if (Number.isFinite(data.ping)) bits.push('gateway ping ' + data.ping + ' ms');
     if (api.latency != null) bits.push('API ' + api.latency + ' ms');
-    if (probe) bits.push('external check ' + shortAgo(probe.lastAt));
+    if (probe && probeState() === 'ok') bits.push('external check ' + shortAgo(probe.lastAt));
     bits.push('refreshes every 20s');
     return bits.join(' · ');
   }
@@ -211,15 +211,6 @@
     if (reasons.length) {
       setBanner('warn', 'Partially degraded', reasons.join(' · ') + '.', 'Degraded');
       document.title = 'Degraded — Kernel status';
-    } else if (probeState() === 'warn') {
-      setBanner(
-        'warn',
-        'Monitoring delayed',
-        'Gateway and API are answering. External checks are ' + shortAgo(probe.lastAt) +
-          ' because GitHub’s scheduled probe has not run; the services themselves are up.',
-        'Probe stale',
-      );
-      document.title = 'Monitoring delayed — Kernel status';
     } else {
       setBanner('ok', 'All systems operational', healthySummary(), 'Live');
       document.title = 'All systems operational — Kernel status';
@@ -407,7 +398,7 @@
     } else if (state === 'bad') {
       service('probe', 'bad', 'Failed', shortAgo(lastAt), 'The last external check did not get an answer');
     } else {
-      service('probe', 'warn', 'Stale', shortAgo(lastAt), 'The scheduled probe is behind — it usually runs every 15 minutes');
+      service('probe', 'idle', 'Delayed', shortAgo(lastAt), 'The scheduled probe is behind — it usually runs every 15 minutes');
     }
     evaluate();
   }
