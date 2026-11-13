@@ -4236,24 +4236,56 @@ body.has-bg { background: transparent; }
   color: var(--muted);
 }
 .review-gate .btn { margin-top: 10px; }
-.ct-form select {
-  width: 100%;
-  padding: 11px 13px;
+/* The form already sits inside the review card, so the shared .ct-form frame would draw a
+   second border inside it. */
+.review-form-card .ct-form { border: 0; background: none; box-shadow: none; }
+.rating-field { display: block; margin: 0; padding: 0; border: 0; min-width: 0; }
+.rating-field legend { padding: 0; margin-bottom: 6px; font-size: .7rem; letter-spacing: .02em; color: #9ea1a6; }
+.rating-scale { display: grid; gap: 6px; }
+.rating-opt { display: block; position: relative; }
+/* A native radio or select popup is painted by the OS and stays white; the input itself
+   is hidden and the label below is the visible control. */
+.ct-form .rating-opt input[type="radio"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+  opacity: 0;
+  pointer-events: none;
+}
+.rating-face {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 9px 12px;
   border: 1px solid var(--line-strong);
-  border-radius: 12px;
+  border-radius: 11px;
   background: rgba(255, 255, 255, .028);
-  color: var(--text);
-  font: inherit;
-  font-size: .86rem;
-  line-height: 1.5;
-  outline: none;
-  appearance: none;
+  font-size: .8rem;
+  line-height: 1.4;
+  letter-spacing: 0;
+  color: var(--muted);
+  cursor: pointer;
+  transition: border-color .16s ease, background .16s ease, color .16s ease;
 }
-.ct-form select:focus {
-  border-color: rgba(255, 255, 255, .42);
-  background: rgba(255, 255, 255, .055);
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, .06);
+.rating-opt:hover .rating-face { border-color: rgba(255, 255, 255, .3); background: rgba(255, 255, 255, .05); }
+.rating-opt input[type="radio"]:checked + .rating-face {
+  border-color: rgba(255, 255, 255, .6);
+  background: rgba(255, 255, 255, .11);
+  color: #f2f3f5;
 }
+.rating-opt input[type="radio"]:focus-visible + .rating-face {
+  border-color: rgba(255, 255, 255, .55);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, .14);
+}
+.rating-stars { flex: none; letter-spacing: .1em; font-size: .74rem; color: #ffffff; }
+.rating-opt input[type="radio"]:not(:checked) + .rating-face .rating-stars { color: #8f939a; }
 
 /* ---------------------------------------------------------------- legal */
 

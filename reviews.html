@@ -23,7 +23,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20261113g">
+<link rel="stylesheet" href="styles.css?v=20261113h">
 <script>document.documentElement.classList.add('js');</script>
 </head>
 <body class="ct-page has-bg reviews-page">
@@ -116,15 +116,31 @@
         </div>
 
         <form class="ct-form" data-review-form hidden novalidate>
-          <label class="ct-field"><span>Rating</span>
-            <select name="rating" required>
-              <option value="5">5 — does exactly what it says</option>
-              <option value="4">4 — works, one rough edge</option>
-              <option value="3">3 — fine, not special</option>
-              <option value="2">2 — needs work</option>
-              <option value="1">1 — did not work for me</option>
-            </select>
-          </label>
+          <fieldset class="ct-field rating-field">
+            <legend>Rating</legend>
+            <div class="rating-scale">
+              <label class="rating-opt">
+                <input type="radio" name="rating" value="5" required aria-label="5 out of 5 — does exactly what it says">
+                <span class="rating-face"><span class="rating-stars" aria-hidden="true">★★★★★</span><span class="rating-word">Does exactly what it says</span></span>
+              </label>
+              <label class="rating-opt">
+                <input type="radio" name="rating" value="4" aria-label="4 out of 5 — works, one rough edge">
+                <span class="rating-face"><span class="rating-stars" aria-hidden="true">★★★★☆</span><span class="rating-word">Works, one rough edge</span></span>
+              </label>
+              <label class="rating-opt">
+                <input type="radio" name="rating" value="3" aria-label="3 out of 5 — fine, not special">
+                <span class="rating-face"><span class="rating-stars" aria-hidden="true">★★★☆☆</span><span class="rating-word">Fine, not special</span></span>
+              </label>
+              <label class="rating-opt">
+                <input type="radio" name="rating" value="2" aria-label="2 out of 5 — needs work">
+                <span class="rating-face"><span class="rating-stars" aria-hidden="true">★★☆☆☆</span><span class="rating-word">Needs work</span></span>
+              </label>
+              <label class="rating-opt">
+                <input type="radio" name="rating" value="1" aria-label="1 out of 5 — did not work for me">
+                <span class="rating-face"><span class="rating-stars" aria-hidden="true">★☆☆☆☆</span><span class="rating-word">Did not work for me</span></span>
+              </label>
+            </div>
+          </fieldset>
           <label class="ct-field"><span>Your review</span>
             <textarea name="body" rows="6" minlength="20" maxlength="600" placeholder="Between 20 and 600 characters." required></textarea>
           </label>
@@ -168,7 +184,7 @@
 <script src="auth.js"></script>
 <script src="site-bg.js?v=20261113g"></script>
 <script src="app.js?v=20261113g"></script>
-<script src="reviews.js?v=20261113g" defer></script>
+<script src="reviews.js?v=20261113h" defer></script>
 <script>document.getElementById('year').textContent = String(new Date().getFullYear());</script>
 </body>
 </html>

@@ -143,7 +143,12 @@
       return;
     }
     try {
-      const response = await fetch(apiBase + '/api/public/reviews', { cache: 'no-store' });
+      // ngrok's free plan answers browser-like requests with an HTML warning unless this
+      // header is present; without it the browser blocks the HTML response entirely.
+      const response = await fetch(apiBase + '/api/public/reviews', {
+        cache: 'no-store',
+        headers: { 'ngrok-skip-browser-warning': '1' },
+      });
       if (!response.ok) {
         if (response.status === 401 || response.status === 404) {
           unavailable('The bot behind this page has not been updated with reviews yet.');
@@ -191,6 +196,7 @@
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': '1',
             Authorization: 'Bearer ' + session.accessToken,
           },
           body: JSON.stringify({
