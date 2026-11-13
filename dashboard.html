@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20261113b">
+<link rel="stylesheet" href="styles.css?v=20261113c">
 <script>document.documentElement.classList.add('js');</script>
 </head>
 <body class="dash-page">
@@ -27,6 +27,7 @@
       <a href="index.html#features">Features</a>
       <a href="index.html#news">News</a>
       <a href="index.html#commands">Commands</a>
+      <a href="premium.html">Premium</a>
       <a href="contact.html">Contact</a>
       <a href="index.html#faq">FAQ</a>
     </nav>
@@ -35,9 +36,26 @@
       <a class="nav-support nav-owner-pinned" data-owner-link hidden href="admin.html">Admin</a>
       <a class="nav-support" href="index.html">Back to site</a>
       <a class="btn btn-light btn-sm" data-link="invite" href="index.html#support">Invite</a>
+      <button class="burger" id="burger" aria-expanded="false" aria-controls="drawer" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </div>
 </header>
+
+<div class="drawer" id="drawer">
+  <nav aria-label="Mobile">
+    <a href="index.html#features">Features</a>
+    <a href="index.html#news">News</a>
+    <a href="premium.html">Premium</a>
+    <a href="index.html#commands">Commands</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="status.html">Status</a>
+    <a href="contact.html">Contact</a>
+    <a href="index.html#support">Support</a>
+    <a class="btn btn-dark" data-link="invite" href="index.html#support">Invite Kernel</a>
+  </nav>
+</div>
 
 <main id="main" class="dash">
   <div class="shell">
