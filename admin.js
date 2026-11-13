@@ -209,6 +209,33 @@
     ticketList: document.querySelector('[data-ad-ticket-list]'),
     ticketRefresh: document.querySelector('[data-ad-ticket-refresh]'),
     ticketStatus: document.querySelector('[data-ad-ticket-status]'),
+    exportData: document.querySelector('[data-ad-export]'),
+    newsCount: document.querySelector('[data-ad-news-count]'),
+    newsTitle: document.querySelector('[data-ad-news-title-input]'),
+    newsTag: document.querySelector('[data-ad-news-tag]'),
+    newsBody: document.querySelector('[data-ad-news-body]'),
+    newsPublish: document.querySelector('[data-ad-news-publish]'),
+    newsClear: document.querySelector('[data-ad-news-clear]'),
+    newsStatus: document.querySelector('[data-ad-news-status]'),
+    newsList: document.querySelector('[data-ad-news-list]'),
+    premiumCount: document.querySelector('[data-ad-premium-count]'),
+    premiumOn: document.querySelector('[data-ad-premium-on]'),
+    premiumUrl: document.querySelector('[data-ad-premium-url]'),
+    premiumNote: document.querySelector('[data-ad-premium-note]'),
+    premiumGuild: document.querySelector('[data-ad-premium-guild]'),
+    premiumRolePremium: document.querySelector('[data-ad-premium-role-premium]'),
+    premiumRoleVip: document.querySelector('[data-ad-premium-role-vip]'),
+    premiumPricePremium: document.querySelector('[data-ad-premium-price-premium]'),
+    premiumPriceVip: document.querySelector('[data-ad-premium-price-vip]'),
+    premiumPerksPremium: document.querySelector('[data-ad-premium-perks-premium]'),
+    premiumPerksVip: document.querySelector('[data-ad-premium-perks-vip]'),
+    premiumSave: document.querySelector('[data-ad-premium-save]'),
+    premiumStatus: document.querySelector('[data-ad-premium-status]'),
+    premiumUser: document.querySelector('[data-ad-premium-user]'),
+    premiumTier: document.querySelector('[data-ad-premium-tier]'),
+    premiumGrant: document.querySelector('[data-ad-premium-grant]'),
+    premiumGrantStatus: document.querySelector('[data-ad-premium-grant-status]'),
+    premiumMembers: document.querySelector('[data-ad-premium-members]'),
   };
 
   const state = {
@@ -226,6 +253,8 @@
     showcaseRules: { hidden: [], order: [] },
     showcaseDraft: [],
     templates: [],
+    newsEditing: '',
+    premium: null,
   };
 
   const numberFormat = new Intl.NumberFormat('en');
@@ -2524,6 +2553,254 @@
     }
   }
 
+  /* ------------------------------------------------------ news & membership */
+
+  function renderNews(data) {
+    const items = Array.isArray(data && data.items) ? data.items : [];
+    if (ui.newsCount) ui.newsCount.textContent = items.length ? items.length + (items.length === 1 ? ' post' : ' posts') : 'none';
+    if (!ui.newsList) return;
+    ui.newsList.replaceChildren();
+    if (!items.length) {
+      ui.newsList.append(el('p', { className: 'ad-empty', text: 'No posts yet. The shipped announcement still shows on the homepage.' }));
+      return;
+    }
+
+    items.forEach((item) => {
+      const edit = el('button', { className: 'btn btn-dark btn-sm', type: 'button', text: 'Edit' });
+      edit.addEventListener('click', () => {
+        state.newsEditing = item.id;
+        if (ui.newsTitle) ui.newsTitle.value = item.title;
+        if (ui.newsTag) ui.newsTag.value = item.tag || '';
+        if (ui.newsBody) ui.newsBody.value = item.body;
+        if (ui.newsPublish) ui.newsPublish.textContent = 'Save changes';
+        setStatus(ui.newsStatus, 'Editing “' + item.title + '”.', '');
+        if (ui.newsTitle) ui.newsTitle.focus();
+      });
+      const remove = el('button', { className: 'btn btn-dark btn-sm', type: 'button', text: 'Delete' });
+      remove.addEventListener('click', () => { removeNews(item); });
+
+      ui.newsList.append(el('div', { className: 'ad-row' },
+        el('div', { className: 'ad-row-main' },
+          el('div', { className: 'ad-row-name', text: item.title }),
+          el('div', { className: 'ad-row-meta', text: (item.tag || 'Update') + ' · ' + (formatDate(item.at) || 'unknown date') + (item.editedAt ? ' · edited' : '') })),
+        el('div', { className: 'ad-row-side' }, edit, remove)));
+    });
+  }
+
+  async function loadNews() {
+    try {
+      renderNews(await get('/api/owner/announcements'));
+    } catch (error) {
+      if (error.session) throw error;
+      if (ui.newsCount) ui.newsCount.textContent = 'unavailable';
+      toolMissing(ui.newsList, 'News posts');
+    }
+  }
+
+  function clearNewsForm() {
+    state.newsEditing = '';
+    if (ui.newsTitle) ui.newsTitle.value = '';
+    if (ui.newsTag) ui.newsTag.value = '';
+    if (ui.newsBody) ui.newsBody.value = '';
+    if (ui.newsPublish) ui.newsPublish.textContent = 'Publish';
+  }
+
+  async function publishNews() {
+    if (!ui.newsPublish) return;
+    const body = {
+      title: ui.newsTitle ? ui.newsTitle.value.trim() : '',
+      tag: ui.newsTag ? ui.newsTag.value.trim() : '',
+      body: ui.newsBody ? ui.newsBody.value.trim() : '',
+    };
+    if (state.newsEditing) body.id = state.newsEditing;
+    setStatus(ui.newsStatus, 'Saving…');
+    try {
+      const data = await request('POST', '/api/owner/announcements', body);
+      renderNews(data);
+      clearNewsForm();
+      setStatus(ui.newsStatus, 'Published. Reload the site to see it.', 'ok');
+      loadAudit();
+    } catch (error) {
+      if (error.session) return gate('Your Discord session expired. Log in again.');
+      if (error.denied) return show('denied');
+      setStatus(ui.newsStatus, error.message, 'bad');
+    }
+  }
+
+  async function removeNews(item) {
+    setStatus(ui.newsStatus, 'Deleting…');
+    try {
+      const data = await request('POST', '/api/owner/announcements/remove', { id: item.id });
+      renderNews(data);
+      if (state.newsEditing === item.id) clearNewsForm();
+      setStatus(ui.newsStatus, 'Deleted “' + item.title + '”.', 'ok');
+      loadAudit();
+    } catch (error) {
+      if (error.session) return gate('Your Discord session expired. Log in again.');
+      if (error.denied) return show('denied');
+      setStatus(ui.newsStatus, error.message, 'bad');
+    }
+  }
+
+  function perksFrom(text) {
+    return String(text || '').split('\n').map((line) => line.trim()).filter(Boolean).slice(0, 8);
+  }
+
+  function tierLabel(tier) {
+    const tiers = state.premium && state.premium.tiers ? state.premium.tiers : {};
+    const row = tiers[tier];
+    return row && row.name ? row.name : (tier === 'vip' ? 'VIP' : 'Premium');
+  }
+
+  function renderPremiumMembers(rows) {
+    if (!ui.premiumMembers) return;
+    ui.premiumMembers.replaceChildren();
+    if (!rows.length) {
+      ui.premiumMembers.append(el('p', { className: 'ad-empty', text: 'No members yet.' }));
+      return;
+    }
+    rows.forEach((row) => {
+      const remove = el('button', { className: 'btn btn-dark btn-sm', type: 'button', text: 'Remove' });
+      remove.addEventListener('click', () => { applyGrant(row.userId, 'none'); });
+      ui.premiumMembers.append(el('div', { className: 'ad-row' },
+        el('div', { className: 'ad-row-main' },
+          el('div', { className: 'ad-row-name', text: row.userId }),
+          el('div', { className: 'ad-row-meta', text: tierLabel(row.tier) + ' · since ' + (formatDate(row.since) || 'unknown') })),
+        el('div', { className: 'ad-row-side' }, remove)));
+    });
+  }
+
+  function renderPremium(data) {
+    state.premium = data;
+    const tiers = data.tiers || {};
+    if (ui.premiumOn) ui.premiumOn.checked = data.enabled === true;
+    if (ui.premiumUrl) ui.premiumUrl.value = data.paymentUrl || '';
+    if (ui.premiumNote) ui.premiumNote.value = data.note || '';
+    if (ui.premiumGuild) {
+      fillGuildSelect(ui.premiumGuild, showcaseSource());
+      if (data.guildId && Array.from(ui.premiumGuild.options).some((option) => option.value === data.guildId)) {
+        ui.premiumGuild.value = data.guildId;
+      }
+    }
+    if (ui.premiumRolePremium) ui.premiumRolePremium.value = data.roles && data.roles.premium ? data.roles.premium : '';
+    if (ui.premiumRoleVip) ui.premiumRoleVip.value = data.roles && data.roles.vip ? data.roles.vip : '';
+    if (ui.premiumPricePremium) ui.premiumPricePremium.value = tiers.premium ? tiers.premium.price : 2;
+    if (ui.premiumPriceVip) ui.premiumPriceVip.value = tiers.vip ? tiers.vip.price : 5;
+    if (ui.premiumPerksPremium) ui.premiumPerksPremium.value = tiers.premium && Array.isArray(tiers.premium.perks) ? tiers.premium.perks.join('\n') : '';
+    if (ui.premiumPerksVip) ui.premiumPerksVip.value = tiers.vip && Array.isArray(tiers.vip.perks) ? tiers.vip.perks.join('\n') : '';
+    if (ui.premiumCount) {
+      const counts = data.counts || {};
+      ui.premiumCount.textContent = (counts.premium || 0) + ' Premium · ' + (counts.vip || 0) + ' VIP';
+    }
+    renderPremiumMembers(Array.isArray(data.members) ? data.members : []);
+  }
+
+  async function loadPremium() {
+    try {
+      renderPremium(await get('/api/owner/premium'));
+    } catch (error) {
+      if (error.session) throw error;
+      if (ui.premiumCount) ui.premiumCount.textContent = 'unavailable';
+      toolMissing(ui.premiumMembers, 'Premium tiers');
+    }
+  }
+
+  async function savePremium() {
+    if (!ui.premiumSave) return;
+    setStatus(ui.premiumStatus, 'Saving…');
+    try {
+      const data = await request('PUT', '/api/owner/premium', {
+        enabled: Boolean(ui.premiumOn && ui.premiumOn.checked),
+        paymentUrl: ui.premiumUrl ? ui.premiumUrl.value.trim() : '',
+        note: ui.premiumNote ? ui.premiumNote.value.trim() : '',
+        guildId: ui.premiumGuild ? ui.premiumGuild.value : '',
+        roles: {
+          premium: ui.premiumRolePremium ? ui.premiumRolePremium.value.trim() : '',
+          vip: ui.premiumRoleVip ? ui.premiumRoleVip.value.trim() : '',
+        },
+        tiers: {
+          premium: {
+            price: ui.premiumPricePremium ? Number(ui.premiumPricePremium.value) : 2,
+            perks: perksFrom(ui.premiumPerksPremium ? ui.premiumPerksPremium.value : ''),
+          },
+          vip: {
+            price: ui.premiumPriceVip ? Number(ui.premiumPriceVip.value) : 5,
+            perks: perksFrom(ui.premiumPerksVip ? ui.premiumPerksVip.value : ''),
+          },
+        },
+      });
+      renderPremium(data);
+      setStatus(ui.premiumStatus, 'Saved. Reload the site to see it.', 'ok');
+      loadAudit();
+    } catch (error) {
+      if (error.session) return gate('Your Discord session expired. Log in again.');
+      if (error.denied) return show('denied');
+      setStatus(ui.premiumStatus, error.message, 'bad');
+    }
+  }
+
+  async function applyGrant(userId, tier) {
+    setStatus(ui.premiumGrantStatus, 'Applying…');
+    try {
+      const data = await request('POST', '/api/owner/premium/grant', { userId, tier });
+      if (data.members) renderPremiumMembers(data.members);
+      if (ui.premiumCount && data.counts) {
+        ui.premiumCount.textContent = (data.counts.premium || 0) + ' Premium · ' + (data.counts.vip || 0) + ' VIP';
+      }
+      const label = tier === 'none' ? 'Removed' : 'Granted ' + tierLabel(tier);
+      const notes = Array.isArray(data.notes) && data.notes.length ? ' ' + data.notes.join(' ') : '';
+      setStatus(ui.premiumGrantStatus, label + ' for ' + userId + '.' + notes, 'ok');
+      if (ui.premiumUser) ui.premiumUser.value = '';
+      loadAudit();
+    } catch (error) {
+      if (error.session) return gate('Your Discord session expired. Log in again.');
+      if (error.denied) return show('denied');
+      setStatus(ui.premiumGrantStatus, error.message, 'bad');
+    }
+  }
+
+  function grantPremium() {
+    if (!ui.premiumGrant) return;
+    const userId = ui.premiumUser ? ui.premiumUser.value.trim() : '';
+    const tier = ui.premiumTier ? ui.premiumTier.value : 'premium';
+    applyGrant(userId, tier);
+  }
+
+  async function downloadExport() {
+    if (!ui.exportData) return;
+    setStatus(ui.backupStatus, 'Packing data…');
+    try {
+      const response = await fetch(state.base + '/api/owner/export', {
+        cache: 'no-store',
+        headers: {
+          Authorization: 'Bearer ' + state.session.accessToken,
+          'ngrok-skip-browser-warning': '1',
+        },
+      });
+      if (response.status === 401) {
+        auth.clearSession();
+        return gate('Your Discord session expired. Log in again.');
+      }
+      if (response.status === 404) return show('denied');
+      if (!response.ok) throw new Error('Kernel answered ' + response.status + '.');
+      const disposition = response.headers.get('Content-Disposition') || '';
+      const match = /filename="([^"]+)"/.exec(disposition);
+      const name = match ? match[1] : 'kernel-export.zip';
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = name;
+      document.body.append(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+      setStatus(ui.backupStatus, 'Downloaded ' + name + '. Keep it private.', 'ok');
+    } catch (error) {
+      setStatus(ui.backupStatus, error.message, 'bad');
+    }
+  }
+
   /* ------------------------------------------------------------------- load */
 
   // The site and the bot are uploaded separately, so a page newer than the running build must say
@@ -2620,7 +2897,7 @@
       state.overview = await get('/api/owner');
       renderOverview();
       populateToolSelects();
-      await Promise.all([loadLogs(), loadJobs(), loadCoverage(), loadPresence(), loadAdmin(), loadControl(), loadAudit(), loadBackups(), loadErrors(), loadScorecard(), loadScheduled(), loadWatch(), loadBuilds(), loadInbox(), loadUsage(), loadAdoption()]);
+      await Promise.all([loadLogs(), loadJobs(), loadCoverage(), loadPresence(), loadAdmin(), loadControl(), loadAudit(), loadBackups(), loadErrors(), loadScorecard(), loadScheduled(), loadWatch(), loadBuilds(), loadInbox(), loadUsage(), loadAdoption(), loadNews()]);
       if (!silent) {
         await loadJoins(true);
         await loadSettings();
@@ -2632,6 +2909,7 @@
         await loadSite();
         await loadTemplates();
         await loadTickets();
+        await loadPremium();
       }
       markLive(false);
       show('app');
@@ -2883,6 +3161,12 @@
     });
     if (ui.ticketRefresh) ui.ticketRefresh.addEventListener('click', () => { loadTickets().catch(report); });
     if (ui.ticketScope) ui.ticketScope.addEventListener('change', () => { loadTickets().catch(report); });
+
+    if (ui.exportData) ui.exportData.addEventListener('click', () => { downloadExport(); });
+    if (ui.newsPublish) ui.newsPublish.addEventListener('click', () => { publishNews(); });
+    if (ui.newsClear) ui.newsClear.addEventListener('click', clearNewsForm);
+    if (ui.premiumSave) ui.premiumSave.addEventListener('click', () => { savePremium(); });
+    if (ui.premiumGrant) ui.premiumGrant.addEventListener('click', () => { grantPremium(); });
 
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden && state.session && state.overview) refresh(true);

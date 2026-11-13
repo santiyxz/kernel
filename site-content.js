@@ -75,6 +75,102 @@
     document.body.classList.add('has-site-banner');
   }
 
+  // Owner posts, rendered as the same card shape as the shipped announcement. textContent only:
+  // a post containing <script> is shown as text, never parsed.
+  function newsCard(item) {
+    const card = document.createElement('article');
+    card.className = 'announce announce-post';
+
+    const head = document.createElement('header');
+    head.className = 'announce-head';
+    const avatar = document.createElement('span');
+    avatar.className = 'announce-avatar';
+    avatar.setAttribute('aria-hidden', 'true');
+    avatar.textContent = 'K';
+    const id = document.createElement('div');
+    id.className = 'announce-id';
+    const name = document.createElement('p');
+    name.className = 'announce-name';
+    name.append(document.createTextNode('Kernel '));
+    const tag = document.createElement('span');
+    tag.className = 'announce-tag';
+    tag.textContent = item.tag || 'Update';
+    name.append(tag);
+    const channel = document.createElement('span');
+    channel.className = 'announce-channel';
+    channel.textContent = '#announcements · ' + new Date(Number(item.at) || Date.now())
+      .toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+    id.append(name, channel);
+    head.append(avatar, id);
+
+    const title = document.createElement('h3');
+    title.className = 'announce-post-title';
+    title.textContent = item.title;
+
+    card.append(head, title);
+    const paragraphs = String(item.body || '').split(/\n\s*\n/).filter(Boolean);
+    for (const text of paragraphs) {
+      const p = document.createElement('p');
+      p.textContent = text;
+      card.append(p);
+    }
+    if (item.editedAt) {
+      const edited = document.createElement('p');
+      edited.className = 'announce-edited';
+      edited.textContent = 'Edited ' + new Date(Number(item.editedAt)).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+      card.append(edited);
+    }
+    return card;
+  }
+
+  function applyNews(feed) {
+    const box = document.querySelector('[data-news-feed]');
+    const items = feed && Array.isArray(feed.items) ? feed.items : [];
+    if (!box || !items.length) return;
+    box.replaceChildren(...items.map(newsCard));
+    box.hidden = false;
+  }
+
+  // The offer is public; the member list is not. A disabled or link-less offer keeps the tier cards
+  // but hides the buttons, so the section never links to a checkout that does not exist.
+  function applyPremium(offer) {
+    if (!offer) return;
+    const note = document.querySelector('[data-premium-note]');
+    if (note && offer.note) note.textContent = offer.note;
+
+    ['premium', 'vip'].forEach((key) => {
+      const tier = offer.tiers && offer.tiers[key];
+      if (!tier) return;
+      const price = document.querySelector('[data-tier-price="' + key + '"]');
+      if (price) price.textContent = '$' + tier.price;
+      const perks = document.querySelector('[data-tier-perks="' + key + '"]');
+      if (perks && Array.isArray(tier.perks) && tier.perks.length) {
+        perks.replaceChildren(...tier.perks.map((line) => {
+          const li = document.createElement('li');
+          li.textContent = line;
+          return li;
+        }));
+      }
+      const cta = document.querySelector('[data-tier-cta="' + key + '"]');
+      const tierNote = document.querySelector('[data-tier-note="' + key + '"]');
+      if (cta) {
+        if (offer.enabled && offer.paymentUrl) {
+          cta.hidden = false;
+          cta.href = offer.paymentUrl;
+          cta.textContent = 'Get ' + tier.name + ' — $' + tier.price + '/month';
+        } else {
+          cta.hidden = true;
+        }
+      }
+      if (tierNote) {
+        const count = offer.counts && Number(offer.counts[key]) ? Number(offer.counts[key]) : 0;
+        tierNote.textContent = offer.enabled && offer.paymentUrl
+          ? (count ? count + (count === 1 ? ' member' : ' members') + ' so far.' : 'Opens the payment page.')
+          : 'Subscriptions are not open yet.';
+      }
+    });
+  }
+
   const ready = (async () => {
     if (!BASE) return null;
     try {
@@ -93,6 +189,8 @@
       state.content = content;
       applyHero(content);
       applyBanner(content);
+      applyNews(content.announcements);
+      applyPremium(content.premium);
       return content;
     } catch (error) {
       return null;

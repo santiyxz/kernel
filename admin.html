@@ -641,9 +641,10 @@
               <h3 id="ad-backup-title">Backups</h3>
               <span class="ad-count" data-ad-backups-count>—</span>
             </div>
-            <p class="ad-tool-note">A copy of every settings file, kept on the bot (last 10). Download one before a deploy, or restore after a bad change. Restoring replaces all settings, so it asks for the same typed confirmation as a broadcast.</p>
+            <p class="ad-tool-note">A copy of every settings file, kept on the bot (last 10). Download one before a deploy, or restore after a bad change. Restoring replaces all settings, so it asks for the same typed confirmation as a broadcast. The data export below is different: a zip of the live data files (users, economy, guilds, tickets, premium records) for safekeeping off the host.</p>
             <div class="ad-form-actions">
               <button class="btn btn-light btn-sm" type="button" data-ad-backup-now>Back up now</button>
+              <button class="btn btn-dark btn-sm" type="button" data-ad-export>Download data export</button>
               <label class="ad-inline"><span>Type</span><input type="text" data-ad-restore-confirm placeholder="RESTORE" autocomplete="off" spellcheck="false"> <span>to restore</span></label>
               <span class="ad-status" data-ad-backup-status role="status"></span>
             </div>
@@ -798,6 +799,103 @@
                 <div class="ad-rows" data-ad-tpl-list></div>
               </div>
             </div>
+          </article>
+
+          <article class="ad-tool ad-tool-wide" aria-labelledby="ad-news-title">
+            <div class="ad-tool-head">
+              <h3 id="ad-news-title">News posts</h3>
+              <span class="ad-count" data-ad-news-count>—</span>
+            </div>
+            <p class="ad-tool-note">Publish an update to the homepage News section. Plain text only: the site renders it as text, never as markup. Newest first, last 12 kept. The shipped announcement stays below the feed.</p>
+            <div class="ad-form-row">
+              <label class="ad-field">
+                <span>Title</span>
+                <input type="text" maxlength="120" data-ad-news-title-input placeholder="Verify System update">
+              </label>
+              <label class="ad-field">
+                <span>Tag</span>
+                <input type="text" maxlength="20" data-ad-news-tag placeholder="Update">
+              </label>
+            </div>
+            <label class="ad-field">
+              <span>Post</span>
+              <textarea rows="5" maxlength="1200" data-ad-news-body placeholder="What changed, and what it means for server owners."></textarea>
+            </label>
+            <div class="ad-form-actions">
+              <button class="btn btn-light btn-sm" type="button" data-ad-news-publish>Publish</button>
+              <button class="btn btn-dark btn-sm" type="button" data-ad-news-clear>Clear form</button>
+              <span class="ad-status" data-ad-news-status role="status"></span>
+            </div>
+            <div class="ad-rows" data-ad-news-list></div>
+          </article>
+
+          <article class="ad-tool ad-tool-wide" aria-labelledby="ad-premium-title">
+            <div class="ad-tool-head">
+              <h3 id="ad-premium-title">Premium tiers</h3>
+              <span class="ad-count" data-ad-premium-count>—</span>
+            </div>
+            <p class="ad-tool-note">The site links to a payment page you control, so Kernel never touches a card. A grant records the member and, when a role server and role ID are set, puts the Discord role on them. No password, IP or login history is stored.</p>
+            <div class="ad-tool-grid">
+              <label class="ad-check"><input type="checkbox" data-ad-premium-on> <span>Show subscriptions on the site</span></label>
+              <label class="ad-field">
+                <span>Payment link (https)</span>
+                <input type="text" maxlength="300" data-ad-premium-url placeholder="https://ko-fi.com/…">
+              </label>
+              <label class="ad-field">
+                <span>Note under the tiers (optional)</span>
+                <input type="text" maxlength="200" data-ad-premium-note placeholder="Payments open on the 1st.">
+              </label>
+              <label class="ad-field">
+                <span>Role server</span>
+                <select data-ad-premium-guild></select>
+              </label>
+              <label class="ad-field">
+                <span>Premium role ID</span>
+                <input type="text" inputmode="numeric" data-ad-premium-role-premium placeholder="123456789012345678">
+              </label>
+              <label class="ad-field">
+                <span>VIP role ID</span>
+                <input type="text" inputmode="numeric" data-ad-premium-role-vip placeholder="123456789012345678">
+              </label>
+              <label class="ad-field">
+                <span>Premium price (USD/month)</span>
+                <input type="number" min="0" max="500" step="0.5" data-ad-premium-price-premium>
+              </label>
+              <label class="ad-field">
+                <span>VIP price (USD/month)</span>
+                <input type="number" min="0" max="500" step="0.5" data-ad-premium-price-vip>
+              </label>
+            </div>
+            <p class="ad-field-label">Perks (one per line, up to 8)</p>
+            <div class="ad-form-row">
+              <label class="ad-field">
+                <span>Premium</span>
+                <textarea rows="4" maxlength="1000" data-ad-premium-perks-premium></textarea>
+              </label>
+              <label class="ad-field">
+                <span>VIP</span>
+                <textarea rows="4" maxlength="1000" data-ad-premium-perks-vip></textarea>
+              </label>
+            </div>
+            <div class="ad-form-actions">
+              <button class="btn btn-light btn-sm" type="button" data-ad-premium-save>Save tiers</button>
+              <span class="ad-status" data-ad-premium-status role="status"></span>
+            </div>
+
+            <p class="ad-field-label">Grant or remove a member</p>
+            <div class="ad-form-actions">
+              <label class="ad-inline"><span>User ID</span><input type="text" inputmode="numeric" data-ad-premium-user placeholder="123456789012345678"></label>
+              <label class="ad-inline"><span>Tier</span>
+                <select data-ad-premium-tier>
+                  <option value="premium">Premium</option>
+                  <option value="vip">VIP</option>
+                  <option value="none">Remove</option>
+                </select>
+              </label>
+              <button class="btn btn-dark btn-sm" type="button" data-ad-premium-grant>Apply</button>
+              <span class="ad-status" data-ad-premium-grant-status role="status"></span>
+            </div>
+            <div class="ad-rows" data-ad-premium-members></div>
           </article>
         </div>
       </section>

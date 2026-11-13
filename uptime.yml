@@ -23,7 +23,7 @@ jobs:
         env:
           # Change this when the ngrok domain changes.
           UPTIME_TARGET: https://almanac-carbon-babied.ngrok-free.dev
-        run: python3 uptime_probe.py
+        run: python3 tools/uptime_probe.py
 
       - name: Keep the result in the repository
         run: |
