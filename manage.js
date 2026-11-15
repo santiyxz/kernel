@@ -1086,14 +1086,14 @@
     const embed = el('div', { class: 'dc-embed' });
     embed.style.setProperty('--dc-accent', '#c9cdd3');
     const main = el('div', { class: 'dc-embed-main' });
-    main.append(el('div', { class: 'dc-title', text: '🔐 Member verification' }));
+    main.append(el('div', { class: 'dc-title', text: 'Member verification' }));
     main.append(el('div', { class: 'dc-desc', html: formatText(text) }));
     embed.append(main);
     embed.append(el('div', { class: 'dc-footer' }, el('span', { text: 'Kernel verification gate' })));
     content.append(embed);
 
     content.append(el('div', { class: 'dc-buttons' },
-      el('span', { class: 'dc-button', text: '✅ ' + label }),
+      el('span', { class: 'dc-button', text: label }),
     ));
 
     return message;

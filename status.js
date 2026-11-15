@@ -53,7 +53,14 @@
     tried: false,
     failed: false,
     inFlight: false,
+    slowStreak: 0,
   };
+
+  // One cold ngrok/TLS sample can land above the usual millisecond range and would otherwise
+  // flip the banner to "degraded" for a whole poll cycle, so only call the API slow after it
+  // has been slow on two polls in a row.
+  const SLOW_MS = 1500;
+  const SLOW_STREAK = 2;
   let probe = null;
   let probeError = '';
 
@@ -145,7 +152,7 @@
     const gw = gatewayState();
     if ((api.data || {}).ready === false) reasons.push('Discord is still completing the gateway handshake');
     else if (gw === 'warn') reasons.push('Discord has not reported a gateway ping yet');
-    if (api.latency != null && api.latency > 1500) reasons.push('the API is answering slowly');
+    if (api.slowStreak >= SLOW_STREAK) reasons.push('the API is answering slowly');
     if (probeState() === 'bad') reasons.push('the last external check failed');
     return reasons;
   }
@@ -282,6 +289,7 @@
       api.error = '';
       api.lastOkAt = Date.now();
       api.latency = Math.max(1, Math.round(performance.now() - started));
+      api.slowStreak = api.latency > SLOW_MS ? api.slowStreak + 1 : 0;
       service('api', 'ok', 'Operational', api.latency + ' ms', 'Public status endpoint, asked in ' + api.latency + ' ms');
       render(data);
     } catch (error) {
