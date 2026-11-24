@@ -172,6 +172,21 @@ section[id], [id="top"] { scroll-margin-top: 100px; }
   padding-inline: var(--gut);
 }
 
+/* The nav floats 16px below the viewport edge, so page text used to scroll through that gap and
+   get sliced at the top of the screen. This fade sits behind the pill: solid through the gap and
+   the top of the bar, then fades out under the pill. */
+.nav-shell::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -16px;
+  height: 80px;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(180deg, #08090a 0, #08090a 34px, rgba(8, 9, 10, 0) 80px);
+}
+
 .nav {
   display: flex;
   align-items: center;
