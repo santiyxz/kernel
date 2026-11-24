@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Kernel — One Discord bot for anti-nuke, moderation and logs</title>
-<meta name="description" content="Kernel is one Discord bot for anti-nuke, moderation, logging and the rest of your toolkit. 99 slash commands, one invite, and a case record that can be checked.">
+<meta name="description" content="Kernel is one Discord bot for anti-nuke, moderation, logging, music and the rest of your toolkit. 107 commands, one invite, and a case record that can be checked.">
 <meta property="og:title" content="Kernel — One Discord bot for anti-nuke, moderation and logs">
-<meta property="og:description" content="99 slash commands, one invite, zero paywalls. Anti-nuke that can rebuild what was deleted, and a case record that stays checkable.">
+<meta property="og:description" content="107 commands, one invite, zero paywalls. Anti-nuke that can rebuild what was deleted, a music player, and a case record that stays checkable.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Kernel">
 <meta property="og:url" content="https://santiyxz.github.io/kernel/">
@@ -15,7 +15,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Kernel — One Discord bot for anti-nuke, moderation and logs">
-<meta name="twitter:description" content="99 slash commands, one invite, zero paywalls.">
+<meta name="twitter:description" content="107 commands, one invite, zero paywalls.">
 <meta name="twitter:image" content="https://santiyxz.github.io/kernel/og.png">
 <link rel="canonical" href="https://santiyxz.github.io/kernel/">
 <script type="application/ld+json">
@@ -26,7 +26,7 @@
   "applicationCategory": "Discord application",
   "operatingSystem": "Discord",
   "url": "https://santiyxz.github.io/kernel/",
-  "description": "One Discord bot for anti-nuke, moderation, logging and the rest of your toolkit. 99 slash commands, one invite, zero paywalls.",
+  "description": "One Discord bot for anti-nuke, moderation, logging, music and the rest of your toolkit. 107 commands, one invite, zero paywalls.",
   "isAccessibleForFree": true,
   "publisher": { "@type": "Organization", "name": "Kernel" }
 }
@@ -65,7 +65,7 @@
       "name": "Will my other bots still work?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. Kernel uses slash commands only and never registers a text prefix, so there is nothing to collide with. It also stays quiet about messages it did not ask for; automod rules can be scoped to specific channels or exempted per role and per bot."
+        "text": "Yes. Kernel answers to slash commands and to a chat prefix, ! by default, which the owner can change with KERNEL_PREFIX. It does not claim messages that are not commands, and automod rules can be scoped to specific channels or exempted per role and per bot."
       }
     },
     {
@@ -81,7 +81,7 @@
       "name": "What is Kernel not?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "It is not a music bot, not an AI chatbot, and not a level system with role rewards yet. It cannot undo a channel delete — restore rebuilds an equivalent channel under a new id, so anything that referenced the old id needs pointing again. And it is a small project: if your server needs a support SLA, use a commercial bot."
+        "text": "It is not a full music platform: the player searches YouTube (Spotify playlists are read for their track list and then played through YouTube) and refuses whatever YouTube refuses (age-restricted, private, live). It never records or transcribes voice. It is not an AI chatbot, and not a level system with role rewards yet. It cannot undo a channel delete — restore rebuilds an equivalent channel under a new id, so anything that referenced the old id needs pointing again. And it is a small project: if your server needs a support SLA, use a commercial bot."
       }
     }
   ]
@@ -165,7 +165,7 @@
       <div class="hero-reveal" style="--d:0ms">
         <a class="hero-pill" href="status.html">
           <span class="dot" aria-hidden="true"></span>
-          <span data-site="pill">99 commands. One invite. No paywalls.</span>
+          <span data-site="pill">107 commands. One invite. No paywalls.</span>
         </a>
       </div>
 
@@ -176,8 +176,8 @@
       <h1 id="hero-title" class="hero-word" data-site="title" data-words>Kernel</h1>
 
       <p class="hero-sub hero-reveal" style="--d:180ms" data-site="sub">
-        One Discord bot for anti-nuke, moderation, logging and the rest of your toolkit.
-        99 slash commands, one invite, zero paywalls.
+        One Discord bot for anti-nuke, moderation, logging, music and the rest of your toolkit.
+        107 commands, slash or <code>!</code>, one invite, zero paywalls.
       </p>
 
       <div class="hero-cta hero-reveal" style="--d:240ms">
@@ -193,7 +193,7 @@
           <div class="nav-menu" id="explore-menu">
             <a href="#features">Features</a>
             <a href="#how">How it works</a>
-            <a href="commands.html">All 99 commands</a>
+            <a href="commands.html">All 107 commands</a>
             <a href="docs.html">Docs</a>
             <a href="bots.html">Bots</a>
             <a href="servers.html">Server showcase</a>
@@ -297,6 +297,7 @@
             <li><strong>Logging</strong> — message, join, level-up, welcome and leave events.</li>
             <li><strong>Community</strong> — tickets, giveaways, polls, rank and afk.</li>
             <li><strong>Economy and games</strong> — cash, daily streaks, blackjack, slots and more.</li>
+            <li><strong>Music</strong> — YouTube search, any public Spotify playlist or album (no keys), no queue limit, <code>/profile</code> listening cards and <code>!p</code> as the short form.</li>
             <li><strong>Utility</strong> — userinfo, avatars, snipe, translate, embeds and socials.</li>
           </ul>
         </article>
@@ -440,7 +441,7 @@
         <a class="platform-card" href="commands.html" data-reveal>
           <span class="platform-icon" aria-hidden="true">/</span>
           <h3>Command index</h3>
-          <p>All 99 slash commands grouped by area, searchable, with what each one actually changes.</p>
+          <p>All 107 commands grouped by area, searchable, with what each one actually changes.</p>
           <span class="platform-link">Browse commands <span aria-hidden="true">→</span></span>
         </a>
         <a class="platform-card" href="docs.html" data-reveal>
@@ -741,9 +742,9 @@
         <details>
           <summary>Will my other bots still work?</summary>
           <div class="faq-body">
-            <p>Yes. Kernel uses slash commands only and never registers a text prefix, so there is nothing to
-               collide with. It also stays quiet about messages it did not ask for; automod rules can be scoped
-               to specific channels or exempted per role and per bot.</p>
+            <p>Yes. Kernel answers to slash commands and to a chat prefix, <code>!</code> by default, which the
+               bot owner can change. It does not claim messages that are not commands; automod rules can be
+               scoped to specific channels or exempted per role and per bot.</p>
           </div>
         </details>
         <details>
@@ -757,10 +758,12 @@
         <details>
           <summary>What is Kernel not?</summary>
           <div class="faq-body">
-            <p>It is not a music bot, not an AI chatbot, and not a level system with role rewards yet. It cannot
-               undo a channel delete — restore rebuilds an equivalent channel under a new id, so anything that
-               referenced the old id needs pointing again. And it is a small project: if your server needs a
-               support SLA, use a commercial bot.</p>
+            <p>It is not a full music platform: the player searches YouTube and refuses whatever YouTube refuses
+               (age-restricted, private, live), and it never records or transcribes voice. It is not an AI
+               chatbot, and not a level system with role rewards yet. It cannot undo a channel delete — restore
+               rebuilds an equivalent channel under a new id, so anything that referenced the old id needs
+               pointing again. And it is a small project: if your server needs a support SLA, use a commercial
+               bot.</p>
           </div>
         </details>
       </div>
@@ -847,12 +850,12 @@
 <script src="site-content.js?v=20261113i"></script>
 <script src="auth.js"></script>
 <script src="site-bg.js?v=20261113h"></script>
-<script src="app.js?v=20261113i"></script>
-<script src="developers.js?v=20261113a" defer></script>
+<script src="app.js?v=20261124a"></script>
+<script src="developers.js?v=20261124a" defer></script>
 <script src="owner-nav.js"></script>
 <script src="owner-status.js"></script>
 <script src="motion.js?v=20261113e"></script>
 <script src="ui-kit.js?v=20261113a"></script>
-<script src="search.js?v=20261113j" defer></script>
+<script src="search.js?v=20261124a" defer></script>
 </body>
 </html>

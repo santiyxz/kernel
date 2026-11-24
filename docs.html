@@ -253,7 +253,9 @@
           <p>
             The dashboard signs you in with Discord OAuth and shows only servers where you hold
             <code>Manage Server</code> or a role Kernel recognises as staff. Everything it can change is also a
-            slash command, so a broken dashboard never locks you out of configuration.
+            slash command, so a broken dashboard never locks you out of configuration. Every command also
+            answers to <code>!name</code> in chat — <code>!p</code>, <code>!sk</code> and the other music short
+            forms are listed on the <a href="commands.html">command page</a>.
           </p>
           <ul>
             <li><strong>No Administrator.</strong> Kernel asks for the specific permissions it uses.</li>
@@ -276,6 +278,9 @@
             </thead>
             <tbody>
               <tr><td>Slash commands do not appear</td><td>Kernel registers commands globally; Discord can take up to an hour to roll them out. Re-invite with <code>applications.commands</code> if <code>/setup</code> is missing entirely.</td><td><a href="#setup">Setup</a></td></tr>
+              <tr><td><code>!</code> commands do nothing</td><td>Turn on <b>Message Content Intent</b> in the Discord Developer Portal (Bot → Privileged Gateway Intents), save, then restart. Slash commands work without it.</td><td><a href="#setup">Setup</a></td></tr>
+              <tr><td>A Spotify playlist or album link does not work</td><td>Private playlists stay private: open it in Spotify, set it to <b>Public</b>, then paste the link again. No API keys are needed — any public playlist or album from any Spotify user is read once, and each track is searched on YouTube as its turn comes. Spotify never streams its own audio, and its public pages stop at 100 tracks, so an album or playlist longer than that queues the first 100.</td><td><a href="commands.html?group=music">Music</a></td></tr>
+              <tr><td>Music will not join voice</td><td>You have to be in a voice channel first, and the host needs Node 22.22 or newer (Node 24.15+ also works). A bot can only sit in one voice channel per server: if it is playing in another one, join that channel or stop the music; if it is only sitting idle elsewhere, <code>/play</code> moves it to you. Every server has its own independent player. Some videos (age-restricted, private, live) are refused by YouTube.</td><td><a href="commands.html?group=music">Music</a></td></tr>
               <tr><td>“Missing permission” after setup</td><td>Grant the exact permission <code>/setup</code> names, then run it again — do not grant Administrator to silence the list.</td><td><a href="#setup">Setup</a></td></tr>
               <tr><td>Verification button does nothing</td><td><code>/verifysetup check</code>: the role must sit below Kernel’s highest role, and Kernel needs <code>Manage Roles</code>.</td><td><a href="#verification">Verification</a></td></tr>
               <tr><td>No log messages arrive</td><td>Kernel needs View Channel, Send Messages and Embed Links in the log channel. Moving channels means re-running <code>/setup</code>.</td><td><a href="#logging">Logging</a></td></tr>
@@ -301,8 +306,8 @@
 
         <nav class="doc-next" aria-label="Where to go next" data-reveal>
           <a class="doc-next-card" href="commands.html">
-            <b>All 99 commands</b>
-            <span>Every slash command, filterable and copyable.</span>
+            <b>All 107 commands</b>
+            <span>Every command, slash or <code>!</code>, filterable and copyable.</span>
           </a>
           <a class="doc-next-card" href="dashboard.html">
             <b>Open the dashboard</b>
@@ -337,10 +342,10 @@
 <script src="site-content.js?v=20261113i"></script>
 <script src="auth.js"></script>
 <script src="site-bg.js?v=20261113h"></script>
-<script src="app.js?v=20261113i"></script>
+<script src="app.js?v=20261124a"></script>
 <script src="docs.js?v=20261113i"></script>
 <script>document.getElementById('year').textContent = String(new Date().getFullYear());</script>
 <script src="ui-kit.js?v=20261113a"></script>
-<script src="search.js?v=20261113j" defer></script>
+<script src="search.js?v=20261124a" defer></script>
 </body>
 </html>

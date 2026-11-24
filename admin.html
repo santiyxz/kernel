@@ -378,7 +378,7 @@
               <h3 id="ad-broadcast-title">Broadcast</h3>
               <span class="ad-count">sends in Discord</span>
             </div>
-            <p class="ad-tool-note">One embed to the servers you pick, through each server's system channel (or the first channel Kernel can post in). Type SEND to confirm; nothing is sent until then.</p>
+            <p class="ad-tool-note">One embed to the servers you pick, posted in each server's announcement channel (or its main chat when there isn't one) with an @everyone ping. A server with neither is listed as skipped, never dropped into a random channel. Type SEND to confirm; nothing is sent until then.</p>
             <form class="ad-form" data-ad-broadcast-form>
               <div class="ad-broadcast-grid">
                 <div class="ad-broadcast-fields">
@@ -566,7 +566,7 @@
               <span class="ad-count" data-ad-sched-count>—</span>
               <button class="btn btn-dark btn-sm" type="button" data-ad-sched-refresh>Refresh</button>
             </div>
-            <p class="ad-tool-note">The same embed and sender as Broadcast, queued in <code>data/meta.json</code> so a host restart inside the window still delivers. A post missed by more than the grace window is reported as skipped, never sent late.</p>
+            <p class="ad-tool-note">The same embed, @everyone ping and channel choice as Broadcast, queued in <code>data/meta.json</code> so a host restart inside the window still delivers. A post missed by more than the grace window is reported as skipped, never sent late.</p>
             <div class="ad-rows" data-ad-sched-list></div>
             <div class="ad-tool-grid">
               <label class="ad-field">
@@ -1044,8 +1044,8 @@
 
 <script src="api-config.js"></script>
 <script src="auth.js"></script>
-<script src="admin.js?v=20261113j"></script>
+<script src="admin.js?v=20261124b"></script>
 <script src="ui-kit.js?v=20261113a"></script>
-<script src="search.js?v=20261113j" defer></script>
+<script src="search.js?v=20261124a" defer></script>
 </body>
 </html>

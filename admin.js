@@ -1292,7 +1292,9 @@
       setStatus(ui.broadcastStatus, data.sent + ' delivered, ' + data.failed + ' failed.', data.failed ? 'bad' : 'ok');
       ui.broadcastOut.hidden = false;
       ui.broadcastOut.textContent = data.results
-        .map((row) => (row.ok ? '✓ ' : '✗ ') + row.name + (row.ok ? ' → #' + row.channelName : ' — ' + row.reason))
+        .map((row) => (row.ok
+          ? '✓ ' + row.name + ' → #' + row.channelName + (row.ping === false ? ' (no @everyone ping: Kernel lacks Mention Everyone)' : '')
+          : '✗ ' + row.name + ' — ' + row.reason))
         .join('\n');
       loadAudit();
     } catch (error) {
@@ -2693,7 +2695,7 @@
     }
     if (ui.usageRows) {
       if (!top.length) {
-        ui.usageRows.replaceChildren(el('p', { className: 'ad-empty', text: 'No slash command has been run since this build booted.' }));
+        ui.usageRows.replaceChildren(el('p', { className: 'ad-empty', text: 'No command has been run since this build booted.' }));
       } else {
         ui.usageRows.replaceChildren(...top.map((row) => el('div', { className: 'ad-row' },
           el('div', { className: 'ad-row-main' },
