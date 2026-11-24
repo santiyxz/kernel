@@ -6,9 +6,8 @@ on:
   push:
     branches: [main]
     paths:
-      - 'uptime_probe.py'
-      - 'tools/uptime_probe.py'
-      - '.github/workflows/uptime.yml'
+      - '**'
+      - '!uptime.json'
   workflow_dispatch:
 
 permissions:
