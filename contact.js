@@ -26,6 +26,7 @@
       mount.append(empty);
     }
 
+    const live = [];
     keys.forEach((key) => {
       const profile = profiles[key];
       if (!profile) return;
@@ -61,6 +62,19 @@
       main.append(name, role, links);
       card.append(initials, main);
       mount.append(card);
+
+      const id = dev.idFor(key);
+      if (id) live.push({ id, name });
+    });
+
+    // The name above is the fallback written in developers.js; Lanyard keeps it current when the
+    // account's Discord display name changes. A failed read leaves the written name alone.
+    live.forEach(({ id, name }) => {
+      dev.fetchPresence(id).then((presence) => {
+        const user = presence && presence.discord_user;
+        const shown = user && (user.display_name || user.global_name || user.username);
+        if (shown) name.textContent = shown;
+      }).catch(() => {});
     });
   }
 

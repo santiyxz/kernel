@@ -23,9 +23,9 @@ window.KERNEL_DEVELOPERS = {
   ],
   profiles: {
     founder: {
-      name: 'intelnito',
+      name: 'juda',
       handle: '@py.ex',
-      initials: 'IN',
+      initials: 'JU',
       badge: 'Maintainer',
       role: 'Founder',
       tagline: 'Built the anti-nuke engine, the case ledger and this site.',
