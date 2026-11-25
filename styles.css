@@ -3207,13 +3207,13 @@ body.home main > section { position: relative; z-index: 1; }
 }
 
 .js .hero-reveal {
-  opacity: 0;
+  opacity: 1;
   transform: translateY(18px);
   animation: hero-rise .95s var(--ease) forwards;
   animation-delay: var(--d, 0ms);
 }
 @keyframes hero-rise {
-  to { opacity: 1; transform: none; }
+  to { transform: none; }
 }
 
 .hero-cine h1 {
@@ -3237,14 +3237,14 @@ body.home main > section { position: relative; z-index: 1; }
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
-  opacity: 0;
+  opacity: 1;
   transform: translateY(.42em);
   animation: word-in .9s var(--ease) forwards;
   animation-delay: calc(80ms + var(--word-i, 0) * 85ms);
 }
 /* Words are separated by real space nodes in motion.js; no extra margin or the gaps double. */
 @keyframes word-in {
-  to { opacity: 1; transform: none; }
+  to { transform: none; }
 }
 
 .hero-cine .hero-sub {
@@ -4040,6 +4040,19 @@ body.has-site-banner .hero-cine { padding-bottom: clamp(96px, 12vw, 140px); }
   .demo-term-log,
   .atk-log { scroll-behavior: auto; }
 }
+
+/* Hidden tabs and screenshot surfaces can freeze CSS animations at frame zero. Critical copy must
+   stay readable there, and the marquee should show one real set instead of its looping duplicate. */
+.motion-fallback [data-reveal] { opacity: 1; transform: none; }
+.motion-fallback .hero-reveal,
+.motion-fallback .hero-word,
+.motion-fallback .hero-word .word {
+  opacity: 1;
+  transform: none;
+  animation: none;
+}
+.motion-fallback .marquee-track { animation: none; }
+.motion-fallback .marquee-group[aria-hidden="true"] { display: none; }
 
 @keyframes status-pulse {
   0%, 100% { opacity: 1; box-shadow: 0 0 10px rgba(255, 255, 255, .35); }

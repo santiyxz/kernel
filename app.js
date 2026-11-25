@@ -204,6 +204,18 @@ function setupNav() {
 
 /* ----------------------------------------------------------------- reveal */
 
+function setupMotionFallback() {
+  const apply = () => {
+    const hidden = document.visibilityState === 'hidden';
+    document.documentElement.classList.toggle('motion-fallback', hidden);
+    if (hidden) {
+      document.querySelectorAll('[data-reveal]').forEach((el) => el.classList.add('is-in'));
+    }
+  };
+  apply();
+  document.addEventListener('visibilitychange', apply);
+}
+
 function setupReveals() {
   const items = Array.from(document.querySelectorAll('[data-reveal]'));
   if (!items.length) return;
@@ -755,6 +767,7 @@ function boot() {
   applyConfig();
   setupAuthUI();
   setupNav();
+  setupMotionFallback();
   setupReveals();
   setupDirectory();
   setupHeroStatus();
